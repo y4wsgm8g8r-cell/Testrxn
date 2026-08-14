@@ -48,7 +48,7 @@ signal.signal(signal.SIGTERM, _handle_sigterm)
 # ---------------- Configuración ----------------
 SIMULATION_MODE = os.environ.get("SIMULATION_MODE", "true").lower() != "false"
 ORDER_SIZE_USD = float(os.environ.get("ORDER_SIZE_USD", "2.0"))
-JUMP_THRESHOLD_PCT = 0.03
+JUMP_THRESHOLD_PCT = 0.10
 JUMP_WINDOW_SECONDS = 5.0
 MARKET_WINDOW_MINUTES = 5
 
