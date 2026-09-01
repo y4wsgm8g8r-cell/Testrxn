@@ -1,6 +1,16 @@
 {
-  "generated_at": "2026-09-01T23:09:56.290416+00:00",
-  "morpho_direct_market": null,
+  "generated_at": "2026-09-01T23:14:17.496305+00:00",
+  "morpho_direct_market": {
+    "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
+    "loan": "USDC",
+    "collateral": "fxSAVE",
+    "lltv_pct": 86.0,
+    "supply_apy_pct": 0,
+    "supply_usd": 0,
+    "liquidity_usd": 0,
+    "utilization_pct": 0,
+    "url": "https://app.morpho.org/ethereum/market/0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4"
+  },
   "morpho_rockawayx_vault": null,
   "defillama": {
     "f(x) Protocol (nativo)": [
