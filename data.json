@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T15:23:52.332290+00:00",
+  "generated_at": "2026-09-02T15:26:01.406502+00:00",
   "morpho_direct_market": {
     "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
     "loan": "USDC",
@@ -378,8 +378,11 @@
     "price": 0.9999
   },
   "fxsave_mcap_usd": {
-    "mcap": 68946964,
+    "mcap": 68947625,
     "price": 1.11
   },
-  "fxsave_apy_pct": 7.23
+  "fxsave_apy_pct": {
+    "apy": 7.23,
+    "change_24h": -0.41
+  }
 }
