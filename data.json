@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T08:54:41.303038+00:00",
+  "generated_at": "2026-09-02T09:00:00.033832+00:00",
   "morpho_direct_market": {
     "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
     "loan": "USDC",
@@ -15,7 +15,7 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 4481950.98,
+    "total_assets_usd": 4482059.96,
     "net_apy_pct": 10.66,
     "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423"
   },
@@ -354,6 +354,16 @@
         "apy_pct": 0.07,
         "apy_reward_pct": null,
         "url": "https://defillama.com/yields/pool/51916b88-38f9-45b1-b839-2e27c0f31d0b"
+      }
+    ],
+    "Concentrator": [
+      {
+        "symbol": "FXSAVE",
+        "chain": "Ethereum",
+        "tvl_usd": 68011125,
+        "apy_pct": 7.35,
+        "apy_reward_pct": null,
+        "url": "https://defillama.com/yields/pool/ee0b7069-f8f3-4aa2-a415-728f13e6cc3d"
       }
     ]
   },
