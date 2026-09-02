@@ -109,9 +109,10 @@ FXSAVE_APP_URL = "https://fx.aladdin.club/v2/fxsave"
 FXSAVE_DEFILLAMA_POOL_ID = "ee0b7069-f8f3-4aa2-a415-728f13e6cc3d"
 
 
-def collect_fxsave_apy() -> float | None:
-    """Looks up fxSAVE's real Supply APY from DeFiLlama's yields dataset,
-    by its known pool ID (project: Concentrator, symbol: fxSAVE)."""
+def collect_fxsave_apy() -> dict | None:
+    """Looks up fxSAVE's real Supply APY (plus its 24h change) from
+    DeFiLlama's yields dataset, by its known pool ID
+    (project: Concentrator, symbol: fxSAVE)."""
     try:
         resp = requests.get(DEFILLAMA_POOLS_URL, timeout=60)
         resp.raise_for_status()
@@ -119,7 +120,13 @@ def collect_fxsave_apy() -> float | None:
         for p in payload.get("data", []):
             if p.get("pool") == FXSAVE_DEFILLAMA_POOL_ID:
                 apy = p.get("apy")
-                return round(apy, 2) if apy is not None else None
+                if apy is None:
+                    return None
+                change = p.get("apyPct1D")
+                return {
+                    "apy": round(apy, 2),
+                    "change_24h": round(change, 2) if change is not None else None,
+                }
         print(f"[warn] fxSAVE APY: pool id {FXSAVE_DEFILLAMA_POOL_ID} not found in DeFiLlama data", file=sys.stderr)
         return None
     except Exception as exc:  # noqa: BLE001
@@ -551,7 +558,7 @@ def render_html(
     defillama: dict[str, list[dict]],
     fxusd_mcap: dict | None,
     fxsave_mcap: dict | None,
-    fxsave_apy: float | None = None,
+    fxsave_apy_data: dict | None = None,
 ) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
@@ -559,11 +566,14 @@ def render_html(
     fxusd_price_val = (fxusd_mcap or {}).get("price") or 0
     fxsave_mcap_val = (fxsave_mcap or {}).get("mcap") or 0
     fxsave_price_val = (fxsave_mcap or {}).get("price") or 0
+    fxsave_apy = (fxsave_apy_data or {}).get("apy")
+    fxsave_apy_change = (fxsave_apy_data or {}).get("change_24h")
 
     market_html = render_market_card(market) if market else '<p class="empty">Mercado no disponible en este momento.</p>'
     vault_html = render_vault_card(vault) if vault else '<p class="empty">No se encontro el vault de RockawayX en este momento.</p>'
 
     apy_display = f"{fxsave_apy}%" if fxsave_apy is not None else "no disponible"
+    fxsave_change_badge = render_apy_change_badge(fxsave_apy_change)
     fxsave_apy_card = f"""
     <a class="card" href="{FXSAVE_APP_URL}" target="_blank" rel="noopener">
       <p class="card-title">FXSAVE</p>
@@ -571,7 +581,7 @@ def render_html(
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">{apy_display}</p>
+          <p class="stat-value apy">{apy_display} {fxsave_change_badge}</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -810,7 +820,7 @@ def main() -> None:
     print(
         f"Listo: market={'ok' if market else 'missing'}, vault={'ok' if vault else 'missing'}, "
         f"fxusd_mcap={'ok' if fxusd_mcap else 'missing'}, fxsave_mcap={'ok' if fxsave_mcap else 'missing'}, "
-        f"fxsave_apy={fxsave_apy if fxsave_apy is not None else 'missing'}, "
+        f"fxsave_apy={(fxsave_apy or {}).get('apy', 'missing')}, "
         f"defillama={counts}"
     )
 
