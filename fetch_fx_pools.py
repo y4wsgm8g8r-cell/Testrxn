@@ -654,7 +654,7 @@ def render_html(
     </div>
 
     <div class="whale-box">
-      <p class="whale-title">On-chain transfers &gt; $10K LIVE</p>
+      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
@@ -664,7 +664,7 @@ def render_html(
     {''.join(sections)}
 
     <footer>
-      BY METAFXN
+      <img src="logo.png" alt="METAFXN" style="width: 140px; height: 140px; border-radius: 50%; display: block; margin: 0 auto;" />
     </footer>
   </div>
 
