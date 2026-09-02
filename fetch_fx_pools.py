@@ -102,62 +102,96 @@ MAX_PAGES = 6  # up to 1200 markets/vaults, in safe 200-item chunks
 AERODROME_EMISSIONS_NOTE = "> 6% emisiones"
 
 # fx.aladdin.club calculates the fxSAVE vault's own APY client-side, with no
-# public API for it -- so instead we read the number straight off the
-# rendered page using a headless browser (Playwright), since the app
-# calculates it client-side with JavaScript.
+# public API for it -- so instead we compute a real APY ourselves from two
+# on-chain share-price readings (now vs ~24h ago), rather than typing in a
+# number by hand.
 FXSAVE_APP_URL = "https://fx.aladdin.club/v2/fxsave"
+ETH_RPC_URLS = [
+    "https://1rpc.io/eth",
+    "https://eth.drpc.org",
+    "https://eth-mainnet.public.blastapi.io",
+    "https://rpc.payload.de",
+    "https://rpc.flashbots.net",
+    "https://eth-pokt.nodies.app",
+]
+_RPC_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (compatible; fx-pools-dashboard/1.0)",
+}
+BLOCKS_PER_DAY_ETH = 7200  # ~12s per block
+
+
+def _rpc_post(payload: dict) -> dict:
+    """Try each public RPC endpoint in turn until one returns a usable
+    JSON-RPC "result" -- HTTP 200 alone isn't enough, since some providers
+    return HTTP 200 with a JSON-RPC error body (e.g. rate limits)."""
+    errors = []
+    for url in ETH_RPC_URLS:
+        try:
+            resp = requests.post(url, json=payload, headers=_RPC_HEADERS, timeout=20)
+            if not resp.ok:
+                errors.append(f"{url}: HTTP {resp.status_code} {resp.text[:150]}")
+                continue
+            body = resp.json()
+            if "result" not in body:
+                errors.append(f"{url}: {str(body)[:150]}")
+                continue
+            return body
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"{url}: {exc}")
+            continue
+    raise RuntimeError("all RPC endpoints failed -- " + " | ".join(errors))
+
+
+def _eth_call(to: str, data: str, block: str = "latest") -> int | None:
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "eth_call",
+        "params": [{"to": to, "data": data}, block],
+        "id": 1,
+    }
+    result = _rpc_post(payload).get("result")
+    return int(result, 16) if result else None
 
 
 def collect_fxsave_apy() -> float | None:
-    """Reads fxSAVE's real APY directly off the rendered fx.aladdin.club
-    page using a headless browser, since the app calculates and displays
-    this number with client-side JavaScript (no public API exposes it).
+    """Computes fxSAVE's real APY from on-chain data: reads the vault's
+    share price (totalAssets/totalSupply) now and ~24h ago (via block
+    offset), then annualizes the observed growth. This is a genuine
+    calculation from live contract state, not a manual estimate.
     """
     try:
-        from playwright.sync_api import sync_playwright
+        block_hex = _rpc_post({"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1}).get("result")
+        if not block_hex:
+            print("[warn] fxSAVE APY: eth_blockNumber returned no result", file=sys.stderr)
+            return None
+        current_block = int(block_hex, 16)
+        block_24h_ago = hex(current_block - BLOCKS_PER_DAY_ETH)
 
-        with sync_playwright() as p:
-            browser = p.chromium.launch()
-            page = browser.new_page()
-            page.goto(FXSAVE_APP_URL, wait_until="networkidle", timeout=45000)
+        assets_now = _eth_call(FXSAVE_CONTRACT, "0x01e1d114")  # totalAssets()
+        supply_now = _eth_call(FXSAVE_CONTRACT, "0x18160ddd")  # totalSupply()
+        assets_then = _eth_call(FXSAVE_CONTRACT, "0x01e1d114", block_24h_ago)
+        supply_then = _eth_call(FXSAVE_CONTRACT, "0x18160ddd", block_24h_ago)
 
-            find_percents_js = """() => [...document.querySelectorAll('*')]
-                .filter(el => el.children.length === 0)
-                .map(el => el.textContent.trim())
-                .filter(t => /^\\d+(\\.\\d+)?%$/.test(t))
-            """
+        if not all([assets_now, supply_now, assets_then, supply_then]):
+            print(
+                f"[warn] fxSAVE APY: missing on-chain values -- "
+                f"assets_now={assets_now}, supply_now={supply_now}, "
+                f"assets_then={assets_then}, supply_then={supply_then}",
+                file=sys.stderr,
+            )
+            return None
 
-            # The app needs a bit of extra time beyond "networkidle" to finish
-            # reading on-chain data and render the APY, so poll for up to ~50s
-            # instead of relying on a single wait_for_function call.
-            candidates: list[str] = []
-            for _ in range(10):
-                candidates = page.evaluate(find_percents_js)
-                if candidates:
-                    break
-                page.wait_for_timeout(5000)
+        price_now = assets_now / supply_now
+        price_then = assets_then / supply_then
+        if price_then <= 0:
+            print(f"[warn] fxSAVE APY: price_then was {price_then} (<=0)", file=sys.stderr)
+            return None
 
-            if not candidates:
-                # Diagnostic fallback: dump ANY short text containing '%'
-                # (even "-%" placeholders) so we can see what's really there.
-                loose = page.evaluate(
-                    """() => [...document.querySelectorAll('*')]
-                        .filter(el => el.children.length === 0 && el.textContent.includes('%'))
-                        .map(el => el.textContent.trim())
-                        .slice(0, 10)
-                    """
-                )
-                print(f"[warn] fxSAVE APY: no matching percentage after polling; loose matches: {loose}", file=sys.stderr)
-                browser.close()
-                return None
-
-            browser.close()
-            # The APY figure is typically the first/only standalone percentage
-            # near the top of the page (Total Balance has no % sign).
-            apy_text = candidates[0].replace("%", "")
-            return round(float(apy_text), 2)
+        daily_growth = (price_now / price_then) - 1
+        apy = ((1 + daily_growth) ** 365 - 1) * 100
+        return round(apy, 2)
     except Exception as exc:  # noqa: BLE001
-        print(f"[warn] could not scrape fxSAVE APY: {exc}", file=sys.stderr)
+        print(f"[warn] could not compute fxSAVE on-chain APY: {exc}", file=sys.stderr)
         return None
 
 # Whale-watch feed: shows live transfers over $10k for fxUSD/fxSAVE.
