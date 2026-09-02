@@ -139,23 +139,23 @@ footer a { color: #000; }
     <div class="mcap-row">
       <div class="mcap-card">
         <p class="mcap-label">fxUSD Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,582,012</span></p>
-        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9999</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,573,408</span></p>
+        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9998</span></p>
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">70,106,277</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">70,103,633</span></p>
         <p class="mcap-price">Precio: $<span id="fxsave-price">1.1100</span></p>
       </div>
     </div>
 
     <div class="whale-box">
-      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
+      <p class="whale-title">On-chain transfers &gt; $10K LIVE</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
     <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 17:52 UTC</p>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 18:11 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -171,7 +171,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$70,106,277</p>
+          <p class="stat-value">$70,103,633</p>
         </div>
       </div>
     </a>
@@ -395,11 +395,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Net APY</p>
-          <p class="stat-value apy">10.71%</p>
+          <p class="stat-value apy">10.84%</p>
         </div>
         <div class="stat">
           <p class="stat-label">Depositos totales</p>
-          <p class="stat-value">$5,603,008</p>
+          <p class="stat-value">$5,567,210</p>
         </div>
       </div>
     </a>
@@ -828,7 +828,7 @@ footer a { color: #000; }
       setInterval(refreshAll, 20000);
 
       // --- Whale watch: live transfers over $10k for fxUSD / fxSAVE ---
-      var whalePrices = { FXUSD: 0.9999, FXSAVE: 1.11 };
+      var whalePrices = { FXUSD: 0.9998, FXSAVE: 1.11 };
       var whaleSeen = {};
       var whaleLastShown = {}; // symbol -> amount/time pair, for fuzzy dedup
       var WHALE_MAX_ITEMS = 8;
