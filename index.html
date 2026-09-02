@@ -90,6 +90,14 @@ footer a { color: #000; }
 }
 .mcap-label { font-size: 0.75rem; color: #ffffff; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px; font-weight: 600; }
 .mcap-value { font-size: 1.9rem; font-weight: 700; margin: 0; color: #39ff14; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; }
+.mcap-price {
+  font-size: 0.85rem; color: #ffffff; margin: 4px 0 0; font-variant-numeric: tabular-nums;
+  animation: price-blink 1.4s infinite;
+}
+@keyframes price-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
 </style>
 </head>
 <body>
@@ -97,16 +105,18 @@ footer a { color: #000; }
     <div class="mcap-row">
       <div class="mcap-card">
         <p class="mcap-label">fxUSD Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">76,386,699</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">76,376,393</span></p>
+        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9999</span></p>
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
         <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">65,174,825</span></p>
+        <p class="mcap-price">Precio: $<span id="fxsave-price">1.1200</span></p>
       </div>
     </div>
 
     <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 10:35 UTC</p>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 11:41 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -118,7 +128,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">18.13%</p>
+          <p class="stat-value apy">17.89%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -134,7 +144,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">13.3%</p>
+          <p class="stat-value apy">13.07%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -150,11 +160,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">8.52%</p>
+          <p class="stat-value apy">8.37%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$82,409</p>
+          <p class="stat-value">$82,417</p>
         </div>
       </div>
       
@@ -166,7 +176,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.47%</p>
+          <p class="stat-value apy">7.37%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -182,11 +192,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.05%</p>
+          <p class="stat-value apy">7.03%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$69,783,307</p>
+          <p class="stat-value">$69,783,238</p>
         </div>
       </div>
       
@@ -198,7 +208,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.94%</p>
+          <p class="stat-value apy">6.82%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -214,7 +224,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.26%</p>
+          <p class="stat-value apy">6.17%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -230,11 +240,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.22%</p>
+          <p class="stat-value apy">1.21%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$436,537</p>
+          <p class="stat-value">$435,473</p>
         </div>
       </div>
       
@@ -282,7 +292,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$98,605</p>
+          <p class="stat-value">$98,615</p>
         </div>
       </div>
       
@@ -298,7 +308,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$55,660</p>
+          <p class="stat-value">$55,359</p>
         </div>
       </div>
       
@@ -331,11 +341,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Net APY</p>
-          <p class="stat-value apy">10.73%</p>
+          <p class="stat-value apy">10.74%</p>
         </div>
         <div class="stat">
           <p class="stat-label">Depositos totales</p>
-          <p class="stat-value">$4,791,528</p>
+          <p class="stat-value">$5,120,091</p>
         </div>
       </div>
     </a>
@@ -351,11 +361,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">12.02%</p>
+          <p class="stat-value apy">12.01%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$727,138</p>
+          <p class="stat-value">$727,140</p>
         </div>
       </div>
       
@@ -371,7 +381,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$727,138</p>
+          <p class="stat-value">$727,140</p>
         </div>
       </div>
       
@@ -388,14 +398,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">13.91%</p>
+          <p class="stat-value apy">13.85%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$32,435</p>
+          <p class="stat-value">$32,432</p>
         </div>
       </div>
-       <span class="pill">incl. 13.62% rewards</span>
+       <span class="pill">incl. 13.56% rewards</span>
     </a>
     
     <a class="card" href="https://defillama.com/yields/pool/18f29a9a-3550-457b-a39e-b80ce65000aa" target="_blank" rel="noopener">
@@ -404,14 +414,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.97%</p>
+          <p class="stat-value apy">7.93%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$897,014</p>
+          <p class="stat-value">$897,015</p>
         </div>
       </div>
-       <span class="pill">incl. 7.95% rewards</span>
+       <span class="pill">incl. 7.91% rewards</span>
     </a>
     
     <a class="card" href="https://defillama.com/yields/pool/2e8bf750-dfef-4b63-844d-da2d861f4e36" target="_blank" rel="noopener">
@@ -424,7 +434,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$123,375</p>
+          <p class="stat-value">$123,377</p>
         </div>
       </div>
        <span class="pill">incl. 6.67% rewards</span>
@@ -436,14 +446,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">3.01%</p>
+          <p class="stat-value apy">3.0%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$439,576</p>
+          <p class="stat-value">$438,534</p>
         </div>
       </div>
-       <span class="pill">incl. 2.31% rewards</span>
+       <span class="pill">incl. 2.3% rewards</span>
     </a>
     
     <a class="card" href="https://defillama.com/yields/pool/d2cec87c-a53a-45bd-aeae-c98cbc599bc6" target="_blank" rel="noopener">
@@ -472,7 +482,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$109,202</p>
+          <p class="stat-value">$109,029</p>
         </div>
       </div>
        <span class="pill">incl. 0.7% rewards</span>
@@ -488,7 +498,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$8,801,168</p>
+          <p class="stat-value">$8,801,187</p>
         </div>
       </div>
       
@@ -504,7 +514,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$765,452</p>
+          <p class="stat-value">$765,454</p>
         </div>
       </div>
       
@@ -552,7 +562,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$42,171</p>
+          <p class="stat-value">$42,172</p>
         </div>
       </div>
       
@@ -569,14 +579,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">12.32%</p>
+          <p class="stat-value apy">12.19%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$702,613</p>
+          <p class="stat-value">$702,614</p>
         </div>
       </div>
-       <span class="pill">incl. 12.3% rewards</span>
+       <span class="pill">incl. 12.17% rewards</span>
     </a>
     
     <a class="card" href="https://defillama.com/yields/pool/c9c1eb2b-3a22-41e1-b896-4cbfc5c0ddb1" target="_blank" rel="noopener">
@@ -605,7 +615,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$8,800,250</p>
+          <p class="stat-value">$8,800,270</p>
         </div>
       </div>
       
@@ -621,7 +631,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$81,371</p>
+          <p class="stat-value">$81,373</p>
         </div>
       </div>
       
@@ -653,7 +663,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$42,110</p>
+          <p class="stat-value">$42,112</p>
         </div>
       </div>
       
@@ -670,11 +680,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.34%</p>
+          <p class="stat-value apy">7.29%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$68,023,083</p>
+          <p class="stat-value">$68,023,055</p>
         </div>
       </div>
       
@@ -691,11 +701,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY total</p>
-          <p class="stat-value apy">0.72% <span class="pill">> 6% emisiones</span></p>
+          <p class="stat-value apy">0.71% <span class="pill">> 6% emisiones</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$492,537</p>
+          <p class="stat-value">$492,531</p>
         </div>
       </div>
     </a>
@@ -721,6 +731,13 @@ footer a { color: #000; }
         }
       }
 
+      function setPrice(id, value) {
+        var el = document.getElementById(id);
+        if (el && typeof value === 'number' && !isNaN(value)) {
+          el.textContent = value.toFixed(4);
+        }
+      }
+
       function refreshAll() {
         fetch('https://stablecoins.llama.fi/stablecoins?includePrices=true')
           .then(function(r) { return r.json(); })
@@ -729,6 +746,7 @@ footer a { color: #000; }
             for (var i = 0; i < list.length; i++) {
               if ((list[i].symbol || '').toUpperCase() === 'FXUSD') {
                 setValue('fxusd-mcap', (list[i].circulating || {}).peggedUSD);
+                setPrice('fxusd-price', list[i].price);
                 return;
               }
             }
@@ -738,8 +756,9 @@ footer a { color: #000; }
         fetch('https://api.coingecko.com/api/v3/coins/fx-usd-saving?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false')
           .then(function(r) { return r.json(); })
           .then(function(data) {
-            var mcap = data.market_data && data.market_data.market_cap && data.market_data.market_cap.usd;
-            setValue('fxsave-mcap', mcap);
+            var md = data.market_data || {};
+            setValue('fxsave-mcap', (md.market_cap || {}).usd);
+            setPrice('fxsave-price', (md.current_price || {}).usd);
           })
           .catch(function() { /* keep last known value on failure */ });
       }
