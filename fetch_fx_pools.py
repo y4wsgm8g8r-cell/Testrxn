@@ -654,7 +654,7 @@ def render_html(
     </div>
 
     <div class="whale-box">
-      <p class="whale-title">ON-Chain transfers  &gt; $10K LIVE</p>
+      <p class="whale-title">On-chain transfers &gt; $10K live</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
@@ -667,6 +667,8 @@ def render_html(
       <img src="logo.png" alt="METAFXN" style="width: 140px; height: 140px; border-radius: 50%; display: block; margin: 0 auto;" />
     </footer>
   </div>
+
+  <img id="mascot" src="mascot.png" alt="" style="position: fixed; top: 0; left: 0; width: 130px; z-index: 999; pointer-events: none;" />
 
   <script>
     (function() {{
@@ -793,6 +795,26 @@ def render_html(
 
       checkAllWhales();
       setInterval(checkAllWhales, 25000);
+
+      // --- Mascot: bounces around the screen like the old DVD logo ---
+      var mascot = document.getElementById('mascot');
+      if (mascot) {{
+        var x = Math.random() * (window.innerWidth - 130);
+        var y = Math.random() * (window.innerHeight - 130);
+        var vx = 2.2, vy = 2.2;
+
+        function stepMascot() {{
+          var w = mascot.offsetWidth || 130;
+          var h = mascot.offsetHeight || 73;
+          x += vx;
+          y += vy;
+          if (x <= 0 || x + w >= window.innerWidth) {{ vx = -vx; x = Math.max(0, Math.min(x, window.innerWidth - w)); }}
+          if (y <= 0 || y + h >= window.innerHeight) {{ vy = -vy; y = Math.max(0, Math.min(y, window.innerHeight - h)); }}
+          mascot.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+          requestAnimationFrame(stepMascot);
+        }}
+        requestAnimationFrame(stepMascot);
+      }}
     }})();
   </script>
 </body>
