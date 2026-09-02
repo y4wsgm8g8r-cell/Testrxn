@@ -26,7 +26,19 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 .wrap { max-width: 900px; margin: 0 auto; }
-h1 { font-size: 1.7rem; font-weight: 600; margin-bottom: 0.25rem; }
+h1 { font-size: 1.7rem; font-weight: 600; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 10px; }
+.live-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+  animation: live-pulse 1.6s infinite;
+  flex-shrink: 0;
+}
+@keyframes live-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
 .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
 .section-title {
   font-size: 1.35rem; font-weight: 700; margin: 2.5rem 0 0.85rem;
@@ -58,12 +70,32 @@ h1 { font-size: 1.7rem; font-weight: 600; margin-bottom: 0.25rem; }
 .empty { color: var(--muted); font-size: 0.9rem; padding: 1rem 0; }
 footer { color: var(--muted); font-size: 0.75rem; margin-top: 3rem; text-align: center; }
 footer a { color: var(--accent-text); }
+.mcap-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.mcap-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+}
+.mcap-label { font-size: 0.75rem; color: #ffffff; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px; font-weight: 600; }
+.mcap-value { font-size: 1.9rem; font-weight: 700; margin: 0; color: #39ff14; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-01 23:56 UTC</p>
+    <div class="mcap-row">
+      <div class="mcap-card">
+        <p class="mcap-label">fxUSD Market Cap</p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">76,047,572</span></p>
+      </div>
+      <div class="mcap-card">
+        <p class="mcap-label">fxSAVE Market Cap</p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">0</span></p>
+      </div>
+    </div>
+
+    <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 00:09 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -329,22 +361,7 @@ footer a { color: var(--accent-text); }
     
     <p class="section-title">Morpho -- vault RockawayX</p>
     <div class="grid">
-      
-    <a class="card" href="https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423" target="_blank" rel="noopener">
-      <p class="card-title">RockawayX f(x) Protocol Ecosystem USDC</p>
-      <p class="card-sub">Morpho &middot; vault curado por RockawayX &middot; activo USDC</p>
-      <div class="stat-row">
-        <div class="stat">
-          <p class="stat-label">Net APY</p>
-          <p class="stat-value apy">10.62%</p>
-        </div>
-        <div class="stat">
-          <p class="stat-label">Depositos totales</p>
-          <p class="stat-value">$4,213,710</p>
-        </div>
-      </div>
-    </a>
-    
+      <p class="empty">No se encontro el vault de RockawayX en este momento.</p>
     </div>
     
     <p class="section-title">Pendle</p>
@@ -767,5 +784,40 @@ footer a { color: var(--accent-text); }
       BY METAFXN
     </footer>
   </div>
+
+  <script>
+    (function() {
+      function fmt(n) {
+        return Math.round(n).toLocaleString('en-US');
+      }
+
+      function setValue(id, value) {
+        var el = document.getElementById(id);
+        if (el && typeof value === 'number' && !isNaN(value)) {
+          el.textContent = fmt(value);
+        }
+      }
+
+      function refreshAll() {
+        fetch('https://stablecoins.llama.fi/stablecoins?includePrices=true')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var list = data.peggedAssets || [];
+            for (var i = 0; i < list.length; i++) {
+              var symbol = (list[i].symbol || '').toUpperCase();
+              if (symbol === 'FXUSD') {
+                setValue('fxusd-mcap', (list[i].circulating || {}).peggedUSD);
+              } else if (symbol === 'FXSAVE') {
+                setValue('fxsave-mcap', (list[i].circulating || {}).peggedUSD);
+              }
+            }
+          })
+          .catch(function() { /* keep last known values on failure */ });
+      }
+
+      refreshAll();
+      setInterval(refreshAll, 20000);
+    })();
+  </script>
 </body>
 </html>

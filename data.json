@@ -1,24 +1,7 @@
 {
-  "generated_at": "2026-09-01T23:56:37.833417+00:00",
-  "morpho_direct_market": {
-    "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
-    "loan": "USDC",
-    "collateral": "fxSAVE",
-    "lltv_pct": 86.0,
-    "supply_apy_pct": 0,
-    "supply_usd": 0,
-    "liquidity_usd": 0,
-    "utilization_pct": 0,
-    "url": "https://app.morpho.org/ethereum/market/0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4"
-  },
-  "morpho_rockawayx_vault": {
-    "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
-    "name": "RockawayX f(x) Protocol Ecosystem USDC",
-    "asset": "USDC",
-    "total_assets_usd": 4213709.95,
-    "net_apy_pct": 10.62,
-    "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423"
-  },
+  "generated_at": "2026-09-02T00:09:23.631451+00:00",
+  "morpho_direct_market": null,
+  "morpho_rockawayx_vault": null,
   "defillama": {
     "f(x) Protocol (nativo)": [
       {
@@ -356,5 +339,7 @@
         "url": "https://defillama.com/yields/pool/51916b88-38f9-45b1-b839-2e27c0f31d0b"
       }
     ]
-  }
+  },
+  "fxusd_mcap_usd": 76047571.69,
+  "fxsave_mcap_usd": null
 }
