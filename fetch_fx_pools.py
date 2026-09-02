@@ -591,14 +591,31 @@ def render_html(
     </a>
     """
 
+    fx_native_pools = [
+        {**p, "url": "https://fx.aladdin.club/v2/earn"}
+        for p in defillama.get("f(x) Protocol (nativo)", [])
+    ]
+
     sections = [
         render_section("f(x) Protocol", fxsave_apy_card + "".join(
-            render_defillama_card(p) for p in defillama.get("f(x) Protocol (nativo)", [])
+            render_defillama_card(p) for p in fx_native_pools
         ) or '<p class="empty">Sin pools activos en este momento.</p>'),
         render_section("Morpho -- vault RockawayX", vault_html),
     ]
+    # Manual link overrides for the Pendle section: the first two cards
+    # should point straight to the Pendle app (zap-in and swap pages) for
+    # this specific market, instead of the generic DeFiLlama pool page.
+    PENDLE_URL_OVERRIDES = [
+        "https://app.pendle.finance/trade/pools/0x8308e53f584a7e5f0c581059d9ba971c0bec9454/zap/in?chain=ethereum",
+        "https://app.pendle.finance/trade/markets/0x8308e53f584a7e5f0c581059d9ba971c0bec9454/swap?view=pt&chain=ethereum&py=output",
+    ]
+
     for label in ("Pendle", "Curve", "Convex", "Concentrator", "Aerodrome"):
         pools = defillama.get(label, [])
+        if label == "Pendle":
+            for i, override_url in enumerate(PENDLE_URL_OVERRIDES):
+                if i < len(pools):
+                    pools[i] = {**pools[i], "url": override_url}
         card_fn = render_aerodrome_card if label == "Aerodrome" else render_defillama_card
         html = "".join(card_fn(p) for p in pools) if pools else '<p class="empty">Sin pools activos en este momento.</p>'
         sections.append(render_section(label, html))
