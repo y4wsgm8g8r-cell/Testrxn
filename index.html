@@ -139,8 +139,8 @@ footer a { color: #000; }
     <div class="mcap-row">
       <div class="mcap-card">
         <p class="mcap-label">fxUSD Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,572,849</span></p>
-        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9999</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,565,559</span></p>
+        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9998</span></p>
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
@@ -150,12 +150,12 @@ footer a { color: #000; }
     </div>
 
     <div class="whale-box">
-      <p class="whale-title">ON-Chain transfers  &gt; $10K LIVE</p>
+      <p class="whale-title">On-chain transfers &gt; $10K live</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
     <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 20:33 UTC</p>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 21:15 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -388,7 +388,22 @@ footer a { color: #000; }
     
     <p class="section-title">Morpho -- vault RockawayX</p>
     <div class="grid">
-      <p class="empty">No se encontro el vault de RockawayX en este momento.</p>
+      
+    <a class="card" href="https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423" target="_blank" rel="noopener">
+      <p class="card-title">RockawayX f(x) Protocol Ecosystem USDC</p>
+      <p class="card-sub">Morpho &middot; vault curado por RockawayX &middot; activo USDC</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">Net APY</p>
+          <p class="stat-value apy">11.11%</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Depositos totales</p>
+          <p class="stat-value">$5,168,682</p>
+        </div>
+      </div>
+    </a>
+    
     </div>
     
     <p class="section-title">Pendle</p>
@@ -757,6 +772,8 @@ footer a { color: #000; }
     </footer>
   </div>
 
+  <img id="mascot" src="mascot.png" alt="" style="position: fixed; top: 0; left: 0; width: 130px; z-index: 999; pointer-events: none;" />
+
   <script>
     (function() {
       function fmt(n) {
@@ -813,7 +830,7 @@ footer a { color: #000; }
       setInterval(refreshAll, 20000);
 
       // --- Whale watch: live transfers over $10k for fxUSD / fxSAVE ---
-      var whalePrices = { FXUSD: 0.9999, FXSAVE: 1.11 };
+      var whalePrices = { FXUSD: 0.9998, FXSAVE: 1.11 };
       var whaleSeen = {};
       var whaleLastShown = {}; // symbol -> amount/time pair, for fuzzy dedup
       var WHALE_MAX_ITEMS = 8;
@@ -882,6 +899,26 @@ footer a { color: #000; }
 
       checkAllWhales();
       setInterval(checkAllWhales, 25000);
+
+      // --- Mascot: bounces around the screen like the old DVD logo ---
+      var mascot = document.getElementById('mascot');
+      if (mascot) {
+        var x = Math.random() * (window.innerWidth - 130);
+        var y = Math.random() * (window.innerHeight - 130);
+        var vx = 2.2, vy = 2.2;
+
+        function stepMascot() {
+          var w = mascot.offsetWidth || 130;
+          var h = mascot.offsetHeight || 73;
+          x += vx;
+          y += vy;
+          if (x <= 0 || x + w >= window.innerWidth) { vx = -vx; x = Math.max(0, Math.min(x, window.innerWidth - w)); }
+          if (y <= 0 || y + h >= window.innerHeight) { vy = -vy; y = Math.max(0, Math.min(y, window.innerHeight - h)); }
+          mascot.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+          requestAnimationFrame(stepMascot);
+        }
+        requestAnimationFrame(stepMascot);
+      }
     })();
   </script>
 </body>
