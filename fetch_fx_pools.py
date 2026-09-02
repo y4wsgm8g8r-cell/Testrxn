@@ -553,7 +553,7 @@ def render_html(
     </div>
 
     <div class="whale-box">
-      <p class="whale-title">Movimientod  &gt; $10K LIVE</p>
+      <p class="whale-title">Movimientos &gt; $10K LIVE</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
