@@ -98,6 +98,33 @@ footer a { color: #000; }
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 }
+.whale-box {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 2rem;
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+.whale-title {
+  font-size: 0.8rem; color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.05em; margin: 0 0 8px; font-weight: 700;
+}
+.whale-list { display: flex; flex-direction: column; gap: 8px; }
+.whale-item {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #161d28; border-radius: 8px; padding: 8px 10px;
+  font-size: 0.85rem; animation: whale-in 0.5s ease;
+  text-decoration: none; color: inherit;
+}
+.whale-item .whale-symbol { font-weight: 700; color: var(--accent-text); }
+.whale-item .whale-amount { color: #39ff14; font-weight: 700; }
+@keyframes whale-in {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -110,13 +137,18 @@ footer a { color: #000; }
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">65,174,825</span></p>
-        <p class="mcap-price">Precio: $<span id="fxsave-price">1.1200</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">67,943,578</span></p>
+        <p class="mcap-price">Precio: $<span id="fxsave-price">1.1100</span></p>
       </div>
     </div>
 
+    <div class="whale-box">
+      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
+      <div class="whale-list" id="whale-list"></div>
+    </div>
+
     <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 11:41 UTC</p>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 12:12 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -341,11 +373,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Net APY</p>
-          <p class="stat-value apy">10.74%</p>
+          <p class="stat-value apy">10.71%</p>
         </div>
         <div class="stat">
           <p class="stat-label">Depositos totales</p>
-          <p class="stat-value">$5,120,091</p>
+          <p class="stat-value">$5,120,340</p>
         </div>
       </div>
     </a>
@@ -747,6 +779,9 @@ footer a { color: #000; }
               if ((list[i].symbol || '').toUpperCase() === 'FXUSD') {
                 setValue('fxusd-mcap', (list[i].circulating || {}).peggedUSD);
                 setPrice('fxusd-price', list[i].price);
+                if (typeof whalePrices !== 'undefined' && list[i].price) {
+                  whalePrices.FXUSD = list[i].price;
+                }
                 return;
               }
             }
@@ -758,13 +793,79 @@ footer a { color: #000; }
           .then(function(data) {
             var md = data.market_data || {};
             setValue('fxsave-mcap', (md.market_cap || {}).usd);
-            setPrice('fxsave-price', (md.current_price || {}).usd);
+            var price = (md.current_price || {}).usd;
+            setPrice('fxsave-price', price);
+            if (typeof whalePrices !== 'undefined' && price) {
+              whalePrices.FXSAVE = price;
+            }
           })
           .catch(function() { /* keep last known value on failure */ });
       }
 
       refreshAll();
       setInterval(refreshAll, 20000);
+
+      // --- Whale watch: live transfers over $10k for fxUSD / fxSAVE ---
+      var whalePrices = { FXUSD: 0.9999, FXSAVE: 1.11 };
+      var whaleSeen = {};
+      var WHALE_MAX_ITEMS = 8;
+      var WHALE_MIN_USD = 10000;
+      var ETHERSCAN_KEY = "FQF5W8F6ZYMPQUJRV1ZBF1ASZC7IF9EBRM";
+
+      function whaleUrl(contract) {
+        return 'https://api.etherscan.io/v2/api?chainid=1&module=account&action=tokentx'
+          + '&contractaddress=' + contract
+          + '&page=1&offset=25&sort=desc&apikey=' + ETHERSCAN_KEY;
+      }
+
+      function addWhaleItem(symbol, usdValue, txHash) {
+        var list = document.getElementById('whale-list');
+        if (!list) return;
+        var item = document.createElement('a');
+        item.className = 'whale-item';
+        item.href = 'https://etherscan.io/tx/' + txHash;
+        item.target = '_blank';
+        item.rel = 'noopener';
+        item.innerHTML =
+          '<span class="whale-symbol">' + symbol + '</span>' +
+          '<span class="whale-amount">$' + Math.round(usdValue).toLocaleString('en-US') + '</span>';
+        list.insertBefore(item, list.firstChild);
+        while (list.children.length > WHALE_MAX_ITEMS) {
+          list.removeChild(list.lastChild);
+        }
+      }
+
+      function checkWhales(contract, symbol) {
+        fetch(whaleUrl(contract))
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var results = data.result;
+            if (!Array.isArray(results)) return;
+            var price = whalePrices[symbol] || 0;
+            if (!price) return;
+            // Process oldest-to-newest so the feed reads top-to-bottom chronologically
+            for (var i = results.length - 1; i >= 0; i--) {
+              var t = results[i];
+              if (whaleSeen[t.hash]) continue;
+              whaleSeen[t.hash] = true;
+              var decimals = parseInt(t.tokenDecimal, 10) || 18;
+              var amount = parseFloat(t.value) / Math.pow(10, decimals);
+              var usdValue = amount * price;
+              if (usdValue >= WHALE_MIN_USD) {
+                addWhaleItem(symbol, usdValue, t.hash);
+              }
+            }
+          })
+          .catch(function() { /* ignore failures, try again next cycle */ });
+      }
+
+      function checkAllWhales() {
+        checkWhales('0x085780639cC2cAcd35E474e71f4d000e2405D8f6', 'FXUSD');
+        checkWhales('0x7743e50F534a7f9F1791DdE7dCD89F7783Eefc39', 'FXSAVE');
+      }
+
+      checkAllWhales();
+      setInterval(checkAllWhales, 25000);
     })();
   </script>
 </body>
