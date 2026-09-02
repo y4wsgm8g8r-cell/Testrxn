@@ -21,8 +21,6 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - run: playwright install --with-deps chromium
-
       - run: python fetch_fx_pools.py
 
       - name: Commit refreshed dashboard
