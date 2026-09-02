@@ -654,7 +654,7 @@ def render_html(
     </div>
 
     <div class="whale-box">
-      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
+      <p class="whale-title">On-chain transfers &gt; $10K LIVE</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
