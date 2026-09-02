@@ -119,32 +119,39 @@ def collect_fxsave_apy() -> float | None:
         with sync_playwright() as p:
             browser = p.chromium.launch()
             page = browser.new_page()
-            page.goto(FXSAVE_APP_URL, wait_until="networkidle", timeout=30000)
-            # The APY value renders as text like "7.15%" once the app's JS
-            # finishes loading on-chain data; wait for it to stop being "-%".
-            page.wait_for_function(
-                """() => {
-                    const els = [...document.querySelectorAll('*')];
-                    return els.some(el =>
-                        el.children.length === 0 &&
-                        /^\\d+(\\.\\d+)?%$/.test(el.textContent.trim())
-                    );
-                }""",
-                timeout=20000,
-            )
-            candidates = page.eval_on_selector_all(
-                "*",
-                """els => els
-                    .filter(el => el.children.length === 0)
-                    .map(el => el.textContent.trim())
-                    .filter(t => /^\\d+(\\.\\d+)?%$/.test(t))
-                """,
-            )
-            browser.close()
+            page.goto(FXSAVE_APP_URL, wait_until="networkidle", timeout=45000)
+
+            find_percents_js = """() => [...document.querySelectorAll('*')]
+                .filter(el => el.children.length === 0)
+                .map(el => el.textContent.trim())
+                .filter(t => /^\\d+(\\.\\d+)?%$/.test(t))
+            """
+
+            # The app needs a bit of extra time beyond "networkidle" to finish
+            # reading on-chain data and render the APY, so poll for up to ~50s
+            # instead of relying on a single wait_for_function call.
+            candidates: list[str] = []
+            for _ in range(10):
+                candidates = page.evaluate(find_percents_js)
+                if candidates:
+                    break
+                page.wait_for_timeout(5000)
 
             if not candidates:
-                print("[warn] fxSAVE APY: no percentage text found on page", file=sys.stderr)
+                # Diagnostic fallback: dump ANY short text containing '%'
+                # (even "-%" placeholders) so we can see what's really there.
+                loose = page.evaluate(
+                    """() => [...document.querySelectorAll('*')]
+                        .filter(el => el.children.length === 0 && el.textContent.includes('%'))
+                        .map(el => el.textContent.trim())
+                        .slice(0, 10)
+                    """
+                )
+                print(f"[warn] fxSAVE APY: no matching percentage after polling; loose matches: {loose}", file=sys.stderr)
+                browser.close()
                 return None
+
+            browser.close()
             # The APY figure is typically the first/only standalone percentage
             # near the top of the page (Total Balance has no % sign).
             apy_text = candidates[0].replace("%", "")
