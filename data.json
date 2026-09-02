@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T00:09:23.631451+00:00",
+  "generated_at": "2026-09-02T00:15:40.415776+00:00",
   "morpho_direct_market": null,
   "morpho_rockawayx_vault": null,
   "defillama": {
@@ -341,5 +341,5 @@
     ]
   },
   "fxusd_mcap_usd": 76047571.69,
-  "fxsave_mcap_usd": null
+  "fxsave_mcap_usd": 65174825
 }

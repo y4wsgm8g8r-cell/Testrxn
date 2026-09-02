@@ -90,12 +90,12 @@ footer a { color: var(--accent-text); }
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">0</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">65,174,825</span></p>
       </div>
     </div>
 
     <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 00:09 UTC</p>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 00:15 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -804,15 +804,21 @@ footer a { color: var(--accent-text); }
           .then(function(data) {
             var list = data.peggedAssets || [];
             for (var i = 0; i < list.length; i++) {
-              var symbol = (list[i].symbol || '').toUpperCase();
-              if (symbol === 'FXUSD') {
+              if ((list[i].symbol || '').toUpperCase() === 'FXUSD') {
                 setValue('fxusd-mcap', (list[i].circulating || {}).peggedUSD);
-              } else if (symbol === 'FXSAVE') {
-                setValue('fxsave-mcap', (list[i].circulating || {}).peggedUSD);
+                return;
               }
             }
           })
-          .catch(function() { /* keep last known values on failure */ });
+          .catch(function() { /* keep last known value on failure */ });
+
+        fetch('https://api.coingecko.com/api/v3/coins/fx-usd-saving?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var mcap = data.market_data && data.market_data.market_cap && data.market_data.market_cap.usd;
+            setValue('fxsave-mcap', mcap);
+          })
+          .catch(function() { /* keep last known value on failure */ });
       }
 
       refreshAll();
