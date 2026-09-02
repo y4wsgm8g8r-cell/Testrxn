@@ -78,6 +78,13 @@ h1 {
   display: inline-block; font-size: 0.7rem; background: #1a2536; color: var(--accent-text);
   padding: 2px 8px; border-radius: 6px; margin-top: 8px;
 }
+.apy-change {
+  display: inline-block; font-size: 0.7rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 6px; margin-left: 4px; vertical-align: middle;
+}
+.apy-up { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.apy-down { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.apy-flat { background: rgba(154, 154, 162, 0.15); color: var(--muted); }
 .empty { color: var(--muted); font-size: 0.9rem; padding: 1rem 0; }
 footer { color: #000; font-size: 0.75rem; margin-top: 3rem; text-align: center; }
 footer a { color: #000; }
@@ -137,18 +144,18 @@ footer a { color: #000; }
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">67,949,379</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">67,948,717</span></p>
         <p class="mcap-price">Precio: $<span id="fxsave-price">1.1100</span></p>
       </div>
     </div>
 
     <div class="whale-box">
-      <p class="whale-title">Movimientos &gt; $10K LIVE</p>
+      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
     <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 13:35 UTC</p>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-02 13:40 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -160,7 +167,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">17.81%</p>
+          <p class="stat-value apy">17.81% <span class="apy-change apy-down">-1.53% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -176,7 +183,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">13.11%</p>
+          <p class="stat-value apy">13.11% <span class="apy-change apy-down">-1.4% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -192,7 +199,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">8.4%</p>
+          <p class="stat-value apy">8.4% <span class="apy-change apy-down">-0.71% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -208,7 +215,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.39%</p>
+          <p class="stat-value apy">7.39% <span class="apy-change apy-down">-1.23% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -224,7 +231,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.92%</p>
+          <p class="stat-value apy">6.92% <span class="apy-change apy-down">-0.55% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -240,7 +247,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.85%</p>
+          <p class="stat-value apy">6.85% <span class="apy-change apy-down">-0.52% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -256,7 +263,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.19%</p>
+          <p class="stat-value apy">6.19% <span class="apy-change apy-up">+0.56% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -272,7 +279,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.22%</p>
+          <p class="stat-value apy">1.22% <span class="apy-change apy-down">-0.35% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -288,7 +295,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.07%</p>
+          <p class="stat-value apy">0.07% <span class="apy-change apy-up">+0.04% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -304,7 +311,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0%</p>
+          <p class="stat-value apy">0% <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -320,7 +327,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0%</p>
+          <p class="stat-value apy">0% <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -336,7 +343,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0%</p>
+          <p class="stat-value apy">0% <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -352,7 +359,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0%</p>
+          <p class="stat-value apy">0% <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -377,7 +384,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">Depositos totales</p>
-          <p class="stat-value">$5,207,146</p>
+          <p class="stat-value">$5,209,830</p>
         </div>
       </div>
     </a>
@@ -393,7 +400,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">11.98%</p>
+          <p class="stat-value apy">11.98% <span class="apy-change apy-down">-0.15% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -409,7 +416,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">8.05%</p>
+          <p class="stat-value apy">8.05% <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -430,7 +437,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">13.71%</p>
+          <p class="stat-value apy">13.71% <span class="apy-change apy-up">+0.09% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -446,7 +453,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.86%</p>
+          <p class="stat-value apy">7.86% <span class="apy-change apy-down">-0.03% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -462,7 +469,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.16%</p>
+          <p class="stat-value apy">7.16% <span class="apy-change apy-down">-0.53% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -478,7 +485,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">2.99%</p>
+          <p class="stat-value apy">2.99% <span class="apy-change apy-down">-0.3% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -494,7 +501,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.6%</p>
+          <p class="stat-value apy">1.6% <span class="apy-change apy-down">-0.76% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -510,7 +517,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.26%</p>
+          <p class="stat-value apy">1.26% <span class="apy-change apy-up">+0.28% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -526,7 +533,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.1%</p>
+          <p class="stat-value apy">1.1% <span class="apy-change apy-up">+1.02% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -542,7 +549,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.53%</p>
+          <p class="stat-value apy">0.53% <span class="apy-change apy-up">+0.53% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -558,7 +565,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.17%</p>
+          <p class="stat-value apy">0.17% <span class="apy-change apy-up">+0.08% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -574,7 +581,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.1%</p>
+          <p class="stat-value apy">0.1% <span class="apy-change apy-down">-0.3% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -590,7 +597,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.07%</p>
+          <p class="stat-value apy">0.07% <span class="apy-change apy-up">+0.04% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -611,7 +618,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">12.15%</p>
+          <p class="stat-value apy">12.15% <span class="apy-change apy-down">-0.54% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -627,7 +634,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.6%</p>
+          <p class="stat-value apy">1.6% <span class="apy-change apy-down">-0.76% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -643,7 +650,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.1%</p>
+          <p class="stat-value apy">1.1% <span class="apy-change apy-up">+1.02% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -659,7 +666,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.17%</p>
+          <p class="stat-value apy">0.17% <span class="apy-change apy-up">+0.08% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -675,7 +682,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.1%</p>
+          <p class="stat-value apy">0.1% <span class="apy-change apy-down">-0.3% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -691,7 +698,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.07%</p>
+          <p class="stat-value apy">0.07% <span class="apy-change apy-up">+0.04% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -712,7 +719,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.16%</p>
+          <p class="stat-value apy">7.16% <span class="apy-change apy-down">-0.68% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -733,7 +740,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY total</p>
-          <p class="stat-value apy">0.71% <span class="pill">> 6% emisiones</span></p>
+          <p class="stat-value apy">0.71% <span class="pill">> 6% emisiones</span> <span class="apy-change apy-down">-1.59% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
