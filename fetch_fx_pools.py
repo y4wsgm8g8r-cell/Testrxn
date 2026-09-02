@@ -610,12 +610,22 @@ def render_html(
         "https://app.pendle.finance/trade/markets/0x8308e53f584a7e5f0c581059d9ba971c0bec9454/swap?view=pt&chain=ethereum&py=output",
     ]
 
+    CURVE_POOLS_URL = "https://www.curve.finance/#/ethereum/pools"
+    CONVEX_STAKE_URL = "https://curve.convexfinance.com/stake"
+    CONCENTRATOR_VAULT_URL = "https://concentrator.aladdin.club/#/vault"
+
     for label in ("Pendle", "Curve", "Convex", "Concentrator", "Aerodrome"):
         pools = defillama.get(label, [])
         if label == "Pendle":
             for i, override_url in enumerate(PENDLE_URL_OVERRIDES):
                 if i < len(pools):
                     pools[i] = {**pools[i], "url": override_url}
+        if label == "Curve":
+            pools = [{**p, "url": CURVE_POOLS_URL} for p in pools]
+        if label == "Convex":
+            pools = [{**p, "url": CONVEX_STAKE_URL} for p in pools]
+        if label == "Concentrator":
+            pools = [{**p, "url": CONCENTRATOR_VAULT_URL} for p in pools]
         card_fn = render_aerodrome_card if label == "Aerodrome" else render_defillama_card
         html = "".join(card_fn(p) for p in pools) if pools else '<p class="empty">Sin pools activos en este momento.</p>'
         sections.append(render_section(label, html))
