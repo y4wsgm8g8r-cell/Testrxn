@@ -133,6 +133,62 @@ def collect_fxsave_apy() -> dict | None:
         print(f"[warn] could not fetch fxSAVE APY from DeFiLlama: {exc}", file=sys.stderr)
         return None
 
+
+# The RockawayX-curated PT-fxSAVE Pendle market. DeFiLlama sometimes has
+# gaps in its Pendle coverage for this pool, so we pull its APY straight
+# from Pendle's own public API instead of depending on DeFiLlama for it.
+PENDLE_ROCKAWAYX_MARKET_ADDRESS = "0x8308e53f584a7e5f0c581059d9ba971c0bec9454"
+PENDLE_ROCKAWAYX_URL = f"https://app.pendle.finance/trade/markets/{PENDLE_ROCKAWAYX_MARKET_ADDRESS}/swap?view=pt&chain=ethereum"
+
+
+def collect_pendle_fxsave_market() -> dict | None:
+    """Fetches live market data directly from Pendle's own public backend
+    API for the fxSAVE market, returning both the PT (fixed/implied) APY
+    and the LP (liquidity provision) APY from a single call, plus TVL."""
+    try:
+        url = f"https://api-v2.pendle.finance/core/v2/1/markets/{PENDLE_ROCKAWAYX_MARKET_ADDRESS}/data"
+        resp = requests.get(url, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+
+        def find_apy(candidates: tuple[str, ...]) -> float | None:
+            for key in candidates:
+                val = data.get(key)
+                if isinstance(val, (int, float)):
+                    return val
+            return None
+
+        pt_apy_raw = find_apy(("impliedApy", "underlyingApy"))
+        lp_apy_raw = find_apy(("lpApy", "aggregatedApy", "apy"))
+
+        tvl = None
+        liquidity = data.get("liquidity")
+        if isinstance(liquidity, dict):
+            tvl = liquidity.get("usd")
+        elif isinstance(data.get("tvl"), (int, float)):
+            tvl = data.get("tvl")
+
+        if pt_apy_raw is None and lp_apy_raw is None:
+            print(f"[warn] Pendle fxSAVE market: no known APY field in response, raw keys: {list(data.keys())}", file=sys.stderr)
+            return None
+
+        # Pendle's docs don't specify whether these fields are fractions
+        # (0.0715) or already percentages (7.15) -- treat small values as
+        # fractions needing *100, larger ones as already percentages.
+        def to_pct(raw: float | None) -> float | None:
+            if raw is None:
+                return None
+            return round(raw * 100 if abs(raw) < 1 else raw, 2)
+
+        return {
+            "pt_apy": to_pct(pt_apy_raw),
+            "lp_apy": to_pct(lp_apy_raw),
+            "tvl": round(tvl or 0, 2),
+        }
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] could not fetch Pendle fxSAVE market data: {exc}", file=sys.stderr)
+        return None
+
 # Whale-watch feed: shows live transfers over $10k for fxUSD/fxSAVE.
 # This runs client-side in the browser, so this key is publicly visible in
 # the page source -- that's expected/fine for a free-tier Etherscan key,
@@ -559,6 +615,7 @@ def render_html(
     fxusd_mcap: dict | None,
     fxsave_mcap: dict | None,
     fxsave_apy_data: dict | None = None,
+    pendle_rockawayx: dict | None = None,
 ) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
@@ -603,23 +660,56 @@ def render_html(
         render_section("Morpho -- vault RockawayX", vault_html),
     ]
     # Manual link overrides for the Pendle section: the first two cards
-    # should point straight to the Pendle app (zap-in and swap pages) for
-    # this specific market, instead of the generic DeFiLlama pool page.
-    PENDLE_URL_OVERRIDES = [
-        "https://app.pendle.finance/trade/pools/0x8308e53f584a7e5f0c581059d9ba971c0bec9454/zap/in?chain=ethereum",
-        "https://app.pendle.finance/trade/markets/0x8308e53f584a7e5f0c581059d9ba971c0bec9454/swap?view=pt&chain=ethereum&py=output",
-    ]
+    # Pendle section is fully independent of DeFiLlama now -- just these
+    # two fixed cards (PT and PLP for the fxSAVE market), both sourced
+    # directly from Pendle's own API.
+    PENDLE_ZAP_URL = "https://app.pendle.finance/trade/pools/0x8308e53f584a7e5f0c581059d9ba971c0bec9454/zap/in?chain=ethereum"
+
+    if pendle_rockawayx is not None:
+        pt_apy = pendle_rockawayx.get("pt_apy")
+        lp_apy = pendle_rockawayx.get("lp_apy")
+        tvl = pendle_rockawayx.get("tvl") or 0
+        pendle_html = f"""
+    <a class="card" href="{PENDLE_ROCKAWAYX_URL}" target="_blank" rel="noopener">
+      <p class="card-title">PT-fxSAVE</p>
+      <p class="card-sub">f(x) USD Saving &middot; Pendle V2</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">APY</p>
+          <p class="stat-value apy">{pt_apy if pt_apy is not None else 'no disponible'}{'%' if pt_apy is not None else ''}</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">TVL</p>
+          <p class="stat-value">${tvl:,.0f}</p>
+        </div>
+      </div>
+    </a>
+    <a class="card" href="{PENDLE_ZAP_URL}" target="_blank" rel="noopener">
+      <p class="card-title">PLP-fxSAVE</p>
+      <p class="card-sub">f(x) USD Saving &middot; Pendle V2</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">APY</p>
+          <p class="stat-value apy">{lp_apy if lp_apy is not None else 'no disponible'}{'%' if lp_apy is not None else ''}</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">TVL</p>
+          <p class="stat-value">${tvl:,.0f}</p>
+        </div>
+      </div>
+    </a>
+    """
+    else:
+        pendle_html = '<p class="empty">No se pudo obtener el dato de Pendle en este momento.</p>'
+
+    sections.append(render_section("Pendle", pendle_html))
 
     CURVE_POOLS_URL = "https://www.curve.finance/#/ethereum/pools"
     CONVEX_STAKE_URL = "https://curve.convexfinance.com/stake"
     CONCENTRATOR_VAULT_URL = "https://concentrator.aladdin.club/#/vault"
 
-    for label in ("Pendle", "Curve", "Convex", "Concentrator", "Aerodrome"):
+    for label in ("Curve", "Convex", "Concentrator", "Aerodrome"):
         pools = defillama.get(label, [])
-        if label == "Pendle":
-            for i, override_url in enumerate(PENDLE_URL_OVERRIDES):
-                if i < len(pools):
-                    pools[i] = {**pools[i], "url": override_url}
         if label == "Curve":
             pools = [{**p, "url": CURVE_POOLS_URL} for p in pools]
         if label == "Convex":
@@ -627,7 +717,8 @@ def render_html(
         if label == "Concentrator":
             pools = [{**p, "url": CONCENTRATOR_VAULT_URL} for p in pools]
         card_fn = render_aerodrome_card if label == "Aerodrome" else render_defillama_card
-        html = "".join(card_fn(p) for p in pools) if pools else '<p class="empty">Sin pools activos en este momento.</p>'
+        pool_html = "".join(card_fn(p) for p in pools)
+        html = pool_html if pool_html else '<p class="empty">Sin pools activos en este momento.</p>'
         sections.append(render_section(label, html))
 
     return f"""<!doctype html>
@@ -844,6 +935,7 @@ def main() -> None:
     fxusd_mcap = collect_fxusd_mcap()
     fxsave_mcap = collect_fxsave_mcap()
     fxsave_apy = collect_fxsave_apy()
+    pendle_rockawayx = collect_pendle_fxsave_market()
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(
@@ -855,13 +947,14 @@ def main() -> None:
                 "fxusd_mcap_usd": fxusd_mcap,
                 "fxsave_mcap_usd": fxsave_mcap,
                 "fxsave_apy_pct": fxsave_apy,
+                "pendle_rockawayx": pendle_rockawayx,
             },
             f,
             indent=2,
             ensure_ascii=False,
         )
 
-    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy)
+    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
@@ -870,6 +963,8 @@ def main() -> None:
         f"Listo: market={'ok' if market else 'missing'}, vault={'ok' if vault else 'missing'}, "
         f"fxusd_mcap={'ok' if fxusd_mcap else 'missing'}, fxsave_mcap={'ok' if fxsave_mcap else 'missing'}, "
         f"fxsave_apy={(fxsave_apy or {}).get('apy', 'missing')}, "
+        f"pendle_pt_apy={(pendle_rockawayx or {}).get('pt_apy', 'missing')}, "
+        f"pendle_lp_apy={(pendle_rockawayx or {}).get('lp_apy', 'missing')}, "
         f"defillama={counts}"
     )
 
