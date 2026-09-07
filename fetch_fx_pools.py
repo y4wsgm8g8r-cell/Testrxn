@@ -887,7 +887,7 @@ def render_html(
     {peg_chart_html}
 
     <div class="whale-box">
-      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
+      <p class="whale-title">MOVEMENTS &gt; $10K ON-CHAIN</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
