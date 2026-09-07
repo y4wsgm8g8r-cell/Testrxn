@@ -129,7 +129,7 @@ def collect_hydrex_pools() -> list[dict]:
             gauge = s.get("gauge") or {}
             apr = gauge.get("dayFarmingApr")
             tvl = s.get("tvlUsd") if s.get("tvlUsd") is not None else gauge.get("tvl")
-            if not tvl or tvl <= 0:
+            if not tvl or tvl < 1:
                 continue
             results.append(
                 {
@@ -715,6 +715,7 @@ def render_market_card(m: dict) -> str:
 
 
 def render_vault_card(v: dict) -> str:
+    change_badge = render_apy_change_badge(v.get("apy_change_24h"))
     return f"""
     <a class="card" href="{v['url']}" target="_blank" rel="noopener">
       <p class="card-title">{v['name']}</p>
@@ -722,7 +723,7 @@ def render_vault_card(v: dict) -> str:
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Net APY</p>
-          <p class="stat-value apy">{v['net_apy_pct']}%</p>
+          <p class="stat-value apy">{v['net_apy_pct']}% {change_badge}</p>
         </div>
         <div class="stat">
           <p class="stat-label">Depositos totales</p>
@@ -806,6 +807,8 @@ def render_html(
         pt_apy = pendle_rockawayx.get("pt_apy")
         lp_apy = pendle_rockawayx.get("lp_apy")
         tvl = pendle_rockawayx.get("tvl") or 0
+        pt_change_badge = render_apy_change_badge(pendle_rockawayx.get("pt_apy_change_24h"))
+        lp_change_badge = render_apy_change_badge(pendle_rockawayx.get("lp_apy_change_24h"))
         pendle_html = f"""
     <a class="card" href="{PENDLE_ROCKAWAYX_URL}" target="_blank" rel="noopener">
       <p class="card-title">PT-fxSAVE</p>
@@ -813,7 +816,7 @@ def render_html(
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">{pt_apy if pt_apy is not None else 'no disponible'}{'%' if pt_apy is not None else ''}</p>
+          <p class="stat-value apy">{pt_apy if pt_apy is not None else 'no disponible'}{'%' if pt_apy is not None else ''} {pt_change_badge}</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -827,7 +830,7 @@ def render_html(
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">{lp_apy if lp_apy is not None else 'no disponible'}{'%' if lp_apy is not None else ''}</p>
+          <p class="stat-value apy">{lp_apy if lp_apy is not None else 'no disponible'}{'%' if lp_apy is not None else ''} {lp_change_badge}</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -887,7 +890,7 @@ def render_html(
     {peg_chart_html}
 
     <div class="whale-box">
-      <p class="whale-title">MOVEMENTS &gt; $10K ON-CHAIN</p>
+      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
@@ -1063,6 +1066,40 @@ def render_html(
 """
 
 
+APY_HISTORY_FILE = "apy_history.json"
+APY_HISTORY_MAX_ENTRIES = 30  # ~7.5 days at 6h cadence, plenty to find a ~24h-old snapshot
+
+
+def load_apy_history() -> list[dict]:
+    try:
+        with open(APY_HISTORY_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def find_snapshot_near_24h(history: list[dict]) -> dict | None:
+    """Finds the stored snapshot closest to 24h old (within a +/-4h window),
+    for computing genuine 24h changes ourselves since Morpho/Pendle/Hydrex
+    don't expose a 24h-change field via their own APIs."""
+    if not history:
+        return None
+    now = datetime.now(timezone.utc).timestamp()
+    target = now - 24 * 3600
+    best, best_diff = None, None
+    for snap in history:
+        diff = abs(snap.get("ts", 0) - target)
+        if diff <= 4 * 3600 and (best_diff is None or diff < best_diff):
+            best, best_diff = snap, diff
+    return best
+
+
+def pct_point_change(current: float | None, previous: float | None) -> float | None:
+    if current is None or previous is None:
+        return None
+    return round(current - previous, 2)
+
+
 def main() -> None:
     try:
         market = collect_direct_market()
@@ -1088,6 +1125,46 @@ def main() -> None:
     fxsave_mcap = collect_fxsave_mcap()
     fxsave_apy = collect_fxsave_apy()
     pendle_rockawayx = collect_pendle_fxsave_market()
+
+    # Compute real 24h changes for Morpho/Pendle/Hydrex ourselves, since
+    # none of those APIs expose a 24h-change field like DeFiLlama does.
+    history = load_apy_history()
+    prev = find_snapshot_near_24h(history)
+
+    vault_apy_change = pct_point_change(
+        (vault or {}).get("net_apy_pct"),
+        (prev or {}).get("vault_apy") if prev else None,
+    )
+    pendle_pt_change = pct_point_change(
+        (pendle_rockawayx or {}).get("pt_apy"),
+        (prev or {}).get("pendle_pt_apy") if prev else None,
+    )
+    pendle_lp_change = pct_point_change(
+        (pendle_rockawayx or {}).get("lp_apy"),
+        (prev or {}).get("pendle_lp_apy") if prev else None,
+    )
+    prev_hydrex = (prev or {}).get("hydrex") or {}
+    for pool in hydrex_pools:
+        pool["apy_change_24h"] = pct_point_change(pool.get("apy_pct"), prev_hydrex.get(pool["symbol"]))
+
+    if vault is not None:
+        vault["apy_change_24h"] = vault_apy_change
+    if pendle_rockawayx is not None:
+        pendle_rockawayx["pt_apy_change_24h"] = pendle_pt_change
+        pendle_rockawayx["lp_apy_change_24h"] = pendle_lp_change
+
+    history.append(
+        {
+            "ts": datetime.now(timezone.utc).timestamp(),
+            "vault_apy": (vault or {}).get("net_apy_pct"),
+            "pendle_pt_apy": (pendle_rockawayx or {}).get("pt_apy"),
+            "pendle_lp_apy": (pendle_rockawayx or {}).get("lp_apy"),
+            "hydrex": {p["symbol"]: p["apy_pct"] for p in hydrex_pools},
+        }
+    )
+    history = history[-APY_HISTORY_MAX_ENTRIES:]
+    with open(APY_HISTORY_FILE, "w", encoding="utf-8") as f:
+        json.dump(history, f, indent=2)
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(
