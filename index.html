@@ -105,6 +105,15 @@ footer a { color: #000; }
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 }
+.peg-chart {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 2rem;
+}
+.peg-title { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px; font-weight: 700; }
+.peg-value { font-size: 1.1rem; color: #fff; font-weight: 700; margin: 0 0 8px; font-variant-numeric: tabular-nums; }
 .whale-box {
   background: var(--card);
   border: 1px solid var(--card-border);
@@ -139,15 +148,17 @@ footer a { color: #000; }
     <div class="mcap-row">
       <div class="mcap-card">
         <p class="mcap-label">fxUSD Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,548,251</span></p>
-        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9992</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,790,715</span></p>
+        <p class="mcap-price">Precio: $<span id="fxusd-price">1.0001</span></p>
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">72,188,832</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">72,273,621</span></p>
         <p class="mcap-price">Precio: $<span id="fxsave-price">1.1200</span></p>
       </div>
     </div>
+
+    
 
     <div class="whale-box">
       <p class="whale-title">Posiciones &gt; $10K en vivo</p>
@@ -155,7 +166,7 @@ footer a { color: #000; }
     </div>
 
     <h1><span class="live-dot"></span>DASHBOARD FXUSD &amp; FXSAVE POOLS LIVE</h1>
-    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-07 03:07 UTC</p>
+    <p class="subtitle">f(x) Protocol nativo, Morpho (mercado directo + vault RockawayX), Pendle, Curve y Convex. Ultima actualizacion: 2026-09-07 10:42 UTC</p>
 
     
     <p class="section-title">f(x) Protocol</p>
@@ -167,11 +178,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.99% <span class="apy-change apy-down">-0.16% (24h)</span></p>
+          <p class="stat-value apy">6.95% <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$72,188,832</p>
+          <p class="stat-value">$72,273,621</p>
         </div>
       </div>
     </a>
@@ -182,11 +193,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">17.69% <span class="apy-change apy-up">+1.21% (24h)</span></p>
+          <p class="stat-value apy">17.62% <span class="apy-change apy-up">+1.08% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$152,853</p>
+          <p class="stat-value">$152,885</p>
         </div>
       </div>
       
@@ -198,11 +209,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">16.92% <span class="apy-change apy-up">+0.1% (24h)</span></p>
+          <p class="stat-value apy">16.92% <span class="apy-change apy-up">+0.76% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$1,210,156</p>
+          <p class="stat-value">$1,210,035</p>
         </div>
       </div>
       
@@ -214,7 +225,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">9.79% <span class="apy-change apy-down">-1.43% (24h)</span></p>
+          <p class="stat-value apy">9.76% <span class="apy-change apy-down">-1.1% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -230,7 +241,7 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">8.83% <span class="apy-change apy-up">+1.15% (24h)</span></p>
+          <p class="stat-value apy">8.3% <span class="apy-change apy-up">+0.94% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
@@ -246,11 +257,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.92% <span class="apy-change apy-up">+0.28% (24h)</span></p>
+          <p class="stat-value apy">7.01% <span class="apy-change apy-up">+0.45% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$8,673,146</p>
+          <p class="stat-value">$8,574,119</p>
         </div>
       </div>
       
@@ -262,11 +273,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.74% <span class="apy-change apy-down">-0.18% (24h)</span></p>
+          <p class="stat-value apy">6.73% <span class="apy-change apy-up">+0.01% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$74,061,218</p>
+          <p class="stat-value">$74,062,628</p>
         </div>
       </div>
       
@@ -278,11 +289,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">5.69% <span class="apy-change apy-down">-2.4% (24h)</span></p>
+          <p class="stat-value apy">5.67% <span class="apy-change apy-up">+0.34% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$27,530</p>
+          <p class="stat-value">$27,528</p>
         </div>
       </div>
       
@@ -294,11 +305,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.19% <span class="apy-change apy-down">-2.1% (24h)</span></p>
+          <p class="stat-value apy">1.93% <span class="apy-change apy-down">-1.4% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$276,059</p>
+          <p class="stat-value">$301,652</p>
         </div>
       </div>
       
@@ -310,11 +321,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.02% <span class="apy-change apy-down">-0.04% (24h)</span></p>
+          <p class="stat-value apy">0.1% <span class="apy-change apy-up">+0.08% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$42,130</p>
+          <p class="stat-value">$42,135</p>
         </div>
       </div>
       
@@ -330,7 +341,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$757,527</p>
+          <p class="stat-value">$657,780</p>
         </div>
       </div>
       
@@ -346,7 +357,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$98,615</p>
+          <p class="stat-value">$98,625</p>
         </div>
       </div>
       
@@ -362,7 +373,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$57,090</p>
+          <p class="stat-value">$56,971</p>
         </div>
       </div>
       
@@ -378,7 +389,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$28,095</p>
+          <p class="stat-value">$28,098</p>
         </div>
       </div>
       
@@ -395,11 +406,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Net APY</p>
-          <p class="stat-value apy">8.35%</p>
+          <p class="stat-value apy">8.62%</p>
         </div>
         <div class="stat">
           <p class="stat-label">Depositos totales</p>
-          <p class="stat-value">$8,277,507</p>
+          <p class="stat-value">$8,338,656</p>
         </div>
       </div>
     </a>
@@ -419,7 +430,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$845,890</p>
+          <p class="stat-value">$845,875</p>
         </div>
       </div>
     </a>
@@ -429,11 +440,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">13.88%</p>
+          <p class="stat-value apy">14.06%</p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$845,890</p>
+          <p class="stat-value">$845,875</p>
         </div>
       </div>
     </a>
@@ -449,14 +460,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">14.6% <span class="apy-change apy-up">+0.33% (24h)</span></p>
+          <p class="stat-value apy">14.64% <span class="apy-change apy-up">+0.5% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$32,379</p>
+          <p class="stat-value">$32,382</p>
         </div>
       </div>
-       <span class="pill">incl. 13.94% rewards</span>
+       <span class="pill">incl. 14.0% rewards</span>
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -465,14 +476,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">8.89% <span class="apy-change apy-down">-0.21% (24h)</span></p>
+          <p class="stat-value apy">9.08% <span class="apy-change apy-up">+0.22% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$123,382</p>
+          <p class="stat-value">$123,397</p>
         </div>
       </div>
-       <span class="pill">incl. 8.78% rewards</span>
+       <span class="pill">incl. 8.8% rewards</span>
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -481,46 +492,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.0% <span class="apy-change apy-down">-0.14% (24h)</span></p>
+          <p class="stat-value apy">6.01% <span class="apy-change apy-up">+0.18% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$1,242,557</p>
+          <p class="stat-value">$1,242,374</p>
         </div>
       </div>
-       <span class="pill">incl. 5.96% rewards</span>
-    </a>
-    
-    <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
-      <p class="card-title">MSUSD-FXUSD</p>
-      <p class="card-sub">Ethereum</p>
-      <div class="stat-row">
-        <div class="stat">
-          <p class="stat-label">APY</p>
-          <p class="stat-value apy">2.75% <span class="apy-change apy-down">-2.43% (24h)</span></p>
-        </div>
-        <div class="stat">
-          <p class="stat-label">TVL</p>
-          <p class="stat-value">$279,013</p>
-        </div>
-      </div>
-       <span class="pill">incl. 2.43% rewards</span>
-    </a>
-    
-    <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
-      <p class="card-title">FXSAVE-SCRVUSD</p>
-      <p class="card-sub">Ethereum</p>
-      <div class="stat-row">
-        <div class="stat">
-          <p class="stat-label">APY</p>
-          <p class="stat-value apy">2.46% <span class="apy-change apy-up">+0.72% (24h)</span></p>
-        </div>
-        <div class="stat">
-          <p class="stat-label">TVL</p>
-          <p class="stat-value">$484,802</p>
-        </div>
-      </div>
-      
+       <span class="pill">incl. 5.98% rewards</span>
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -529,14 +508,46 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.95% <span class="apy-change apy-up">+0.89% (24h)</span></p>
+          <p class="stat-value apy">3.69% <span class="apy-change apy-up">+2.5% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$112,232</p>
+          <p class="stat-value">$112,039</p>
         </div>
       </div>
        <span class="pill">incl. 0.7% rewards</span>
+    </a>
+    
+    <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
+      <p class="card-title">MSUSD-FXUSD</p>
+      <p class="card-sub">Ethereum</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">APY</p>
+          <p class="stat-value apy">3.38% <span class="apy-change apy-down">-0.9% (24h)</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">TVL</p>
+          <p class="stat-value">$304,905</p>
+        </div>
+      </div>
+       <span class="pill">incl. 2.24% rewards</span>
+    </a>
+    
+    <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
+      <p class="card-title">FXSAVE-SCRVUSD</p>
+      <p class="card-sub">Ethereum</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">APY</p>
+          <p class="stat-value apy">1.95% <span class="apy-change apy-down">-0.32% (24h)</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">TVL</p>
+          <p class="stat-value">$484,805</p>
+        </div>
+      </div>
+      
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -545,11 +556,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.12% <span class="apy-change apy-down">-1.71% (24h)</span></p>
+          <p class="stat-value apy">0.12% <span class="apy-change apy-down">-1.68% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$93,738</p>
+          <p class="stat-value">$93,741</p>
         </div>
       </div>
       
@@ -561,11 +572,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.07% <span class="apy-change apy-down">-0.06% (24h)</span></p>
+          <p class="stat-value apy">0.1% <span class="apy-change apy-up">+0.05% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$8,673,489</p>
+          <p class="stat-value">$8,574,644</p>
         </div>
       </div>
       
@@ -577,11 +588,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.02% <span class="apy-change apy-down">-0.04% (24h)</span></p>
+          <p class="stat-value apy">0.1% <span class="apy-change apy-up">+0.08% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$42,190</p>
+          <p class="stat-value">$42,195</p>
         </div>
       </div>
       
@@ -597,7 +608,7 @@ footer a { color: #000; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$764,403</p>
+          <p class="stat-value">$664,661</p>
         </div>
       </div>
       
@@ -609,11 +620,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.0% <span class="apy-change apy-down">-0.1% (24h)</span></p>
+          <p class="stat-value apy">0.0% <span class="apy-change apy-down">-0.09% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$152,878</p>
+          <p class="stat-value">$152,911</p>
         </div>
       </div>
       
@@ -630,14 +641,14 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">8.12% <span class="apy-change apy-down">-0.41% (24h)</span></p>
+          <p class="stat-value apy">8.17% <span class="apy-change apy-up">+0.24% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$1,210,216</p>
+          <p class="stat-value">$1,210,038</p>
         </div>
       </div>
-       <span class="pill">incl. 8.08% rewards</span>
+       <span class="pill">incl. 8.14% rewards</span>
     </a>
     
     <a class="card" href="https://curve.convexfinance.com/stake" target="_blank" rel="noopener">
@@ -646,11 +657,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">2.46% <span class="apy-change apy-up">+0.72% (24h)</span></p>
+          <p class="stat-value apy">1.95% <span class="apy-change apy-down">-0.32% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$484,667</p>
+          <p class="stat-value">$484,670</p>
         </div>
       </div>
       
@@ -662,11 +673,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.14% <span class="apy-change apy-up">+0.04% (24h)</span></p>
+          <p class="stat-value apy">0.13% <span class="apy-change apy-up">+0.04% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$140,510</p>
+          <p class="stat-value">$140,540</p>
         </div>
       </div>
       
@@ -678,11 +689,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.12% <span class="apy-change apy-down">-1.71% (24h)</span></p>
+          <p class="stat-value apy">0.12% <span class="apy-change apy-down">-1.68% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$78,172</p>
+          <p class="stat-value">$78,175</p>
         </div>
       </div>
       
@@ -694,11 +705,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.07% <span class="apy-change apy-down">-0.06% (24h)</span></p>
+          <p class="stat-value apy">0.1% <span class="apy-change apy-up">+0.05% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$8,526,526</p>
+          <p class="stat-value">$8,527,545</p>
         </div>
       </div>
       
@@ -710,11 +721,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.02% <span class="apy-change apy-down">-0.04% (24h)</span></p>
+          <p class="stat-value apy">0.1% <span class="apy-change apy-up">+0.08% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$42,129</p>
+          <p class="stat-value">$42,134</p>
         </div>
       </div>
       
@@ -731,11 +742,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.99% <span class="apy-change apy-down">-0.16% (24h)</span></p>
+          <p class="stat-value apy">6.95% <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$72,301,080</p>
+          <p class="stat-value">$72,302,620</p>
         </div>
       </div>
       
@@ -752,11 +763,11 @@ footer a { color: #000; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY total</p>
-          <p class="stat-value apy">0.72% <span class="pill">> 6% emisiones</span> <span class="apy-change apy-up">+0.02% (24h)</span></p>
+          <p class="stat-value apy">0.7% <span class="pill">> 6% emisiones</span> <span class="apy-change apy-flat">0% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$492,413</p>
+          <p class="stat-value">$492,542</p>
         </div>
       </div>
     </a>
@@ -827,7 +838,7 @@ footer a { color: #000; }
       setInterval(refreshAll, 20000);
 
       // --- Whale watch: live transfers over $10k for fxUSD / fxSAVE ---
-      var whalePrices = { FXUSD: 0.9992, FXSAVE: 1.12 };
+      var whalePrices = { FXUSD: 1.0001, FXSAVE: 1.12 };
       var whaleSeen = {};
       var whaleLastShown = {}; // symbol -> amount/time pair, for fuzzy dedup
       var WHALE_MAX_ITEMS = 8;
