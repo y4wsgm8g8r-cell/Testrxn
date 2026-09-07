@@ -129,6 +129,8 @@ def collect_hydrex_pools() -> list[dict]:
             gauge = s.get("gauge") or {}
             apr = gauge.get("dayFarmingApr")
             tvl = s.get("tvlUsd") if s.get("tvlUsd") is not None else gauge.get("tvl")
+            if not tvl or tvl <= 0:
+                continue
             results.append(
                 {
                     "symbol": title,
