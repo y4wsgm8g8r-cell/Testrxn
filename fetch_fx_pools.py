@@ -221,11 +221,10 @@ def collect_fxusd_mcap() -> dict | None:
     return None
 
 
-def collect_fxusd_peg_history(days: int = 60) -> list[float] | None:
-    """Fetches fxUSD's daily price history via DeFiLlama's coins API, using
-    the token's contract address. (The stablecoins.llama.fi/stablecoin/{id}
-    endpoint was tried first, but its per-day entries only contain
-    circulating supply, no price -- confirmed via live log inspection.)"""
+def collect_fxusd_peg_history(days: int = 60) -> list[dict] | None:
+    """Fetches fxUSD's daily price history (with dates) via DeFiLlama's
+    coins API, using the token's contract address. Returns a list of
+    {"timestamp": int, "price": float} dicts."""
     try:
         import time as _time
         span_seconds = days * 86400
@@ -242,11 +241,15 @@ def collect_fxusd_peg_history(days: int = 60) -> list[float] | None:
             print(f"[warn] fxUSD peg history: no data for token address in response, keys: {list(payload.get('coins', {}).keys())}", file=sys.stderr)
             return None
         points = coin_data.get("prices") or []
-        prices = [p["price"] for p in points if isinstance(p.get("price"), (int, float))]
-        if not prices:
+        history = [
+            {"timestamp": p["timestamp"], "price": p["price"]}
+            for p in points
+            if isinstance(p.get("price"), (int, float)) and isinstance(p.get("timestamp"), (int, float))
+        ]
+        if not history:
             print(f"[warn] fxUSD peg history: no price points, sample: {points[0] if points else 'N/A'}", file=sys.stderr)
             return None
-        return prices[-days:]
+        return history[-days:]
     except Exception as exc:  # noqa: BLE001
         print(f"[warn] could not fetch fxUSD peg history: {exc}", file=sys.stderr)
         return None
@@ -541,12 +544,14 @@ footer a { color: #000; }
 """
 
 
-def render_peg_chart(prices: list[float] | None) -> str:
-    if not prices or len(prices) < 2:
+def render_peg_chart(history: list[dict] | None) -> str:
+    if not history or len(history) < 2:
         return ""
 
-    width, height = 700, 160
+    prices = [h["price"] for h in history]
+    width, height = 700, 190
     pad = 10
+    chart_bottom = height - 30  # leave room for date labels below the line
     lo, hi = min(prices + [0.994]), max(prices + [1.006])
     if hi == lo:
         hi = lo + 0.001
@@ -556,20 +561,32 @@ def render_peg_chart(prices: list[float] | None) -> str:
         return pad + (i / (len(prices) - 1)) * (width - 2 * pad)
 
     def y_at(v: float) -> float:
-        return pad + (1 - (v - lo) / span_y) * (height - 2 * pad)
+        return pad + (1 - (v - lo) / span_y) * (chart_bottom - pad)
 
     points = " ".join(f"{x_at(i):.1f},{y_at(v):.1f}" for i, v in enumerate(prices))
     peg_y = y_at(1.0)
     current = prices[-1]
     deviation_bps = round((current - 1.0) * 10000, 1)
 
+    # Date labels: show roughly 4 evenly-spaced month markers along the axis.
+    num_labels = min(4, len(history))
+    label_svg = ""
+    if num_labels >= 2:
+        for k in range(num_labels):
+            idx = round(k * (len(history) - 1) / (num_labels - 1))
+            ts = history[idx]["timestamp"]
+            label = datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%b '%y")
+            anchor = "start" if idx == 0 else ("end" if idx == len(history) - 1 else "middle")
+            label_svg += f'<text x="{x_at(idx):.1f}" y="{height - 8}" font-size="11" fill="#8a94a3" text-anchor="{anchor}">{label}</text>'
+
     return f"""
     <div class="peg-chart">
       <p class="peg-title">Peg Deviation (fxUSD)</p>
       <p class="peg-value"><span class="live-dot"></span>$<span id="peg-current-price">{current:.4f}</span> &middot; <span id="peg-deviation">{deviation_bps:+.1f}</span> bps</p>
-      <svg viewBox="0 0 {width} {height}" preserveAspectRatio="none" style="width: 100%; height: 120px;">
+      <svg viewBox="0 0 {width} {height}" preserveAspectRatio="none" style="width: 100%; height: 140px;">
         <line x1="{pad}" y1="{peg_y:.1f}" x2="{width - pad}" y2="{peg_y:.1f}" stroke="#3a4658" stroke-width="1" stroke-dasharray="4,3" />
         <polyline points="{points}" fill="none" stroke="#4ade80" stroke-width="2" />
+        {label_svg}
       </svg>
     </div>
     """
