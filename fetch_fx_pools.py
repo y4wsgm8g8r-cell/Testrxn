@@ -559,7 +559,7 @@ def render_peg_chart(prices: list[float] | None) -> str:
     return f"""
     <div class="peg-chart">
       <p class="peg-title">Peg Deviation (fxUSD)</p>
-      <p class="peg-value">${current:.4f} &middot; {deviation_bps:+.1f} bps</p>
+      <p class="peg-value"><span class="live-dot"></span>$<span id="peg-current-price">{current:.4f}</span> &middot; <span id="peg-deviation">{deviation_bps:+.1f}</span> bps</p>
       <svg viewBox="0 0 {width} {height}" preserveAspectRatio="none" style="width: 100%; height: 120px;">
         <line x1="{pad}" y1="{peg_y:.1f}" x2="{width - pad}" y2="{peg_y:.1f}" stroke="#3a4658" stroke-width="1" stroke-dasharray="4,3" />
         <polyline points="{points}" fill="none" stroke="#4ade80" stroke-width="2" />
@@ -865,6 +865,14 @@ def render_html(
               if ((list[i].symbol || '').toUpperCase() === 'FXUSD') {{
                 setValue('fxusd-mcap', (list[i].circulating || {{}}).peggedUSD);
                 setPrice('fxusd-price', list[i].price);
+                if (list[i].price) {{
+                  setPrice('peg-current-price', list[i].price);
+                  var pegEl = document.getElementById('peg-deviation');
+                  if (pegEl) {{
+                    var bps = (list[i].price - 1.0) * 10000;
+                    pegEl.textContent = (bps >= 0 ? '+' : '') + bps.toFixed(1);
+                  }}
+                }}
                 if (typeof whalePrices !== 'undefined' && list[i].price) {{
                   whalePrices.FXUSD = list[i].price;
                 }}
