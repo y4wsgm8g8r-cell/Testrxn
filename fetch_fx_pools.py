@@ -42,11 +42,6 @@ DEFILLAMA_PROJECTS = {
     "convex-finance": "Convex",
     "concentrator": "Concentrator",
     "aerodrome-slipstream": "Aerodrome",
-    "hydrex": "Hydrex",
-    "hydrex-v3": "Hydrex",
-    "hydrex-v4": "Hydrex",
-    "hydrex-omni": "Hydrex",
-    "hydrex-integral": "Hydrex",
 }
 
 MARKETS_QUERY = """
@@ -112,6 +107,43 @@ AERODROME_EMISSIONS_NOTE = "> 6% emisiones"
 # reading on-chain data or scraping a JS-rendered page ourselves.
 FXSAVE_APP_URL = "https://fx.aladdin.club/v2/fxsave"
 FXSAVE_DEFILLAMA_POOL_ID = "ee0b7069-f8f3-4aa2-a415-728f13e6cc3d"
+
+
+HYDREX_STRATEGIES_URL = "https://api.hydrex.fi/strategies"
+HYDREX_POOLS_URL = "https://www.hydrex.fi/pools?search=Fxusd"
+
+
+def collect_hydrex_pools() -> list[dict]:
+    """Fetches fxUSD pools directly from Hydrex's own public API (Base
+    chain). DeFiLlama doesn't track this DEX's fxUSD pools at all, so we
+    go straight to the source instead of guessing project slugs."""
+    try:
+        resp = requests.get(HYDREX_STRATEGIES_URL, timeout=30)
+        resp.raise_for_status()
+        strategies = resp.json()
+        results = []
+        for s in strategies:
+            title = s.get("title") or ""
+            if "FXUSD" not in title.upper():
+                continue
+            gauge = s.get("gauge") or {}
+            apr = gauge.get("dayFarmingApr")
+            tvl = s.get("tvlUsd") if s.get("tvlUsd") is not None else gauge.get("tvl")
+            results.append(
+                {
+                    "symbol": title,
+                    "chain": "Base",
+                    "tvl_usd": round(tvl or 0, 2),
+                    "apy_pct": round(apr or 0, 2),
+                    "apy_reward_pct": None,
+                    "apy_change_24h": None,
+                    "url": HYDREX_POOLS_URL,
+                }
+            )
+        return results
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] could not fetch Hydrex pools: {exc}", file=sys.stderr)
+        return []
 
 
 def collect_fxsave_apy() -> dict | None:
@@ -717,6 +749,7 @@ def render_html(
     fxsave_apy_data: dict | None = None,
     pendle_rockawayx: dict | None = None,
     fxusd_peg_history: list[float] | None = None,
+    hydrex_pools: list[dict] | None = None,
 ) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     peg_chart_html = render_peg_chart(fxusd_peg_history)
@@ -806,12 +839,14 @@ def render_html(
 
     sections.append(render_section("Pendle", pendle_html))
 
+    hydrex_html = "".join(render_defillama_card(p) for p in (hydrex_pools or []))
+    sections.append(render_section("Hydrex", hydrex_html if hydrex_html else '<p class="empty">Sin pools activos en este momento.</p>'))
+
     CURVE_POOLS_URL = "https://www.curve.finance/#/ethereum/pools"
     CONVEX_STAKE_URL = "https://curve.convexfinance.com/stake"
     CONCENTRATOR_VAULT_URL = "https://concentrator.aladdin.club/#/vault"
-    HYDREX_URL = "https://www.hydrex.fi/pools?search=Fxusd"
 
-    for label in ("Curve", "Convex", "Concentrator", "Aerodrome", "Hydrex"):
+    for label in ("Curve", "Convex", "Concentrator", "Aerodrome"):
         pools = defillama.get(label, [])
         if label == "Curve":
             pools = [{**p, "url": CURVE_POOLS_URL} for p in pools]
@@ -819,8 +854,6 @@ def render_html(
             pools = [{**p, "url": CONVEX_STAKE_URL} for p in pools]
         if label == "Concentrator":
             pools = [{**p, "url": CONCENTRATOR_VAULT_URL} for p in pools]
-        if label == "Hydrex":
-            pools = [{**p, "url": HYDREX_URL} for p in pools]
         card_fn = render_aerodrome_card if label == "Aerodrome" else render_defillama_card
         pool_html = "".join(card_fn(p) for p in pools)
         html = pool_html if pool_html else '<p class="empty">Sin pools activos en este momento.</p>'
@@ -1049,6 +1082,7 @@ def main() -> None:
 
     fxusd_mcap = collect_fxusd_mcap()
     fxusd_peg_history = collect_fxusd_peg_history()
+    hydrex_pools = collect_hydrex_pools()
     fxsave_mcap = collect_fxsave_mcap()
     fxsave_apy = collect_fxsave_apy()
     pendle_rockawayx = collect_pendle_fxsave_market()
@@ -1065,13 +1099,14 @@ def main() -> None:
                 "fxsave_apy_pct": fxsave_apy,
                 "pendle_rockawayx": pendle_rockawayx,
                 "fxusd_peg_history_points": len(fxusd_peg_history) if fxusd_peg_history else 0,
+                "hydrex_pools": hydrex_pools,
             },
             f,
             indent=2,
             ensure_ascii=False,
         )
 
-    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx, fxusd_peg_history)
+    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx, fxusd_peg_history, hydrex_pools)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
@@ -1082,7 +1117,7 @@ def main() -> None:
         f"fxsave_apy={(fxsave_apy or {}).get('apy', 'missing')}, "
         f"pendle_pt_apy={(pendle_rockawayx or {}).get('pt_apy', 'missing')}, "
         f"pendle_lp_apy={(pendle_rockawayx or {}).get('lp_apy', 'missing')}, "
-        f"defillama={counts}"
+        f"defillama={counts}, hydrex_pools={len(hydrex_pools)}"
     )
 
 
