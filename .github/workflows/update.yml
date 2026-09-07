@@ -27,6 +27,6 @@ jobs:
         run: |
           git config user.name "fx-pools-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add index.html data.json
+          git add index.html data.json apy_history.json
           git diff --cached --quiet || git commit -m "auto-update: fxSAVE/fxUSD data $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push
