@@ -42,6 +42,9 @@ DEFILLAMA_PROJECTS = {
     "convex-finance": "Convex",
     "concentrator": "Concentrator",
     "aerodrome-slipstream": "Aerodrome",
+    "hydrex": "Hydrex",
+    "hydrex-v3": "Hydrex",
+    "hydrex-v4": "Hydrex",
 }
 
 MARKETS_QUERY = """
@@ -804,8 +807,9 @@ def render_html(
     CURVE_POOLS_URL = "https://www.curve.finance/#/ethereum/pools"
     CONVEX_STAKE_URL = "https://curve.convexfinance.com/stake"
     CONCENTRATOR_VAULT_URL = "https://concentrator.aladdin.club/#/vault"
+    HYDREX_URL = "https://www.hydrex.fi/pools?search=Fxusd"
 
-    for label in ("Curve", "Convex", "Concentrator", "Aerodrome"):
+    for label in ("Curve", "Convex", "Concentrator", "Aerodrome", "Hydrex"):
         pools = defillama.get(label, [])
         if label == "Curve":
             pools = [{**p, "url": CURVE_POOLS_URL} for p in pools]
@@ -813,6 +817,8 @@ def render_html(
             pools = [{**p, "url": CONVEX_STAKE_URL} for p in pools]
         if label == "Concentrator":
             pools = [{**p, "url": CONCENTRATOR_VAULT_URL} for p in pools]
+        if label == "Hydrex":
+            pools = [{**p, "url": HYDREX_URL} for p in pools]
         card_fn = render_aerodrome_card if label == "Aerodrome" else render_defillama_card
         pool_html = "".join(card_fn(p) for p in pools)
         html = pool_html if pool_html else '<p class="empty">Sin pools activos en este momento.</p>'
