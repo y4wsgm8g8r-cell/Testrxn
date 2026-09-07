@@ -45,6 +45,8 @@ DEFILLAMA_PROJECTS = {
     "hydrex": "Hydrex",
     "hydrex-v3": "Hydrex",
     "hydrex-v4": "Hydrex",
+    "hydrex-omni": "Hydrex",
+    "hydrex-integral": "Hydrex",
 }
 
 MARKETS_QUERY = """
