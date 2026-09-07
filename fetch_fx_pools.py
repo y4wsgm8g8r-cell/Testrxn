@@ -211,10 +211,38 @@ def collect_fxusd_mcap() -> dict | None:
             if (s.get("symbol") or "").upper() == "FXUSD":
                 mcap = (s.get("circulating") or {}).get("peggedUSD")
                 price = s.get("price")
-                return {"mcap": round(mcap or 0, 2), "price": round(price, 4) if price else None}
+                return {
+                    "mcap": round(mcap or 0, 2),
+                    "price": round(price, 4) if price else None,
+                    "id": s.get("id"),
+                }
     except Exception as exc:  # noqa: BLE001
         print(f"[warn] could not fetch fxUSD market cap: {exc}", file=sys.stderr)
     return None
+
+
+def collect_fxusd_peg_history(stablecoin_id: str, days: int = 60) -> list[float] | None:
+    """Fetches fxUSD's daily price history from DeFiLlama, for a simple
+    peg-deviation sparkline chart (like the one on pharos.watch)."""
+    try:
+        resp = requests.get(f"https://stablecoins.llama.fi/stablecoin/{stablecoin_id}", timeout=30)
+        resp.raise_for_status()
+        payload = resp.json()
+        tokens = payload.get("tokens") or payload.get("chainBalances", {})
+        # The per-day entries live under "tokens" for the aggregate history;
+        # each entry should have a price somewhere -- try a few likely keys.
+        prices = []
+        for entry in tokens if isinstance(tokens, list) else []:
+            price = entry.get("price")
+            if isinstance(price, (int, float)):
+                prices.append(price)
+        if not prices:
+            print(f"[warn] fxUSD peg history: no price field found, sample entry: {tokens[0] if isinstance(tokens, list) and tokens else 'N/A'}", file=sys.stderr)
+            return None
+        return prices[-days:]
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] could not fetch fxUSD peg history: {exc}", file=sys.stderr)
+        return None
 
 
 def collect_fxsave_mcap() -> dict | None:
@@ -467,6 +495,15 @@ footer a { color: #000; }
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 }
+.peg-chart {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 2rem;
+}
+.peg-title { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px; font-weight: 700; }
+.peg-value { font-size: 1.1rem; color: #fff; font-weight: 700; margin: 0 0 8px; font-variant-numeric: tabular-nums; }
 .whale-box {
   background: var(--card);
   border: 1px solid var(--card-border);
@@ -495,6 +532,40 @@ footer a { color: #000; }
   to { opacity: 1; transform: translateY(0); }
 }
 """
+
+
+def render_peg_chart(prices: list[float] | None) -> str:
+    if not prices or len(prices) < 2:
+        return ""
+
+    width, height = 700, 160
+    pad = 10
+    lo, hi = min(prices + [0.994]), max(prices + [1.006])
+    if hi == lo:
+        hi = lo + 0.001
+    span_y = hi - lo
+
+    def x_at(i: int) -> float:
+        return pad + (i / (len(prices) - 1)) * (width - 2 * pad)
+
+    def y_at(v: float) -> float:
+        return pad + (1 - (v - lo) / span_y) * (height - 2 * pad)
+
+    points = " ".join(f"{x_at(i):.1f},{y_at(v):.1f}" for i, v in enumerate(prices))
+    peg_y = y_at(1.0)
+    current = prices[-1]
+    deviation_bps = round((current - 1.0) * 10000, 1)
+
+    return f"""
+    <div class="peg-chart">
+      <p class="peg-title">Peg Deviation (fxUSD)</p>
+      <p class="peg-value">${current:.4f} &middot; {deviation_bps:+.1f} bps</p>
+      <svg viewBox="0 0 {width} {height}" preserveAspectRatio="none" style="width: 100%; height: 120px;">
+        <line x1="{pad}" y1="{peg_y:.1f}" x2="{width - pad}" y2="{peg_y:.1f}" stroke="#3a4658" stroke-width="1" stroke-dasharray="4,3" />
+        <polyline points="{points}" fill="none" stroke="#4ade80" stroke-width="2" />
+      </svg>
+    </div>
+    """
 
 
 def render_apy_change_badge(change: float | None) -> str:
@@ -616,8 +687,10 @@ def render_html(
     fxsave_mcap: dict | None,
     fxsave_apy_data: dict | None = None,
     pendle_rockawayx: dict | None = None,
+    fxusd_peg_history: list[float] | None = None,
 ) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    peg_chart_html = render_peg_chart(fxusd_peg_history)
 
     fxusd_mcap_val = (fxusd_mcap or {}).get("mcap") or 0
     fxusd_price_val = (fxusd_mcap or {}).get("price") or 0
@@ -743,6 +816,8 @@ def render_html(
         <p class="mcap-price">Precio: $<span id="fxsave-price">{fxsave_price_val:.4f}</span></p>
       </div>
     </div>
+
+    {peg_chart_html}
 
     <div class="whale-box">
       <p class="whale-title">Posiciones &gt; $10K en vivo</p>
@@ -933,6 +1008,7 @@ def main() -> None:
         defillama = {label: [] for label in DEFILLAMA_PROJECTS.values()}
 
     fxusd_mcap = collect_fxusd_mcap()
+    fxusd_peg_history = collect_fxusd_peg_history(fxusd_mcap["id"]) if fxusd_mcap and fxusd_mcap.get("id") else None
     fxsave_mcap = collect_fxsave_mcap()
     fxsave_apy = collect_fxsave_apy()
     pendle_rockawayx = collect_pendle_fxsave_market()
@@ -948,13 +1024,14 @@ def main() -> None:
                 "fxsave_mcap_usd": fxsave_mcap,
                 "fxsave_apy_pct": fxsave_apy,
                 "pendle_rockawayx": pendle_rockawayx,
+                "fxusd_peg_history_points": len(fxusd_peg_history) if fxusd_peg_history else 0,
             },
             f,
             indent=2,
             ensure_ascii=False,
         )
 
-    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx)
+    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx, fxusd_peg_history)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
