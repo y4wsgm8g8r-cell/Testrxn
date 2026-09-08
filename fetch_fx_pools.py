@@ -74,6 +74,7 @@ query AllVaults($skip: Int!) {
       state {
         totalAssetsUsd
         netApy
+        avgNetApy
       }
     }
   }
@@ -427,7 +428,7 @@ def collect_rockawayx_vault() -> dict | None:
                 "name": name,
                 "asset": (v.get("asset") or {}).get("symbol"),
                 "total_assets_usd": round(state.get("totalAssetsUsd") or 0, 2),
-                "net_apy_pct": round((state.get("netApy") or 0) * 100, 2),
+                "net_apy_pct": round((state.get("avgNetApy") if state.get("avgNetApy") is not None else state.get("netApy") or 0) * 100, 2),
                 "url": f"https://app.morpho.org/ethereum/vault/{v['address']}",
             }
             if v["address"].lower() == ROCKAWAYX_VAULT_ADDRESS.lower():
