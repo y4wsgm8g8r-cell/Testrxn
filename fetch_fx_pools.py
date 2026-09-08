@@ -73,8 +73,11 @@ query AllVaults($skip: Int!) {
       asset { symbol }
       state {
         totalAssetsUsd
+        apy
         netApy
+        avgNetApy
         weeklyNetApy
+        monthlyNetApy
       }
     }
   }
@@ -423,12 +426,26 @@ def collect_rockawayx_vault() -> dict | None:
             if "rockawayx" not in name.lower():
                 continue
             state = v.get("state") or {}
+            if v["address"].lower() == ROCKAWAYX_VAULT_ADDRESS.lower():
+                print(
+                    f"[debug] RockawayX vault APY candidates -- "
+                    f"apy={state.get('apy')}, netApy={state.get('netApy')}, "
+                    f"avgNetApy={state.get('avgNetApy')}, weeklyNetApy={state.get('weeklyNetApy')}, "
+                    f"monthlyNetApy={state.get('monthlyNetApy')}",
+                    file=sys.stderr,
+                )
+            apy_raw = (
+                state.get("avgNetApy")
+                if state.get("avgNetApy") is not None
+                else state.get("weeklyNetApy") if state.get("weeklyNetApy") is not None
+                else state.get("netApy") or 0
+            )
             result = {
                 "address": v["address"],
                 "name": name,
                 "asset": (v.get("asset") or {}).get("symbol"),
                 "total_assets_usd": round(state.get("totalAssetsUsd") or 0, 2),
-                "net_apy_pct": round((state.get("weeklyNetApy") if state.get("weeklyNetApy") is not None else state.get("netApy") or 0) * 100, 2),
+                "net_apy_pct": round(apy_raw * 100, 2),
                 "url": f"https://app.morpho.org/ethereum/vault/{v['address']}",
             }
             if v["address"].lower() == ROCKAWAYX_VAULT_ADDRESS.lower():
