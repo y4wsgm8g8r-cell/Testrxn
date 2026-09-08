@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-08T11:36:37.385096+00:00",
+  "generated_at": "2026-09-08T11:41:44.291866+00:00",
   "morpho_direct_market": {
     "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
     "loan": "USDC",
@@ -15,10 +15,10 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 8150421.69,
+    "total_assets_usd": 8150436.09,
     "net_apy_pct": 9.3,
     "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
-    "apy_change_24h": null
+    "apy_change_24h": 0.67
   },
   "defillama": {
     "f(x) Protocol (nativo)": [
@@ -339,7 +339,7 @@
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 72932199,
+    "mcap": 72931948,
     "price": 1.11
   },
   "fxsave_apy_pct": {
@@ -349,19 +349,19 @@
   "pendle_rockawayx": {
     "pt_apy": 8.49,
     "lp_apy": 13.58,
-    "tvl": 845994.52,
-    "pt_apy_change_24h": null,
-    "lp_apy_change_24h": null
+    "tvl": 845998.18,
+    "pt_apy_change_24h": 0.07,
+    "lp_apy_change_24h": -0.12
   },
   "fxusd_peg_history_points": 60,
   "hydrex_pools": [
     {
       "symbol": "fxUSD/USDC",
       "chain": "Base",
-      "tvl_usd": 29930.65,
-      "apy_pct": 14.34,
+      "tvl_usd": 29930.53,
+      "apy_pct": 14.33,
       "apy_reward_pct": null,
-      "apy_change_24h": null,
+      "apy_change_24h": -74.24,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
@@ -370,16 +370,16 @@
       "tvl_usd": 140,
       "apy_pct": 0.19,
       "apy_reward_pct": null,
-      "apy_change_24h": null,
+      "apy_change_24h": 0.19,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
       "symbol": "fxUSD/MOLT",
       "chain": "Base",
-      "tvl_usd": 38.85,
+      "tvl_usd": 38.86,
       "apy_pct": 0.76,
       "apy_reward_pct": null,
-      "apy_change_24h": null,
+      "apy_change_24h": 0.07,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
@@ -388,7 +388,7 @@
       "tvl_usd": 1.15,
       "apy_pct": 0,
       "apy_reward_pct": null,
-      "apy_change_24h": null,
+      "apy_change_24h": 0,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
@@ -397,7 +397,7 @@
       "tvl_usd": 11.56,
       "apy_pct": 0,
       "apy_reward_pct": null,
-      "apy_change_24h": null,
+      "apy_change_24h": 0,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     }
   ]
