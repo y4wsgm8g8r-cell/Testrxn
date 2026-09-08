@@ -399,13 +399,19 @@ def collect_direct_market() -> dict | None:
     return None
 
 
+ROCKAWAYX_VAULT_ADDRESS = "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423"
+
+
 def collect_rockawayx_vault() -> dict | None:
-    """Page through vaults (200 at a time), matching on curator name -- the
-    vault name won't necessarily contain the literal strings
-    FXUSD/FXSAVE/FXN, so don't filter on that. Checks both Vault V1
-    ("vaults") and Vault V2 ("vaultV2s"), since newer curator vaults may
-    only exist under V2.
+    """Page through vaults (200 at a time). Prioritizes an exact match on
+    the known current RockawayX vault address (it has migrated before),
+    falling back to a name-based search ("rockawayx" in the vault name)
+    if that address isn't found. Checks both Vault V1 ("vaults") and
+    Vault V2 ("vaultV2s"), since newer curator vaults may only exist
+    under V2.
     """
+    name_fallback = None
+
     for page in range(MAX_PAGES):
         data = graphql(VAULTS_QUERY, {"skip": page * 200})
         items = data["vaults"]["items"]
@@ -413,16 +419,21 @@ def collect_rockawayx_vault() -> dict | None:
             break
         for v in items:
             name = v.get("name") or ""
-            if "rockawayx" in name.lower():
-                state = v.get("state") or {}
-                return {
-                    "address": v["address"],
-                    "name": name,
-                    "asset": (v.get("asset") or {}).get("symbol"),
-                    "total_assets_usd": round(state.get("totalAssetsUsd") or 0, 2),
-                    "net_apy_pct": round((state.get("netApy") or 0) * 100, 2),
-                    "url": f"https://app.morpho.org/ethereum/vault/{v['address']}",
-                }
+            if "rockawayx" not in name.lower():
+                continue
+            state = v.get("state") or {}
+            result = {
+                "address": v["address"],
+                "name": name,
+                "asset": (v.get("asset") or {}).get("symbol"),
+                "total_assets_usd": round(state.get("totalAssetsUsd") or 0, 2),
+                "net_apy_pct": round((state.get("netApy") or 0) * 100, 2),
+                "url": f"https://app.morpho.org/ethereum/vault/{v['address']}",
+            }
+            if v["address"].lower() == ROCKAWAYX_VAULT_ADDRESS.lower():
+                return result
+            if name_fallback is None:
+                name_fallback = result
 
     for page in range(MAX_PAGES):
         data = graphql(VAULTS_V2_QUERY, {"skip": page * 200})
@@ -431,15 +442,22 @@ def collect_rockawayx_vault() -> dict | None:
             break
         for v in items:
             name = v.get("name") or ""
-            if "rockawayx" in name.lower():
-                return {
-                    "address": v["address"],
-                    "name": name,
-                    "asset": (v.get("asset") or {}).get("symbol"),
-                    "total_assets_usd": round(v.get("totalAssetsUsd") or 0, 2),
-                    "net_apy_pct": round((v.get("avgNetApy") or 0) * 100, 2),
-                    "url": f"https://app.morpho.org/ethereum/vault/{v['address']}",
-                }
+            if "rockawayx" not in name.lower():
+                continue
+            result = {
+                "address": v["address"],
+                "name": name,
+                "asset": (v.get("asset") or {}).get("symbol"),
+                "total_assets_usd": round(v.get("totalAssetsUsd") or 0, 2),
+                "net_apy_pct": round((v.get("avgNetApy") or 0) * 100, 2),
+                "url": f"https://app.morpho.org/ethereum/vault/{v['address']}",
+            }
+            if v["address"].lower() == ROCKAWAYX_VAULT_ADDRESS.lower():
+                return result
+            if name_fallback is None:
+                name_fallback = result
+
+    return name_fallback
     return None
 
 
@@ -890,7 +908,7 @@ def render_html(
     {peg_chart_html}
 
     <div class="whale-box">
-      <p class="whale-title">Posiciones &gt; $10K en vivo</p>
+      <p class="whale-title">Movements &gt; $10K on-chain</p>
       <div class="whale-list" id="whale-list"></div>
     </div>
 
