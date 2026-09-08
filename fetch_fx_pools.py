@@ -77,7 +77,6 @@ query AllVaults($skip: Int!) {
         netApy
         avgNetApy
         weeklyNetApy
-        monthlyNetApy
       }
     }
   }
@@ -430,8 +429,7 @@ def collect_rockawayx_vault() -> dict | None:
                 print(
                     f"[debug] RockawayX vault APY candidates -- "
                     f"apy={state.get('apy')}, netApy={state.get('netApy')}, "
-                    f"avgNetApy={state.get('avgNetApy')}, weeklyNetApy={state.get('weeklyNetApy')}, "
-                    f"monthlyNetApy={state.get('monthlyNetApy')}",
+                    f"avgNetApy={state.get('avgNetApy')}, weeklyNetApy={state.get('weeklyNetApy')}",
                     file=sys.stderr,
                 )
             apy_raw = (
