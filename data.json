@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T08:56:06.334481+00:00",
+  "generated_at": "2026-09-09T09:00:47.797360+00:00",
   "morpho_direct_market": {
     "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
     "loan": "USDC",
@@ -15,12 +15,12 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 10264936.94,
-    "net_apy_pct": 9.92,
+    "total_assets_usd": 10264942.16,
+    "net_apy_pct": 9.96,
     "rewards": [
       {
         "symbol": "FXN",
-        "apr_pct": 5.72
+        "apr_pct": 5.83
       }
     ],
     "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423/rockawayx-fx-protocol-ecosystem-usdc",
@@ -345,7 +345,7 @@
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 74451320,
+    "mcap": 74451501,
     "price": 1.12
   },
   "fxsave_apy_pct": {
@@ -355,7 +355,7 @@
   "pendle_rockawayx": {
     "pt_apy": 8.4,
     "lp_apy": 13.21,
-    "tvl": 858194.8,
+    "tvl": 858182.24,
     "pt_apy_change_24h": -0.09,
     "lp_apy_change_24h": -0.4
   },
@@ -365,16 +365,16 @@
     {
       "symbol": "fxUSD/USDC",
       "chain": "Base",
-      "tvl_usd": 29825.65,
-      "apy_pct": 15.61,
+      "tvl_usd": 29825.52,
+      "apy_pct": 15.59,
       "apy_reward_pct": null,
-      "apy_change_24h": 1.7,
+      "apy_change_24h": 1.68,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
       "symbol": "BNKR/fxUSD",
       "chain": "Base",
-      "tvl_usd": 136.71,
+      "tvl_usd": 135.61,
       "apy_pct": 0.21,
       "apy_reward_pct": null,
       "apy_change_24h": null,
@@ -383,7 +383,7 @@
     {
       "symbol": "fxUSD/MOLT",
       "chain": "Base",
-      "tvl_usd": 38.21,
+      "tvl_usd": 38.24,
       "apy_pct": 0.85,
       "apy_reward_pct": null,
       "apy_change_24h": null,
@@ -401,7 +401,7 @@
     {
       "symbol": "BNKR/fxUSD",
       "chain": "Base",
-      "tvl_usd": 11.24,
+      "tvl_usd": 11.14,
       "apy_pct": 0,
       "apy_reward_pct": null,
       "apy_change_24h": 0,
