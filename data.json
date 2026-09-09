@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T19:47:51.681479+00:00",
+  "generated_at": "2026-09-09T19:52:25.239347+00:00",
   "morpho_direct_market": {
     "id": "0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84",
     "loan": "USDC",
@@ -7,9 +7,9 @@
     "lltv_pct": 91.5,
     "supply_apy_pct": 10.88,
     "borrow_apy_pct": 5.06,
-    "borrow_usd": 10826219.25,
-    "supply_usd": 12000068.58,
-    "liquidity_usd": 1173849.33,
+    "borrow_usd": 10826182.01,
+    "supply_usd": 12000027.3,
+    "liquidity_usd": 1173845.29,
     "utilization_pct": 90.22,
     "url": "https://app.morpho.org/ethereum/variable/0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84/usdc-fxsave?tab=market#market"
   },
@@ -17,7 +17,7 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 10064143.62,
+    "total_assets_usd": 10064109.0,
     "net_apy_pct": 9.72,
     "rewards": [
       {
@@ -347,7 +347,7 @@
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 74876089,
+    "mcap": 74875478,
     "price": 1.12
   },
   "fxsave_apy_pct": {
@@ -356,10 +356,10 @@
   },
   "pendle_rockawayx": {
     "pt_apy": 8.4,
-    "lp_apy": 13.42,
-    "tvl": 858264.66,
+    "lp_apy": 13.41,
+    "tvl": 858313.84,
     "pt_apy_change_24h": -0.06,
-    "lp_apy_change_24h": -0.04
+    "lp_apy_change_24h": -0.05
   },
   "fxusd_peg_history_points": 60,
   "fxusd_mcap_history_points": 913,
@@ -367,7 +367,7 @@
     {
       "symbol": "fxUSD/USDC",
       "chain": "Base",
-      "tvl_usd": 12339.61,
+      "tvl_usd": 12339.65,
       "apy_pct": 13.52,
       "apy_reward_pct": null,
       "apy_change_24h": -0.61,
