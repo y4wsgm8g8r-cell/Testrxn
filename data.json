@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-09-09T19:32:11.680218+00:00",
+  "generated_at": "2026-09-09T19:41:12.518792+00:00",
   "morpho_direct_market": {
     "id": "0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84",
     "loan": "USDC",
     "collateral": "fxSAVE",
     "lltv_pct": 91.5,
-    "supply_apy_pct": 10.63,
-    "borrow_apy_pct": 4.79,
-    "borrow_usd": 10826081.57,
-    "supply_usd": 12024636.83,
-    "liquidity_usd": 1198555.26,
-    "utilization_pct": 90.03,
+    "supply_apy_pct": 10.88,
+    "borrow_apy_pct": 5.06,
+    "borrow_usd": 10826399.25,
+    "supply_usd": 12000268.09,
+    "liquidity_usd": 1173868.84,
+    "utilization_pct": 90.22,
     "url": "https://app.morpho.org/ethereum/variable/0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84/usdc-fxsave?tab=market#market"
   },
   "morpho_rockawayx_vault": {
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 10064010.01,
-    "net_apy_pct": 9.51,
+    "total_assets_usd": 10064302.27,
+    "net_apy_pct": 9.67,
     "rewards": [
       {
         "symbol": "FXN",
-        "apr_pct": 5.62
+        "apr_pct": 5.6
       }
     ],
     "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423/rockawayx-fx-protocol-ecosystem-usdc",
-    "apy_change_24h": -1.42
+    "apy_change_24h": -1.26
   },
   "defillama": {
     "f(x) Protocol (nativo)": [
@@ -347,7 +347,7 @@
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 74889159,
+    "mcap": 74875928,
     "price": 1.12
   },
   "fxsave_apy_pct": {
@@ -356,10 +356,10 @@
   },
   "pendle_rockawayx": {
     "pt_apy": 8.4,
-    "lp_apy": 13.44,
-    "tvl": 858276.83,
+    "lp_apy": 13.42,
+    "tvl": 858290.63,
     "pt_apy_change_24h": -0.09,
-    "lp_apy_change_24h": -0.06
+    "lp_apy_change_24h": -0.08
   },
   "fxusd_peg_history_points": 60,
   "fxusd_mcap_history_points": 913,
@@ -367,10 +367,10 @@
     {
       "symbol": "fxUSD/USDC",
       "chain": "Base",
-      "tvl_usd": 12339.51,
-      "apy_pct": 13.49,
+      "tvl_usd": 12339.61,
+      "apy_pct": 13.52,
       "apy_reward_pct": null,
-      "apy_change_24h": -0.95,
+      "apy_change_24h": -0.92,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
@@ -385,8 +385,8 @@
     {
       "symbol": "fxUSD/MOLT",
       "chain": "Base",
-      "tvl_usd": 38.57,
-      "apy_pct": 0.92,
+      "tvl_usd": 38.56,
+      "apy_pct": 0.93,
       "apy_reward_pct": null,
       "apy_change_24h": null,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
