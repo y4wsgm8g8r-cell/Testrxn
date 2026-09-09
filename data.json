@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T15:59:36.604487+00:00",
+  "generated_at": "2026-09-09T16:05:53.231807+00:00",
   "morpho_direct_market": {
     "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
     "loan": "USDC",
@@ -15,16 +15,16 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 9948402.0,
-    "net_apy_pct": 10.6,
+    "total_assets_usd": 9948653.89,
+    "net_apy_pct": 10.36,
     "rewards": [
       {
         "symbol": "FXN",
-        "apr_pct": 5.85
+        "apr_pct": 5.86
       }
     ],
     "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423/rockawayx-fx-protocol-ecosystem-usdc",
-    "apy_change_24h": -0.72
+    "apy_change_24h": -0.96
   },
   "defillama": {
     "f(x) Protocol (nativo)": [
@@ -345,7 +345,7 @@
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 74892260,
+    "mcap": 74894073,
     "price": 1.12
   },
   "fxsave_apy_pct": {
@@ -355,7 +355,7 @@
   "pendle_rockawayx": {
     "pt_apy": 8.4,
     "lp_apy": 13.3,
-    "tvl": 858264.01,
+    "tvl": 858225.61,
     "pt_apy_change_24h": -0.09,
     "lp_apy_change_24h": -0.2
   },
@@ -365,7 +365,7 @@
     {
       "symbol": "fxUSD/USDC",
       "chain": "Base",
-      "tvl_usd": 29825.96,
+      "tvl_usd": 29824.82,
       "apy_pct": 16.69,
       "apy_reward_pct": null,
       "apy_change_24h": 2.27,
@@ -374,7 +374,7 @@
     {
       "symbol": "BNKR/fxUSD",
       "chain": "Base",
-      "tvl_usd": 136.4,
+      "tvl_usd": 136.55,
       "apy_pct": 0.22,
       "apy_reward_pct": null,
       "apy_change_24h": null,
@@ -383,7 +383,7 @@
     {
       "symbol": "fxUSD/MOLT",
       "chain": "Base",
-      "tvl_usd": 38.65,
+      "tvl_usd": 38.62,
       "apy_pct": 0.91,
       "apy_reward_pct": null,
       "apy_change_24h": null,
@@ -401,7 +401,7 @@
     {
       "symbol": "BNKR/fxUSD",
       "chain": "Base",
-      "tvl_usd": 11.21,
+      "tvl_usd": 11.23,
       "apy_pct": 0,
       "apy_reward_pct": null,
       "apy_change_24h": 0,
