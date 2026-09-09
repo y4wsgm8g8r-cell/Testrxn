@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T19:41:12.518792+00:00",
+  "generated_at": "2026-09-09T19:47:51.681479+00:00",
   "morpho_direct_market": {
     "id": "0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84",
     "loan": "USDC",
@@ -7,9 +7,9 @@
     "lltv_pct": 91.5,
     "supply_apy_pct": 10.88,
     "borrow_apy_pct": 5.06,
-    "borrow_usd": 10826399.25,
-    "supply_usd": 12000268.09,
-    "liquidity_usd": 1173868.84,
+    "borrow_usd": 10826219.25,
+    "supply_usd": 12000068.58,
+    "liquidity_usd": 1173849.33,
     "utilization_pct": 90.22,
     "url": "https://app.morpho.org/ethereum/variable/0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84/usdc-fxsave?tab=market#market"
   },
@@ -17,8 +17,8 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 10064302.27,
-    "net_apy_pct": 9.67,
+    "total_assets_usd": 10064143.62,
+    "net_apy_pct": 9.72,
     "rewards": [
       {
         "symbol": "FXN",
@@ -26,7 +26,7 @@
       }
     ],
     "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423/rockawayx-fx-protocol-ecosystem-usdc",
-    "apy_change_24h": -1.26
+    "apy_change_24h": -0.92
   },
   "defillama": {
     "f(x) Protocol (nativo)": [
@@ -347,7 +347,7 @@
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 74875928,
+    "mcap": 74876089,
     "price": 1.12
   },
   "fxsave_apy_pct": {
@@ -357,9 +357,9 @@
   "pendle_rockawayx": {
     "pt_apy": 8.4,
     "lp_apy": 13.42,
-    "tvl": 858290.63,
-    "pt_apy_change_24h": -0.09,
-    "lp_apy_change_24h": -0.08
+    "tvl": 858264.66,
+    "pt_apy_change_24h": -0.06,
+    "lp_apy_change_24h": -0.04
   },
   "fxusd_peg_history_points": 60,
   "fxusd_mcap_history_points": 913,
@@ -370,7 +370,7 @@
       "tvl_usd": 12339.61,
       "apy_pct": 13.52,
       "apy_reward_pct": null,
-      "apy_change_24h": -0.92,
+      "apy_change_24h": -0.61,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
