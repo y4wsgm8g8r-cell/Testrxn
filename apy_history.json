@@ -238,5 +238,17 @@
       "fxUSD/MOLT": 0.77,
       "USDC/fxUSD": 0
     }
+  },
+  {
+    "ts": 1788943871.401431,
+    "vault_apy": 9.81,
+    "pendle_pt_apy": 8.4,
+    "pendle_lp_apy": 13.21,
+    "hydrex": {
+      "fxUSD/USDC": 15.61,
+      "BNKR/fxUSD": 0,
+      "fxUSD/MOLT": 0.85,
+      "USDC/fxUSD": 0
+    }
   }
 ]
