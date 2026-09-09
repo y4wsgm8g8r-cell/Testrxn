@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T10:49:47.333215+00:00",
+  "generated_at": "2026-09-09T15:59:36.604487+00:00",
   "morpho_direct_market": {
     "id": "0x6c5942c5701a26908249de68596085b2144390f0c0242b9b545a30b5a31f09f4",
     "loan": "USDC",
@@ -15,74 +15,74 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 10259763.35,
-    "net_apy_pct": 9.7,
+    "total_assets_usd": 9948402.0,
+    "net_apy_pct": 10.6,
     "rewards": [
       {
         "symbol": "FXN",
-        "apr_pct": 5.87
+        "apr_pct": 5.85
       }
     ],
     "url": "https://app.morpho.org/ethereum/vault/0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423/rockawayx-fx-protocol-ecosystem-usdc",
-    "apy_change_24h": null
+    "apy_change_24h": -0.72
   },
   "defillama": {
     "f(x) Protocol (nativo)": [
       {
         "symbol": "ALUSD+FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 152759,
-        "apy_pct": 17.37,
+        "tvl_usd": 152743,
+        "apy_pct": 17.4,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": 0,
+        "apy_change_24h": 0.54,
         "url": "https://defillama.com/yields/pool/f5e02515-834d-442d-9eed-674982b8ec17"
       },
       {
         "symbol": "REUSD+FXUSD",
         "chain": "Ethereum",
         "tvl_usd": 1245863,
-        "apy_pct": 15.93,
+        "apy_pct": 15.91,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": -0.05,
+        "apy_change_24h": 0.26,
         "url": "https://defillama.com/yields/pool/923b502c-b379-421f-a322-58360e97ba64"
       },
       {
         "symbol": "GHO-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 108582,
-        "apy_pct": 9.42,
+        "tvl_usd": 108571,
+        "apy_pct": 9.21,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": -0.23,
+        "apy_change_24h": -0.36,
         "url": "https://defillama.com/yields/pool/8aee14d9-e419-4939-a768-b163be95a08c"
       },
       {
         "symbol": "FXSAVE-SCRVUSD",
         "chain": "Ethereum",
-        "tvl_usd": 484655,
-        "apy_pct": 8.15,
+        "tvl_usd": 484567,
+        "apy_pct": 8.16,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": -0.25,
+        "apy_change_24h": -0.06,
         "url": "https://defillama.com/yields/pool/705cbd88-5428-4973-adc9-d8ca7b4aa1a4"
       },
       {
         "symbol": "USDC+fxUSD",
         "chain": "Ethereum",
-        "tvl_usd": 8557534,
-        "apy_pct": 7.29,
+        "tvl_usd": 8476600,
+        "apy_pct": 7.32,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": -0.36,
+        "apy_change_24h": -0.17,
         "url": "https://defillama.com/yields/pool/36a80c7f-23d1-4e8c-9341-181e1a20d858"
       },
       {
         "symbol": "FXUSDSTABILITYPOOLV2.0",
         "chain": "Ethereum",
-        "tvl_usd": 76236826,
-        "apy_pct": 6.57,
+        "tvl_usd": 76691802,
+        "apy_pct": 6.51,
         "apy_base_pct": null,
         "apy_reward_pct": null,
         "apy_change_24h": -0.05,
@@ -91,27 +91,27 @@
       {
         "symbol": "FXUSDSTABILITYPOOLV2.0(REWARDSFXN)",
         "chain": "Ethereum",
-        "tvl_usd": 27531,
-        "apy_pct": 5.6,
+        "tvl_usd": 27530,
+        "apy_pct": 5.61,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": -0.02,
+        "apy_change_24h": 0.16,
         "url": "https://defillama.com/yields/pool/6d6cb8a4-46e0-4ac5-9800-e0ccb53ea7df"
       },
       {
         "symbol": "MSUSD+FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 310723,
+        "tvl_usd": 310538,
         "apy_pct": 0.84,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": -0.26,
+        "apy_change_24h": -0.24,
         "url": "https://defillama.com/yields/pool/76f2b087-ce87-4f90-9eb1-742457817e3d"
       },
       {
         "symbol": "USDNR-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 655680,
+        "tvl_usd": 655549,
         "apy_pct": 0,
         "apy_base_pct": null,
         "apy_reward_pct": null,
@@ -131,7 +131,7 @@
       {
         "symbol": "ETH+fxUSD",
         "chain": "Ethereum",
-        "tvl_usd": 65840,
+        "tvl_usd": 65746,
         "apy_pct": 0,
         "apy_base_pct": null,
         "apy_reward_pct": null,
@@ -141,7 +141,7 @@
       {
         "symbol": "USDAF+FXUSD+BOLD+USDC",
         "chain": "Ethereum",
-        "tvl_usd": 28115,
+        "tvl_usd": 28112,
         "apy_pct": 0,
         "apy_base_pct": null,
         "apy_reward_pct": null,
@@ -154,47 +154,47 @@
       {
         "symbol": "FXUSD-USDC-USDAF-BOLD",
         "chain": "Ethereum",
-        "tvl_usd": 32404,
-        "apy_pct": 13.78,
+        "tvl_usd": 32401,
+        "apy_pct": 13.8,
         "apy_base_pct": 0.55,
-        "apy_reward_pct": 13.23,
-        "apy_change_24h": 0.21,
+        "apy_reward_pct": 13.25,
+        "apy_change_24h": 0.34,
         "url": "https://defillama.com/yields/pool/d537ad4f-0474-49be-a01e-80fafa09c72a"
       },
       {
         "symbol": "FXUSD-FRXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 123371,
-        "apy_pct": 9.08,
-        "apy_base_pct": 0.14,
-        "apy_reward_pct": 8.94,
-        "apy_change_24h": -0.77,
+        "tvl_usd": 123359,
+        "apy_pct": 9.11,
+        "apy_base_pct": 0.23,
+        "apy_reward_pct": 8.88,
+        "apy_change_24h": -0.47,
         "url": "https://defillama.com/yields/pool/2e8bf750-dfef-4b63-844d-da2d861f4e36"
       },
       {
         "symbol": "REUSD-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 1257915,
+        "tvl_usd": 1257850,
         "apy_pct": 5.71,
         "apy_base_pct": 0.04,
         "apy_reward_pct": 5.67,
-        "apy_change_24h": -0.1,
+        "apy_change_24h": -0.0,
         "url": "https://defillama.com/yields/pool/18f29a9a-3550-457b-a39e-b80ce65000aa"
       },
       {
         "symbol": "MSUSD-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 314073,
-        "apy_pct": 2.13,
+        "tvl_usd": 313855,
+        "apy_pct": 2.14,
         "apy_base_pct": 0.08,
-        "apy_reward_pct": 2.05,
-        "apy_change_24h": -0.3,
+        "apy_reward_pct": 2.06,
+        "apy_change_24h": -0.28,
         "url": "https://defillama.com/yields/pool/4cd5ea56-75f6-449c-b134-cb76e4f86d10"
       },
       {
         "symbol": "FXSAVE-SCRVUSD",
         "chain": "Ethereum",
-        "tvl_usd": 484804,
+        "tvl_usd": 484723,
         "apy_pct": 1.88,
         "apy_base_pct": 1.88,
         "apy_reward_pct": 0.0,
@@ -204,37 +204,37 @@
       {
         "symbol": "WETH-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 121168,
-        "apy_pct": 1.68,
-        "apy_base_pct": 1.02,
+        "tvl_usd": 120924,
+        "apy_pct": 1.6,
+        "apy_base_pct": 0.94,
         "apy_reward_pct": 0.66,
-        "apy_change_24h": -0.46,
+        "apy_change_24h": -0.95,
         "url": "https://defillama.com/yields/pool/f1e4ffd1-a441-4a16-9d8a-4894023b993f"
       },
       {
         "symbol": "GHO-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 109089,
-        "apy_pct": 0.85,
-        "apy_base_pct": 0.85,
+        "tvl_usd": 109069,
+        "apy_pct": 0.62,
+        "apy_base_pct": 0.62,
         "apy_reward_pct": 0.0,
-        "apy_change_24h": 0.75,
+        "apy_change_24h": 0.32,
         "url": "https://defillama.com/yields/pool/2566e666-3341-4572-8eea-fb3c1b3b9868"
       },
       {
         "symbol": "USDC-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 8547894,
-        "apy_pct": 0.45,
-        "apy_base_pct": 0.45,
+        "tvl_usd": 8477242,
+        "apy_pct": 0.4,
+        "apy_base_pct": 0.4,
         "apy_reward_pct": 0.0,
-        "apy_change_24h": -0.34,
+        "apy_change_24h": -0.43,
         "url": "https://defillama.com/yields/pool/bcc046f9-d980-40d9-80b2-5d5ae5931131"
       },
       {
         "symbol": "EUSD-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 42190,
+        "tvl_usd": 42183,
         "apy_pct": 0.05,
         "apy_base_pct": 0.05,
         "apy_reward_pct": null,
@@ -244,7 +244,7 @@
       {
         "symbol": "USDNR-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 662490,
+        "tvl_usd": 662400,
         "apy_pct": 0,
         "apy_base_pct": 0,
         "apy_reward_pct": null,
@@ -254,7 +254,7 @@
       {
         "symbol": "ALUSD-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 152777,
+        "tvl_usd": 152759,
         "apy_pct": 0.0,
         "apy_base_pct": 0,
         "apy_reward_pct": 0.0,
@@ -266,17 +266,17 @@
       {
         "symbol": "REUSD-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 1245901,
-        "apy_pct": 7.5,
+        "tvl_usd": 1245837,
+        "apy_pct": 7.51,
         "apy_base_pct": 0.04,
-        "apy_reward_pct": 7.46,
-        "apy_change_24h": -0.14,
+        "apy_reward_pct": 7.47,
+        "apy_change_24h": -0.03,
         "url": "https://defillama.com/yields/pool/bd685d54-44b7-4b98-a2a8-4ecc22b59d66"
       },
       {
         "symbol": "FXSAVE-SCRVUSD",
         "chain": "Ethereum",
-        "tvl_usd": 484669,
+        "tvl_usd": 484588,
         "apy_pct": 1.88,
         "apy_base_pct": 1.88,
         "apy_reward_pct": null,
@@ -286,27 +286,27 @@
       {
         "symbol": "GHO-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 108581,
-        "apy_pct": 0.85,
-        "apy_base_pct": 0.85,
+        "tvl_usd": 108561,
+        "apy_pct": 0.62,
+        "apy_base_pct": 0.62,
         "apy_reward_pct": null,
-        "apy_change_24h": 0.75,
+        "apy_change_24h": 0.32,
         "url": "https://defillama.com/yields/pool/83a3cdd4-e375-48b7-bf76-a05bfb38c084"
       },
       {
         "symbol": "USDC-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 8547200,
-        "apy_pct": 0.45,
-        "apy_base_pct": 0.45,
+        "tvl_usd": 8476547,
+        "apy_pct": 0.4,
+        "apy_base_pct": 0.4,
         "apy_reward_pct": 0.0,
-        "apy_change_24h": -0.34,
+        "apy_change_24h": -0.43,
         "url": "https://defillama.com/yields/pool/769acc2d-bbc7-4242-87fd-98fcc015f21e"
       },
       {
         "symbol": "ALUSD-FXUSD",
         "chain": "Ethereum",
-        "tvl_usd": 140417,
+        "tvl_usd": 140400,
         "apy_pct": 0.07,
         "apy_base_pct": 0.07,
         "apy_reward_pct": null,
@@ -318,11 +318,11 @@
       {
         "symbol": "FXSAVE",
         "chain": "Ethereum",
-        "tvl_usd": 74476536,
-        "apy_pct": 6.8,
+        "tvl_usd": 74931613,
+        "apy_pct": 6.72,
         "apy_base_pct": null,
         "apy_reward_pct": null,
-        "apy_change_24h": -0.01,
+        "apy_change_24h": -0.05,
         "url": "https://defillama.com/yields/pool/ee0b7069-f8f3-4aa2-a415-728f13e6cc3d"
       }
     ],
@@ -330,34 +330,34 @@
       {
         "symbol": "FXUSD-USDC",
         "chain": "Base",
-        "tvl_usd": 488705,
-        "apy_pct": 1.04,
-        "apy_base_pct": 0.28,
-        "apy_reward_pct": 0.76,
-        "apy_change_24h": -0.13,
+        "tvl_usd": 488695,
+        "apy_pct": 0.73,
+        "apy_base_pct": 0.0,
+        "apy_reward_pct": 0.73,
+        "apy_change_24h": -0.71,
         "url": "https://defillama.com/yields/pool/bfcc6016-8fa5-48c0-b922-5be6c6ebd95b"
       }
     ]
   },
   "fxusd_mcap_usd": {
-    "mcap": 79880258.77,
+    "mcap": 79878392.52,
     "price": 0.9997,
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 74418906,
+    "mcap": 74892260,
     "price": 1.12
   },
   "fxsave_apy_pct": {
-    "apy": 6.8,
-    "change_24h": -0.01
+    "apy": 6.72,
+    "change_24h": -0.05
   },
   "pendle_rockawayx": {
     "pt_apy": 8.4,
-    "lp_apy": 13.13,
-    "tvl": 858217.81,
+    "lp_apy": 13.3,
+    "tvl": 858264.01,
     "pt_apy_change_24h": -0.09,
-    "lp_apy_change_24h": -0.48
+    "lp_apy_change_24h": -0.2
   },
   "fxusd_peg_history_points": 60,
   "fxusd_mcap_history_points": 913,
@@ -365,16 +365,16 @@
     {
       "symbol": "fxUSD/USDC",
       "chain": "Base",
-      "tvl_usd": 29824.81,
-      "apy_pct": 16.38,
+      "tvl_usd": 29825.96,
+      "apy_pct": 16.69,
       "apy_reward_pct": null,
-      "apy_change_24h": 2.47,
+      "apy_change_24h": 2.27,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
       "symbol": "BNKR/fxUSD",
       "chain": "Base",
-      "tvl_usd": 134.02,
+      "tvl_usd": 136.4,
       "apy_pct": 0.22,
       "apy_reward_pct": null,
       "apy_change_24h": null,
@@ -383,8 +383,8 @@
     {
       "symbol": "fxUSD/MOLT",
       "chain": "Base",
-      "tvl_usd": 37.94,
-      "apy_pct": 0.9,
+      "tvl_usd": 38.65,
+      "apy_pct": 0.91,
       "apy_reward_pct": null,
       "apy_change_24h": null,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
@@ -401,7 +401,7 @@
     {
       "symbol": "BNKR/fxUSD",
       "chain": "Base",
-      "tvl_usd": 10.98,
+      "tvl_usd": 11.21,
       "apy_pct": 0,
       "apy_reward_pct": null,
       "apy_change_24h": 0,
