@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T10:52:23.333237+00:00",
+  "generated_at": "2026-09-17T10:57:27.823246+00:00",
   "morpho_direct_market": {
     "id": "0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84",
     "loan": "USDC",
@@ -7,9 +7,9 @@
     "lltv_pct": 91.5,
     "supply_apy_pct": 8.15,
     "borrow_apy_pct": 3.68,
-    "borrow_usd": 9883375.53,
-    "supply_usd": 13810154.03,
-    "liquidity_usd": 3926778.5,
+    "borrow_usd": 9883650.73,
+    "supply_usd": 13810538.58,
+    "liquidity_usd": 3926887.84,
     "utilization_pct": 71.57,
     "url": "https://app.morpho.org/ethereum/variable/0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84/usdc-fxsave?tab=market#market"
   },
@@ -17,7 +17,7 @@
     "address": "0x2cA22cb25558fa2018ecb1CE4eD8AF92Ee7ea423",
     "name": "RockawayX f(x) Protocol Ecosystem USDC",
     "asset": "USDC",
-    "total_assets_usd": 11259486.13,
+    "total_assets_usd": 11259805.18,
     "net_apy_pct": 7.91,
     "rewards": [
       {
@@ -347,7 +347,7 @@
     "id": "168"
   },
   "fxsave_mcap_usd": {
-    "mcap": 75877034,
+    "mcap": 75877973,
     "price": 1.12
   },
   "fxsave_apy_pct": {
@@ -356,11 +356,11 @@
   },
   "pendle_rockawayx": {
     "pt_apy": 8.95,
-    "lp_apy": 12.34,
-    "yt_apy": 1177.35,
-    "tvl": 897823.41,
+    "lp_apy": 12.33,
+    "yt_apy": 11.91,
+    "tvl": 897842.63,
     "pt_apy_change_24h": 0.54,
-    "lp_apy_change_24h": -0.51,
+    "lp_apy_change_24h": -0.52,
     "yt_apy_change_24h": null
   },
   "fxusd_peg_history_points": 60,
@@ -369,10 +369,10 @@
     {
       "symbol": "fxUSD/USDC",
       "chain": "Base",
-      "tvl_usd": 10925.96,
-      "apy_pct": 13.77,
+      "tvl_usd": 10925.92,
+      "apy_pct": 13.76,
       "apy_reward_pct": null,
-      "apy_change_24h": 1.81,
+      "apy_change_24h": 1.8,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
     },
     {
@@ -388,7 +388,7 @@
       "symbol": "fxUSD/MOLT",
       "chain": "Base",
       "tvl_usd": 40.87,
-      "apy_pct": 1.84,
+      "apy_pct": 1.83,
       "apy_reward_pct": null,
       "apy_change_24h": null,
       "url": "https://www.hydrex.fi/pools?search=Fxusd"
