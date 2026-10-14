@@ -1,17 +1,5 @@
 [
   {
-    "ts": 1791114718.091037,
-    "vault_apy": 7.93,
-    "pendle_pt_apy": 8.94,
-    "pendle_lp_apy": 11.34,
-    "pendle_yt_apy": 9.72,
-    "hydrex": {
-      "fxUSD/USDC": 13.04,
-      "BNKR/fxUSD": 0,
-      "USDC/fxUSD": 0
-    }
-  },
-  {
     "ts": 1791131437.06125,
     "vault_apy": 8.25,
     "pendle_pt_apy": 8.94,
@@ -353,6 +341,18 @@
     "pendle_pt_apy": 8.71,
     "pendle_lp_apy": 10.17,
     "pendle_yt_apy": 9.16,
+    "hydrex": {
+      "fxUSD/USDC": 0.01,
+      "BNKR/fxUSD": 0,
+      "USDC/fxUSD": 0
+    }
+  },
+  {
+    "ts": 1791949455.796114,
+    "vault_apy": 7.3,
+    "pendle_pt_apy": 8.73,
+    "pendle_lp_apy": 9.74,
+    "pendle_yt_apy": 8.47,
     "hydrex": {
       "fxUSD/USDC": 0.01,
       "BNKR/fxUSD": 0,
