@@ -466,6 +466,100 @@ def collect_fxsave_mcap() -> dict | None:
     return None
 
 
+# ---------------------------------------------------------------------------
+# Stability Pool funding (f(x) Protocol)
+# Funding nivel I se activa cuando el USDC del Stability Pool baja del 5%
+# del total (USDC + fxUSD). Fuente: docs de f(x), "Advanced Peg Protection
+# Mechanisms". Si la gobernanza cambia el umbral, edita FUNDING_USDC_THRESHOLD_PCT.
+#
+# Formula (U = USDC del pool, F = fxUSD del pool, t = umbral):
+#     U / (U + F) = t   ->   U_necesario = F * t / (1 - t)
+#     con t = 5%        ->   U_necesario = F / 19
+#     USDC que falta    =    max(U_necesario - U, 0)
+# ---------------------------------------------------------------------------
+STABILITY_POOL_ADDRESS = "0x65C9A641afCEB9C0E6034e558A319488FA0FA3be"
+USDC_CONTRACT = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+FUNDING_USDC_THRESHOLD_PCT = 5.0
+STABILITY_POOL_URL = f"https://etherscan.io/address/{STABILITY_POOL_ADDRESS}"
+
+
+def _stability_pool_balances() -> tuple[float, float] | None:
+    """Returns (usdc, fxusd) held by the Stability Pool contract.
+
+    Matches tokens by contract address on purpose: the address also holds
+    fake 'USD Coin' spam tokens with huge balances that must be ignored."""
+    try:
+        resp = requests.get(
+            f"https://eth.blockscout.com/api/v2/addresses/{STABILITY_POOL_ADDRESS}/token-balances",
+            timeout=30,
+        )
+        resp.raise_for_status()
+        usdc = fxusd = None
+        for row in resp.json():
+            token = row.get("token") or {}
+            addr = (token.get("address_hash") or token.get("address") or "").lower()
+            decimals = int(token.get("decimals") or 0)
+            value = int(row.get("value") or 0) / (10 ** decimals)
+            if addr == USDC_CONTRACT.lower():
+                usdc = value
+            elif addr == FXUSD_CONTRACT.lower():
+                fxusd = value
+        if fxusd is not None:
+            return (usdc or 0.0), fxusd
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] Blockscout stability pool balances failed: {exc}", file=sys.stderr)
+
+    # Fallback: Etherscan API V2 with the key already defined above.
+    try:
+        def token_balance(contract: str, decimals: int) -> float:
+            r = requests.get(
+                "https://api.etherscan.io/v2/api",
+                params={
+                    "chainid": 1,
+                    "module": "account",
+                    "action": "tokenbalance",
+                    "contractaddress": contract,
+                    "address": STABILITY_POOL_ADDRESS,
+                    "tag": "latest",
+                    "apikey": ETHERSCAN_API_KEY,
+                },
+                timeout=30,
+            )
+            r.raise_for_status()
+            return int(r.json()["result"]) / (10 ** decimals)
+
+        return token_balance(USDC_CONTRACT, 6), token_balance(FXUSD_CONTRACT, 18)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] Etherscan stability pool balances failed: {exc}", file=sys.stderr)
+    return None
+
+
+def compute_funding_status(usdc: float, fxusd: float, threshold_pct: float = FUNDING_USDC_THRESHOLD_PCT) -> dict:
+    t = threshold_pct / 100
+    total = usdc + fxusd
+    share_pct = (usdc / total * 100) if total > 0 else 0.0
+    usdc_needed = fxusd * t / (1 - t)          # con t=5%: fxusd / 19
+    return {
+        "usdc": round(usdc, 2),
+        "fxusd": round(fxusd, 2),
+        "threshold_pct": threshold_pct,
+        "usdc_share_pct": round(share_pct, 4),
+        "usdc_needed": round(usdc_needed, 2),
+        "usdc_missing": round(max(usdc_needed - usdc, 0.0), 2),
+        "usdc_surplus": round(max(usdc - usdc_needed, 0.0), 2),
+        "pct_missing": round(max(threshold_pct - share_pct, 0.0), 4),
+        "divisor": round((1 - t) / t, 4),
+        "funding_on": share_pct < threshold_pct,
+    }
+
+
+def collect_stability_pool_funding() -> dict | None:
+    balances = _stability_pool_balances()
+    if balances is None:
+        return None
+    return compute_funding_status(*balances)
+
+
 def touches_fx(text: str) -> bool:
     text = (text or "").upper()
     return any(sym in text for sym in TARGET_SYMBOLS)
@@ -980,6 +1074,29 @@ footer a { color: #000; }
   from { opacity: 0; transform: translateY(-14px); }
   to { opacity: 1; transform: translateY(0); }
 }
+.funding-box {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 2rem;
+}
+.funding-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 10px; }
+.funding-title { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 0; font-weight: 700; }
+.funding-tag {
+  font-size: 1rem; font-weight: 900; letter-spacing: 0.06em;
+  padding: 4px 12px; border-radius: 8px;
+}
+.funding-on { background: rgba(239, 68, 68, 0.18); color: #ef4444; }
+.funding-off { background: rgba(74, 222, 128, 0.18); color: #4ade80; }
+.funding-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.funding-formula {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem; color: #c8d0d8; background: #161d28;
+  border-radius: 8px; padding: 8px 10px; margin: 10px 0 0; overflow-x: auto;
+}
+.funding-note { font-size: 0.72rem; color: var(--muted); margin: 8px 0 0; }
+.funding-note a { color: var(--accent-text); }
 """
 
 
@@ -1452,6 +1569,139 @@ def render_section(title: str, html: str) -> str:
     """
 
 
+FUNDING_REFRESH_MS = 15000
+
+# Se ejecuta en el navegador: lee los balances del contrato del Stability Pool
+# en vivo (Blockscout, con Etherscan como respaldo) y recalcula ON/OFF.
+FUNDING_JS = """
+(function() {
+  var ADDR = '__ADDR__', USDC = '__USDC__', FXUSD = '__FXUSD__', KEY = '__KEY__', THR = __THR__;
+  function el(id) { return document.getElementById(id); }
+  function setText(id, t) { var e = el(id); if (e) e.textContent = t; }
+  function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  function fromBlockscout() {
+    return fetch('https://eth.blockscout.com/api/v2/addresses/' + ADDR + '/token-balances')
+      .then(function(r) { if (!r.ok) throw new Error('blockscout ' + r.status); return r.json(); })
+      .then(function(rows) {
+        var u = null, f = null;
+        rows.forEach(function(row) {
+          var tok = row.token || {};
+          var a = String(tok.address_hash || tok.address || '').toLowerCase();
+          var v = parseFloat(row.value) / Math.pow(10, parseInt(tok.decimals || '0', 10));
+          if (a === USDC.toLowerCase()) u = v;
+          else if (a === FXUSD.toLowerCase()) f = v;
+        });
+        if (f === null || isNaN(f)) throw new Error('fxUSD no encontrado');
+        return { usdc: u || 0, fxusd: f };
+      });
+  }
+
+  function etherscanBal(contract, dec) {
+    return fetch('https://api.etherscan.io/v2/api?chainid=1&module=account&action=tokenbalance'
+      + '&contractaddress=' + contract + '&address=' + ADDR + '&tag=latest&apikey=' + KEY)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var v = parseFloat(d.result);
+        if (isNaN(v)) throw new Error('etherscan sin dato');
+        return v / Math.pow(10, dec);
+      });
+  }
+
+  function fromEtherscan() {
+    return Promise.all([etherscanBal(USDC, 6), etherscanBal(FXUSD, 18)])
+      .then(function(a) { return { usdc: a[0], fxusd: a[1] }; });
+  }
+
+  function render(b) {
+    var t = THR / 100, total = b.usdc + b.fxusd;
+    var share = total > 0 ? b.usdc / total * 100 : 0;
+    var needed = b.fxusd * t / (1 - t);
+    var on = share < THR;
+    var tag = el('fd-tag');
+    if (tag) { tag.textContent = on ? 'FUNDING ON' : 'FUNDING OFF'; tag.className = 'funding-tag ' + (on ? 'funding-on' : 'funding-off'); }
+    setText('fd-usdc', money(b.usdc));
+    setText('fd-fxusd', money(b.fxusd));
+    setText('fd-share', share.toFixed(2) + '%');
+    setText('fd-gap-label', on ? 'USDC que faltan' : 'USDC sobre el m\\u00ednimo');
+    setText('fd-gap-usdc', money(on ? Math.max(needed - b.usdc, 0) : Math.max(b.usdc - needed, 0)));
+    setText('fd-pct-label', on ? '% que falta' : '% por encima');
+    setText('fd-gap-pct', (on ? Math.max(THR - share, 0) : share - THR).toFixed(2) + ' pp');
+    ['fd-gap-usdc', 'fd-gap-pct'].forEach(function(id) { var e = el(id); if (e) e.className = 'stat-value' + (on ? '' : ' apy'); });
+    setText('fd-needed', money(needed));
+    setText('fd-needed2', money(needed));
+    setText('fd-usdc2', money(b.usdc));
+    setText('fd-updated', 'En vivo \\u00b7 actualizado ' + new Date().toLocaleTimeString('es-ES'));
+    var u = el('fd-updated'); if (u) u.className = 'funding-note';
+  }
+
+  function refresh() {
+    fromBlockscout().catch(fromEtherscan).then(render).catch(function() {
+      setText('fd-updated', 'Sin conexi\\u00f3n con Blockscout/Etherscan. Mostrando el \\u00faltimo dato (' + new Date().toLocaleTimeString('es-ES') + ').');
+    });
+  }
+
+  refresh();
+  setInterval(refresh, __INTERVAL__);
+})();
+"""
+
+
+def render_funding_box(f: dict | None) -> str:
+    thr = (f or {}).get("threshold_pct", FUNDING_USDC_THRESHOLD_PCT)
+    divisor = (100 - thr) / thr
+    if f:
+        on = f["funding_on"]
+        tag_cls, tag_txt = ("funding-on", "FUNDING ON") if on else ("funding-off", "FUNDING OFF")
+        usdc, fxusd = f"${f['usdc']:,.0f}", f"${f['fxusd']:,.0f}"
+        share = f"{f['usdc_share_pct']:.2f}%"
+        needed = f"${f['usdc_needed']:,.0f}"
+        if on:
+            gap_label, gap_usdc, pct_label, gap_pct = "USDC que faltan", f"${f['usdc_missing']:,.0f}", "% que falta", f"{f['pct_missing']:.2f} pp"
+        else:
+            gap_label, gap_usdc, pct_label = "USDC sobre el mínimo", f"${f['usdc_surplus']:,.0f}", "% por encima"
+            gap_pct = f"{f['usdc_share_pct'] - thr:.2f} pp"
+        val_cls = "" if on else " apy"
+    else:
+        tag_cls, tag_txt = "", "CARGANDO..."
+        usdc = fxusd = share = needed = gap_usdc = gap_pct = "..."
+        gap_label, pct_label, val_cls = "USDC que faltan", "% que falta", ""
+    return f"""
+    <div class="funding-box">
+      <div class="funding-head">
+        <p class="funding-title">Stability Pool Funding</p>
+        <span class="funding-tag {tag_cls}" id="fd-tag">{tag_txt}</span>
+      </div>
+      <div class="funding-stats">
+        <div class="stat">
+          <p class="stat-label">USDC en el pool</p>
+          <p class="stat-value" id="fd-usdc">{usdc}</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">fxUSD en el pool</p>
+          <p class="stat-value" id="fd-fxusd">{fxusd}</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">% USDC (umbral {thr:g}%)</p>
+          <p class="stat-value" id="fd-share">{share}</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label" id="fd-gap-label">{gap_label}</p>
+          <p class="stat-value{val_cls}" id="fd-gap-usdc">{gap_usdc}</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label" id="fd-pct-label">{pct_label}</p>
+          <p class="stat-value{val_cls}" id="fd-gap-pct">{gap_pct}</p>
+        </div>
+      </div>
+      <p class="funding-formula">USDC necesario = fxUSD &times; {thr:g}% / (1 &minus; {thr:g}%) = fxUSD &divide; {divisor:g} = <span id="fd-needed">{needed}</span><br>
+      Falta = USDC necesario &minus; USDC actual = <span id="fd-needed2">{needed}</span> &minus; <span id="fd-usdc2">{usdc}</span></p>
+      <p class="funding-note" id="fd-updated">Cargando datos en vivo...</p>
+      <p class="funding-note">Funding ON si USDC / (USDC + fxUSD) &lt; {thr:g}%. Umbral segun la documentacion de f(x); asume que el fxUSD no cambia. <a href="{STABILITY_POOL_URL}" target="_blank" rel="noopener">Contrato</a></p>
+    </div>
+    """
+
+
 def render_html(
     market: dict | None,
     vault: dict | None,
@@ -1466,7 +1716,18 @@ def render_html(
     compare_histories: dict[str, list[dict]] | None = None,
     yieldz_pools: list[dict] | None = None,
     tangent_pools: list[dict] | None = None,
+    funding: dict | None = None,
 ) -> str:
+    funding_html = render_funding_box(funding)
+    funding_js = (
+        FUNDING_JS
+        .replace("__ADDR__", STABILITY_POOL_ADDRESS)
+        .replace("__USDC__", USDC_CONTRACT)
+        .replace("__FXUSD__", FXUSD_CONTRACT)
+        .replace("__KEY__", ETHERSCAN_API_KEY)
+        .replace("__THR__", f"{FUNDING_USDC_THRESHOLD_PCT:g}")
+        .replace("__INTERVAL__", str(FUNDING_REFRESH_MS))
+    )
     peg_chart_html = render_peg_chart(fxusd_peg_history)
     mcap_chart_html = render_mcap_chart(fxusd_mcap_history)
     compare_chart_html = render_compare_chart(compare_histories)
@@ -1627,6 +1888,8 @@ def render_html(
         <p class="mcap-price">Precio: $<span id="fxsave-price">{fxsave_price_val:.4f}</span></p>
       </div>
     </div>
+
+    {funding_html}
 
     {peg_chart_html}
 
@@ -1986,6 +2249,7 @@ def render_html(
       }}
     }})();
   </script>
+  <script>{funding_js}</script>
 </body>
 </html>
 """
@@ -2067,6 +2331,7 @@ def main() -> None:
     fxsave_mcap = collect_fxsave_mcap()
     fxsave_apy = collect_fxsave_apy()
     pendle_rockawayx = collect_pendle_fxsave_market()
+    funding = collect_stability_pool_funding()
     try:
         yieldz_pools = collect_yieldz_pools()
     except Exception as exc:  # noqa: BLE001
@@ -2138,13 +2403,14 @@ def main() -> None:
                 "fxusd_peg_history_points": len(fxusd_peg_history) if fxusd_peg_history else 0,
                 "fxusd_mcap_history_points": len(fxusd_mcap_history) if fxusd_mcap_history else 0,
                 "hydrex_pools": hydrex_pools,
+                "stability_pool_funding": funding,
             },
             f,
             indent=2,
             ensure_ascii=False,
         )
 
-    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx, fxusd_peg_history, hydrex_pools, fxusd_mcap_history, compare_histories, yieldz_pools, tangent_pools)
+    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx, fxusd_peg_history, hydrex_pools, fxusd_mcap_history, compare_histories, yieldz_pools, tangent_pools, funding)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
