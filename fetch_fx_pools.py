@@ -1592,7 +1592,7 @@ FUNDING_JS = """
           if (a === USDC.toLowerCase()) u = v;
           else if (a === FXUSD.toLowerCase()) f = v;
         });
-        if (f === null || isNaN(f)) throw new Error('fxUSD no encontrado');
+        if (f === null || isNaN(f)) throw new Error('fxUSD not found');
         return { usdc: u || 0, fxusd: f };
       });
   }
@@ -1603,7 +1603,7 @@ FUNDING_JS = """
       .then(function(r) { return r.json(); })
       .then(function(d) {
         var v = parseFloat(d.result);
-        if (isNaN(v)) throw new Error('etherscan sin dato');
+        if (isNaN(v)) throw new Error('etherscan no data');
         return v / Math.pow(10, dec);
       });
   }
@@ -1623,22 +1623,14 @@ FUNDING_JS = """
     setText('fd-usdc', money(b.usdc));
     setText('fd-fxusd', money(b.fxusd));
     setText('fd-share', share.toFixed(2) + '%');
-    setText('fd-gap-label', on ? 'USDC que faltan' : 'USDC sobre el m\\u00ednimo');
+    setText('fd-gap-label', on ? 'USDC missing' : 'USDC above minimum');
     setText('fd-gap-usdc', money(on ? Math.max(needed - b.usdc, 0) : Math.max(b.usdc - needed, 0)));
-    setText('fd-pct-label', on ? '% que falta' : '% por encima');
-    setText('fd-gap-pct', (on ? Math.max(THR - share, 0) : share - THR).toFixed(2) + ' pp');
-    ['fd-gap-usdc', 'fd-gap-pct'].forEach(function(id) { var e = el(id); if (e) e.className = 'stat-value' + (on ? '' : ' apy'); });
-    setText('fd-needed', money(needed));
-    setText('fd-needed2', money(needed));
-    setText('fd-usdc2', money(b.usdc));
-    setText('fd-updated', 'En vivo \\u00b7 actualizado ' + new Date().toLocaleTimeString('es-ES'));
-    var u = el('fd-updated'); if (u) u.className = 'funding-note';
+    var g = el('fd-gap-usdc'); if (g) g.className = 'stat-value' + (on ? '' : ' apy');
   }
 
   function refresh() {
-    fromBlockscout().catch(fromEtherscan).then(render).catch(function() {
-      setText('fd-updated', 'Sin conexi\\u00f3n con Blockscout/Etherscan. Mostrando el \\u00faltimo dato (' + new Date().toLocaleTimeString('es-ES') + ').');
-    });
+    // On failure the last value stays on screen and the next tick retries.
+    fromBlockscout().catch(fromEtherscan).then(render).catch(function() {});
   }
 
   refresh();
@@ -1649,23 +1641,20 @@ FUNDING_JS = """
 
 def render_funding_box(f: dict | None) -> str:
     thr = (f or {}).get("threshold_pct", FUNDING_USDC_THRESHOLD_PCT)
-    divisor = (100 - thr) / thr
     if f:
         on = f["funding_on"]
         tag_cls, tag_txt = ("funding-on", "FUNDING ON") if on else ("funding-off", "FUNDING OFF")
         usdc, fxusd = f"${f['usdc']:,.0f}", f"${f['fxusd']:,.0f}"
         share = f"{f['usdc_share_pct']:.2f}%"
-        needed = f"${f['usdc_needed']:,.0f}"
         if on:
-            gap_label, gap_usdc, pct_label, gap_pct = "USDC que faltan", f"${f['usdc_missing']:,.0f}", "% que falta", f"{f['pct_missing']:.2f} pp"
+            gap_label, gap_usdc = "USDC missing", f"${f['usdc_missing']:,.0f}"
         else:
-            gap_label, gap_usdc, pct_label = "USDC sobre el mínimo", f"${f['usdc_surplus']:,.0f}", "% por encima"
-            gap_pct = f"{f['usdc_share_pct'] - thr:.2f} pp"
+            gap_label, gap_usdc = "USDC above minimum", f"${f['usdc_surplus']:,.0f}"
         val_cls = "" if on else " apy"
     else:
-        tag_cls, tag_txt = "", "CARGANDO..."
-        usdc = fxusd = share = needed = gap_usdc = gap_pct = "..."
-        gap_label, pct_label, val_cls = "USDC que faltan", "% que falta", ""
+        tag_cls, tag_txt = "", "LOADING..."
+        usdc = fxusd = share = gap_usdc = "..."
+        gap_label, val_cls = "USDC missing", ""
     return f"""
     <div class="funding-box">
       <div class="funding-head">
@@ -1674,30 +1663,22 @@ def render_funding_box(f: dict | None) -> str:
       </div>
       <div class="funding-stats">
         <div class="stat">
-          <p class="stat-label">USDC en el pool</p>
+          <p class="stat-label">USDC in pool</p>
           <p class="stat-value" id="fd-usdc">{usdc}</p>
         </div>
         <div class="stat">
-          <p class="stat-label">fxUSD en el pool</p>
+          <p class="stat-label">fxUSD in pool</p>
           <p class="stat-value" id="fd-fxusd">{fxusd}</p>
         </div>
         <div class="stat">
-          <p class="stat-label">% USDC (umbral {thr:g}%)</p>
+          <p class="stat-label">% USDC (threshold {thr:g}%)</p>
           <p class="stat-value" id="fd-share">{share}</p>
         </div>
         <div class="stat">
           <p class="stat-label" id="fd-gap-label">{gap_label}</p>
           <p class="stat-value{val_cls}" id="fd-gap-usdc">{gap_usdc}</p>
         </div>
-        <div class="stat">
-          <p class="stat-label" id="fd-pct-label">{pct_label}</p>
-          <p class="stat-value{val_cls}" id="fd-gap-pct">{gap_pct}</p>
-        </div>
       </div>
-      <p class="funding-formula">USDC necesario = fxUSD &times; {thr:g}% / (1 &minus; {thr:g}%) = fxUSD &divide; {divisor:g} = <span id="fd-needed">{needed}</span><br>
-      Falta = USDC necesario &minus; USDC actual = <span id="fd-needed2">{needed}</span> &minus; <span id="fd-usdc2">{usdc}</span></p>
-      <p class="funding-note" id="fd-updated">Cargando datos en vivo...</p>
-      <p class="funding-note">Funding ON si USDC / (USDC + fxUSD) &lt; {thr:g}%. Umbral segun la documentacion de f(x); asume que el fxUSD no cambia. <a href="{STABILITY_POOL_URL}" target="_blank" rel="noopener">Contrato</a></p>
     </div>
     """
 
