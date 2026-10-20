@@ -1731,7 +1731,7 @@ def render_funding_box(f: dict | None) -> str:
         </div>
       </div>
       <p class="funding-note" id="fd-rate-note">
-        Rate charged to open positions (as shown on f(x) Protocol). 0% when OFF.
+        
       </p>
     </div>
     """
