@@ -617,14 +617,21 @@ FUNDING_RATIO_SELECTOR = "0xeacb05f0"
 FUNDING_HISTORY_DAYS = 365
 FUNDING_HISTORY_FILE = "funding_history.json"
 ETHERSCAN_V2_URL = "https://api.etherscan.io/v2/api"
-ETHERSCAN_DELAY_S = 0.25  # plan gratuito: ~5 llamadas/segundo
+ETHERSCAN_DELAY_S = 0.45  # plan gratuito: maximo 3 llamadas/segundo
 
 
 def _etherscan(params: dict) -> dict:
     p = {"chainid": 1, "apikey": ETHERSCAN_API_KEY, **params}
-    r = requests.get(ETHERSCAN_V2_URL, params=p, timeout=30)
-    r.raise_for_status()
-    return r.json()
+    d: dict = {}
+    for attempt in range(6):
+        r = requests.get(ETHERSCAN_V2_URL, params=p, timeout=30)
+        r.raise_for_status()
+        d = r.json()
+        if "rate limit" in json.dumps(d).lower():
+            time.sleep(1.5 * (attempt + 1))  # esperar y reintentar
+            continue
+        break
+    return d
 
 
 def _block_at(ts: int) -> int | None:
@@ -666,7 +673,13 @@ def collect_funding_history() -> list[dict] | None:
     todo = [t for t in wanted if str(t) not in cache or t == day0]
     if todo:
         print(f"[info] funding history: pidiendo {len(todo)} dias a Etherscan...", file=sys.stderr)
-    for t in todo:
+    for n, t in enumerate(todo):
+        if n and n % 25 == 0:  # guardar progreso por si el proceso se corta
+            try:
+                with open(FUNDING_HISTORY_FILE, "w", encoding="utf-8") as fh:
+                    json.dump(cache, fh)
+            except OSError:
+                pass
         try:
             block = _block_at(min(t, now - 60))
             time.sleep(ETHERSCAN_DELAY_S)
