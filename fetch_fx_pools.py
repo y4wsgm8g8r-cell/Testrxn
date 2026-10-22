@@ -1610,6 +1610,7 @@ FUNDING_REFRESH_MS = 3000
 FUNDING_JS = """
 (function() {
   var ADDR = '__ADDR__', USDC = '__USDC__', FXUSD = '__FXUSD__', KEY = '__KEY__', THR = __THR__;
+  var fundingOn = null; // null = aun no sabemos; true/false tras leer el pool
   function el(id) { return document.getElementById(id); }
   function setText(id, t) { var e = el(id); if (e) e.textContent = t; }
   function money(n) { if (n == null || isNaN(n)) return '$0'; return '$' + Math.round(n).toLocaleString('en-US'); }
@@ -1688,6 +1689,7 @@ FUNDING_JS = """
     var share = total > 0 ? b.usdc / total * 100 : 0;
     var needed = b.fxusd * t / (1 - t);
     var on = share < THR;
+    fundingOn = on;
     var tag = el('fd-tag');
     if (tag) { tag.textContent = on ? 'FUNDING ON' : 'FUNDING OFF'; tag.className = 'funding-tag ' + (on ? 'funding-on' : 'funding-off'); }
     setText('fd-usdc', money(b.usdc));
@@ -1706,6 +1708,7 @@ FUNDING_JS = """
   }
 
   function fetchAaveRate() {
+    if (fundingOn !== true) return; // OFF -> la tasa es 0%, no hace falta consultar Aave
     // Fetch live Aave V3 Ethereum USDC borrow rate and show a small representation
     // (the f(x) UI shows a scaled/daily-style rate, not the full APY)
     fetch('https://aavescan.com/ethereum-v3/usdc')
@@ -1713,17 +1716,15 @@ FUNDING_JS = """
       .then(function(html) {
         var m = html.match(/Borrow APR[^0-9]*([0-9]+\.[0-9]+)%/i) ||
                 html.match(/([4-9]\.[0-9]+)%/);
-        if (m) {
+        if (m && fundingOn === true) {
           var apy = parseFloat(m[1]);
           // Approximate the small rate shown on f(x) UI (empirical scaling)
           var small = (apy / 365 * 0.32).toFixed(4);
           setText('fd-rate', small + '%');
-        } else {
-          setText('fd-rate', 'no data');
         }
       })
       .catch(function() {
-        setText('fd-rate', 'no data');
+        // sin datos: se deja el valor anterior en pantalla
       });
   }
 
@@ -1735,7 +1736,6 @@ FUNDING_JS = """
   }
 
   refresh();
-  fetchAaveRate();
   setInterval(refresh, __INTERVAL__);
   setInterval(fetchAaveRate, __INTERVAL__);
 })();
@@ -1758,6 +1758,7 @@ def render_funding_box(f: dict | None) -> str:
         tag_cls, tag_txt = "", "LOADING..."
         usdc = fxusd = share = gap_usdc = "..."
         gap_label, val_cls = "USDC missing", ""
+    rate_init = "0%" if (f and not f["funding_on"]) else "..."
     return f"""
     <div class="funding-box">
       <div class="funding-head">
@@ -1783,7 +1784,7 @@ def render_funding_box(f: dict | None) -> str:
         </div>
         <div class="stat" id="fd-rate-box">
           <p class="stat-label">Rate</p>
-          <p class="stat-value" id="fd-rate">...</p>
+          <p class="stat-value" id="fd-rate">{rate_init}</p>
         </div>
       </div>
     </div>
