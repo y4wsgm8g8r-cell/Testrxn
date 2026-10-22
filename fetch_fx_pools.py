@@ -27,7 +27,6 @@ Output:
 
 import json
 import sys
-import time
 from datetime import datetime, timezone
 
 import requests
@@ -593,116 +592,6 @@ def collect_stability_pool_funding() -> dict | None:
     if balances is None:
         return None
     return compute_funding_status(*balances)
-
-
-# ---------------------------------------------------------------------------
-# Historical Funding Rate (on-chain, via Etherscan)
-#
-# El funding NO se guarda como serie en ningun sitio: el contrato
-# PoolConfiguration lo calcula al vuelo con getLongPoolFundingRatio(pool)
-# (= escalar x tipo medio de Aave USDC, o 0 si esta OFF). Asi que lo
-# reconstruimos preguntando al contrato, bloque a bloque (1 punto por dia):
-#     eth_call(PoolConfiguration.getLongPoolFundingRatio(wstETH long pool))
-# El resultado viene multiplicado por 1e18 y es una tasa anualizada.
-#
-# Usa la misma ETHERSCAN_API_KEY de arriba (necesita que Etherscan sirva
-# estado historico; si tu plan no lo permite veras [warn] y el grafico no
-# aparecera). Se cachea en funding_history.json: la primera ejecucion tarda
-# unos minutos (~2 llamadas por dia), las siguientes solo piden los dias nuevos.
-# ---------------------------------------------------------------------------
-POOL_CONFIGURATION_ADDRESS = "0x16b334f2644cc00b85DB1A1efF0C2C395e00C28d"
-WSTETH_LONG_POOL_ADDRESS = "0x6Ecfa38FeE8a5277B91eFdA204c235814F0122E8"
-# selector de getLongPoolFundingRatio(address)
-FUNDING_RATIO_SELECTOR = "0xeacb05f0"
-FUNDING_HISTORY_DAYS = 365
-FUNDING_HISTORY_FILE = "funding_history.json"
-ETHERSCAN_V2_URL = "https://api.etherscan.io/v2/api"
-ETHERSCAN_DELAY_S = 0.45  # plan gratuito: maximo 3 llamadas/segundo
-
-
-def _etherscan(params: dict) -> dict:
-    p = {"chainid": 1, "apikey": ETHERSCAN_API_KEY, **params}
-    d: dict = {}
-    for attempt in range(6):
-        r = requests.get(ETHERSCAN_V2_URL, params=p, timeout=30)
-        r.raise_for_status()
-        d = r.json()
-        if "rate limit" in json.dumps(d).lower():
-            time.sleep(1.5 * (attempt + 1))  # esperar y reintentar
-            continue
-        break
-    return d
-
-
-def _block_at(ts: int) -> int | None:
-    d = _etherscan({"module": "block", "action": "getblocknobytime",
-                    "timestamp": ts, "closest": "before"})
-    try:
-        return int(d["result"])
-    except (KeyError, TypeError, ValueError):
-        return None
-
-
-def _funding_ratio_at(block: int) -> tuple[bool, float | None]:
-    """(definitivo, porcentaje). definitivo=False -> error temporal, no cachear."""
-    data = FUNDING_RATIO_SELECTOR + WSTETH_LONG_POOL_ADDRESS[2:].lower().rjust(64, "0")
-    d = _etherscan({"module": "proxy", "action": "eth_call",
-                    "to": POOL_CONFIGURATION_ADDRESS, "data": data,
-                    "tag": hex(block)})
-    res = d.get("result")
-    if isinstance(res, str) and res.startswith("0x") and len(res) > 2:
-        return True, int(res, 16) / 1e18 * 100  # tasa anualizada en %
-    msg = json.dumps(d)[:200].lower()
-    if "revert" in msg or "execution" in msg:
-        return True, None  # el contrato aun no existia / otra version
-    print(f"[warn] eth_call bloque {block}: {msg}", file=sys.stderr)
-    return False, None
-
-
-def collect_funding_history() -> list[dict] | None:
-    """Serie diaria [{"t": unix, "r": % anualizado}] del funding del pool long wstETH."""
-    try:
-        with open(FUNDING_HISTORY_FILE, encoding="utf-8") as fh:
-            cache: dict[str, dict] = json.load(fh)
-    except (OSError, ValueError):
-        cache = {}
-
-    now = int(datetime.now(timezone.utc).timestamp())
-    day0 = now - now % 86400
-    wanted = [day0 - i * 86400 for i in range(FUNDING_HISTORY_DAYS, -1, -1)]
-    todo = [t for t in wanted if str(t) not in cache or t == day0]
-    if todo:
-        print(f"[info] funding history: pidiendo {len(todo)} dias a Etherscan...", file=sys.stderr)
-    for n, t in enumerate(todo):
-        if n and n % 25 == 0:  # guardar progreso por si el proceso se corta
-            try:
-                with open(FUNDING_HISTORY_FILE, "w", encoding="utf-8") as fh:
-                    json.dump(cache, fh)
-            except OSError:
-                pass
-        try:
-            block = _block_at(min(t, now - 60))
-            time.sleep(ETHERSCAN_DELAY_S)
-            if block is None:
-                continue
-            final, pct = _funding_ratio_at(block)
-            time.sleep(ETHERSCAN_DELAY_S)
-            if final:
-                cache[str(t)] = {"block": block, "r": pct}
-        except Exception as exc:  # noqa: BLE001
-            print(f"[warn] funding history dia {t}: {exc}", file=sys.stderr)
-    try:
-        with open(FUNDING_HISTORY_FILE, "w", encoding="utf-8") as fh:
-            json.dump(cache, fh)
-    except OSError as exc:
-        print(f"[warn] no pude guardar {FUNDING_HISTORY_FILE}: {exc}", file=sys.stderr)
-
-    series = [{"t": t, "r": round(cache[str(t)]["r"], 6)}
-              for t in wanted if str(t) in cache and cache[str(t)]["r"] is not None]
-    if len(series) < 2:
-        print("[warn] funding history: sin datos suficientes (Etherscan no devolvio estado historico?)", file=sys.stderr)
-        return None
-    return series
 
 
 def touches_fx(text: str) -> bool:
@@ -1845,144 +1734,15 @@ FUNDING_JS = """
     });
   }
 
-  // --- Funding rate history chart (stored in localStorage) ---
-  var RATE_HISTORY_KEY = 'fx_funding_rate_history';
-  var MAX_POINTS = 200;
-
-  function loadRateHistory() {
-    try {
-      return JSON.parse(localStorage.getItem(RATE_HISTORY_KEY) || '[]');
-    } catch (e) { return []; }
-  }
-
-  function saveRatePoint(rateStr) {
-    var rate = parseFloat(rateStr);
-    if (isNaN(rate)) return;
-    var hist = loadRateHistory();
-    hist.push({ t: Date.now(), r: rate });
-    if (hist.length > MAX_POINTS) hist = hist.slice(-MAX_POINTS);
-    localStorage.setItem(RATE_HISTORY_KEY, JSON.stringify(hist));
-    drawRateChart(hist);
-  }
-
-  function drawRateChart(hist) {
-    var el = document.getElementById('fd-rate-chart');
-    if (!el || !hist.length) return;
-    var w = el.clientWidth || 600, h = 70;
-    var vals = hist.map(function(p) { return p.r; });
-    var lo = Math.min.apply(null, vals.concat([0]));
-    var hi = Math.max.apply(null, vals.concat([0.001]));
-    if (hi === lo) hi = lo + 0.001;
-    var pts = hist.map(function(p, i) {
-      var x = (i / (hist.length - 1 || 1)) * (w - 4) + 2;
-      var y = 4 + (1 - (p.r - lo) / (hi - lo)) * (h - 8);
-      return x.toFixed(1) + ',' + y.toFixed(1);
-    }).join(' ');
-    el.innerHTML = '<svg width="100%" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none">' +
-      '<polyline points="' + pts + '" fill="none" stroke="#39ff14" stroke-width="1.5"/>' +
-      '</svg>';
-  }
-
-  // Hook into rate updates
-  var origSetText = setText;
-  setText = function(id, t) {
-    origSetText(id, t);
-    if (id === 'fd-rate' && t && t !== '...') {
-      saveRatePoint(t);
-    }
-  };
-
   refresh();
   fetchAaveRate();
   setInterval(refresh, __INTERVAL__);
   setInterval(fetchAaveRate, __INTERVAL__);
-  // Draw existing history on load
-  drawRateChart(loadRateHistory());
 })();
 """
 
 
-# Grafico "Historical Funding Rate" (rangos All/1Y/6M/3M/1M), dibujado en el
-# navegador con la serie que genera collect_funding_history().
-FUNDING_HISTORY_JS = """
-(function() {
-  var DATA = __DATA__;
-  var box = document.getElementById('fd-hist-chart');
-  if (!box || !DATA.length) return;
-  var DAY = 86400, range = '1Y';
-  var SPAN = {'All': 0, '1Y': 365, '6M': 183, '3M': 91, '1M': 30};
-
-  function fmtDate(t) {
-    var d = new Date(t * 1000);
-    return d.getUTCFullYear() + '-' + (d.getUTCMonth() + 1) + '-' + d.getUTCDate();
-  }
-
-  function draw() {
-    var last = DATA[DATA.length - 1].t;
-    var pts = SPAN[range] ? DATA.filter(function(p) { return p.t >= last - SPAN[range] * DAY; }) : DATA;
-    if (pts.length < 2) { box.innerHTML = ''; return; }
-    var W = box.clientWidth || 600, H = 190, L = 48, R = 8, T = 8, B = 26;
-    var hi = Math.max.apply(null, pts.map(function(p) { return p.r; }).concat([0.01]));
-    var step = Math.pow(10, Math.floor(Math.log10(hi / 4))) ;
-    var m = hi / 4 / step; step = step * (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10);
-    var top = Math.ceil(hi / step) * step;
-    var t0 = pts[0].t, t1 = pts[pts.length - 1].t;
-    function x(t) { return L + (t - t0) / (t1 - t0 || 1) * (W - L - R); }
-    function y(v) { return T + (1 - v / top) * (H - T - B); }
-    var s = '<svg width="100%" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">';
-    for (var v = 0; v <= top + step / 2; v += step) {
-      s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '" stroke="#3a4658" stroke-dasharray="4,3"/>';
-      s += '<text x="' + (L - 6) + '" y="' + (y(v) + 4).toFixed(1) + '" font-size="11" fill="#8a94a3" text-anchor="end">' + v.toFixed(step < 0.01 ? 3 : 2) + '%</text>';
-    }
-    var line = '';
-    pts.forEach(function(p, i) {
-      var px = x(p.t).toFixed(1), py = y(p.r).toFixed(1);
-      line += (i ? 'H' + px + 'V' + py : 'M' + px + ',' + py);
-    });
-    s += '<path d="' + line + '" fill="none" stroke="#f97316" stroke-width="1.6"/>';
-    for (var k = 0; k < 5; k++) {
-      var tt = t0 + (t1 - t0) * k / 4;
-      s += '<text x="' + x(tt).toFixed(1) + '" y="' + (H - 8) + '" font-size="11" fill="#8a94a3" text-anchor="' + (k == 0 ? 'start' : k == 4 ? 'end' : 'middle') + '">' + fmtDate(tt) + '</text>';
-    }
-    box.innerHTML = s + '</svg>';
-  }
-
-  Array.prototype.forEach.call(document.querySelectorAll('.fd-hist-btn'), function(b) {
-    b.addEventListener('click', function() {
-      range = b.getAttribute('data-range');
-      Array.prototype.forEach.call(document.querySelectorAll('.fd-hist-btn'), function(o) {
-        o.style.opacity = (o === b) ? '1' : '0.55';
-      });
-      draw();
-    });
-  });
-  var init = document.querySelector('.fd-hist-btn[data-range="' + range + '"]');
-  if (init) init.style.opacity = '1';
-  draw();
-  window.addEventListener('resize', draw);
-})();
-"""
-
-
-def render_funding_history(history: list[dict] | None) -> str:
-    if not history:
-        return ""
-    buttons = "".join(
-        f'<button class="fd-hist-btn" data-range="{r}" style="opacity:.55;cursor:pointer;border:0;'
-        f'background:#1a2536;color:#7fb4ec;padding:4px 12px;border-radius:6px;font-size:.8rem;margin-right:6px;">{r}</button>'
-        for r in ("All", "1Y", "6M", "3M", "1M")
-    )
-    data_js = FUNDING_HISTORY_JS.replace("__DATA__", json.dumps(history, separators=(",", ":")))
-    return f"""
-      <p class="funding-title" style="margin:14px 0 8px;">Historical Funding Rate (long pool wstETH, annualized)</p>
-      <div style="margin-bottom:8px;">{buttons}</div>
-      <div id="fd-hist-chart" style="height:190px;background:#161d28;border-radius:8px;"></div>
-      <p class="funding-note">On-chain: <code>PoolConfiguration.getLongPoolFundingRatio</code>, one point per day.</p>
-      <script>{data_js}</script>
-    """
-
-
-def render_funding_box(f: dict | None, history: list[dict] | None = None) -> str:
+def render_funding_box(f: dict | None) -> str:
     thr = (f or {}).get("threshold_pct", FUNDING_USDC_THRESHOLD_PCT)
     if f:
         on = f["funding_on"]
@@ -2026,8 +1786,6 @@ def render_funding_box(f: dict | None, history: list[dict] | None = None) -> str
           <p class="stat-value" id="fd-rate">...</p>
         </div>
       </div>
-      <div id="fd-rate-chart" style="margin-top:8px;height:70px;background:#161d28;border-radius:8px;"></div>
-      {render_funding_history(history)}
     </div>
     """
 
@@ -2046,9 +1804,8 @@ def render_html(
     yieldz_pools: list[dict] | None = None,
     tangent_pools: list[dict] | None = None,
     funding: dict | None = None,
-    funding_history: list[dict] | None = None,
 ) -> str:
-    funding_html = render_funding_box(funding, funding_history)
+    funding_html = render_funding_box(funding)
     funding_js = (
         FUNDING_JS
         .replace("__ADDR__", STABILITY_POOL_ADDRESS)
@@ -2739,11 +2496,6 @@ def main() -> None:
     pendle_rockawayx = collect_pendle_fxsave_market()
     funding = collect_stability_pool_funding()
     try:
-        funding_history = collect_funding_history()
-    except Exception as exc:  # noqa: BLE001
-        print(f"[warn] could not build funding history: {exc}", file=sys.stderr)
-        funding_history = None
-    try:
         yieldz_pools = collect_yieldz_pools()
     except Exception as exc:  # noqa: BLE001
         print(f"[warn] could not fetch Yieldz pools: {exc}", file=sys.stderr)
@@ -2815,7 +2567,7 @@ def main() -> None:
             ensure_ascii=False,
         )
 
-    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx, fxusd_peg_history, fxusd_mcap_history, compare_histories, yieldz_pools, tangent_pools, funding, funding_history)
+    html = render_html(market, vault, defillama, fxusd_mcap, fxsave_mcap, fxsave_apy, pendle_rockawayx, fxusd_peg_history, fxusd_mcap_history, compare_histories, yieldz_pools, tangent_pools, funding)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
