@@ -41,7 +41,6 @@ DEFILLAMA_PROJECTS = {
     "curve-dex": "Curve",
     "convex-finance": "Convex",
     "concentrator": "Concentrator",
-    "aerodrome-slipstream": "Aerodrome",
 }
 
 MARKETS_QUERY = """
@@ -2002,7 +2001,7 @@ def render_html(
     CONVEX_STAKE_URL = "https://curve.convexfinance.com/stake"
     CONCENTRATOR_VAULT_URL = "https://concentrator.aladdin.club/#/vault"
 
-    for label in ("Curve", "Convex", "Concentrator", "Aerodrome"):
+    for label in ("Curve", "Convex", "Concentrator"):
         pools = defillama.get(label, [])
         if label == "Curve":
             pools = [{**p, "url": CURVE_POOLS_URL} for p in pools]
@@ -2053,8 +2052,8 @@ def render_html(
 
     <footer>
       <img src="logo.png" alt="METAFXN" style="width: 140px; height: 140px; border-radius: 50%; display: block; margin: 0 auto;" />
-      <div id="visit-counter" style="text-align:center; margin-top: 16px; color:#8b98a5; font-size:14px;">
-        Visits: <strong id="visit-count" style="color:#c5cdd6;">...</strong>
+      <div id="visit-counter" style="text-align:center; margin-top: 16px; color:#000; font-size:14px;">
+        Visits: <strong id="visit-count" style="color:#000;">...</strong>
       </div>
       <script>
       (function() {{
