@@ -512,6 +512,12 @@ FUNDING_USDC_THRESHOLD_PCT = 5.0
 # Live rate is fetched client-side; this is only a fallback note.
 AAVE_USDC_BORROW_NOTE = "Aave USDC borrow rate (Level I)"
 
+# Contrato que calcula el funding (lectura en vivo del Rate).
+# getLongPoolFundingRatio(pool) devuelve la tasa anual x 1e18 del pool long de wstETH.
+POOL_CONFIGURATION_ADDRESS = "0x16b334f2644cc00b85DB1A1efF0C2C395e00C28d"
+WSTETH_LONG_POOL_ADDRESS = "0x6Ecfa38FeE8a5277B91eFdA204c235814F0122E8"
+FUNDING_RATIO_SELECTOR = "0xeacb05f0"  # getLongPoolFundingRatio(address)
+
 STABILITY_POOL_URL = f"https://etherscan.io/address/{STABILITY_POOL_ADDRESS}"
 
 
@@ -1602,13 +1608,14 @@ def render_section(title: str, html: str) -> str:
     """
 
 
-FUNDING_REFRESH_MS = 3000
+FUNDING_REFRESH_MS = 5000  # se actualiza al entrar y despues cada 5 s
 
 # Se ejecuta en el navegador: lee los balances del contrato del Stability Pool
 # en vivo (Blockscout, con Etherscan como respaldo) y recalcula ON/OFF.
 FUNDING_JS = """
 (function() {
   var ADDR = '__ADDR__', USDC = '__USDC__', FXUSD = '__FXUSD__', KEY = '__KEY__', THR = __THR__;
+  var CFG = '__CFG__', POOL = '__POOL__', SEL = '__SEL__';
   var fundingOn = null; // null = aun no sabemos; true/false tras leer el pool
   function el(id) { return document.getElementById(id); }
   function setText(id, t) { var e = el(id); if (e) e.textContent = t; }
@@ -1698,33 +1705,30 @@ FUNDING_JS = """
     setText('fd-gap-usdc', money(on ? Math.max(needed - b.usdc, 0) : Math.max(b.usdc - needed, 0)));
     var g = el('fd-gap-usdc'); if (g) g.className = 'stat-value' + (on ? '' : ' apy');
 
-    // Always show funding rate: Aave rate when ON, 0% when OFF
+    // Funding rate: valor del contrato cuando esta ON, 0% cuando esta OFF
     if (on) {
-      fetchAaveRate();
+      fetchContractRate();
     } else {
       setText('fd-rate', '0%');
     }
   }
 
-  function fetchAaveRate() {
-    if (fundingOn !== true) return; // OFF -> la tasa es 0%, no hace falta consultar Aave
-    // Fetch live Aave V3 Ethereum USDC borrow rate and show a small representation
-    // (the f(x) UI shows a scaled/daily-style rate, not the full APY)
-    fetch('https://aavescan.com/ethereum-v3/usdc')
-      .then(function(r) { return r.text(); })
-      .then(function(html) {
-        var m = html.match(/Borrow APR[^0-9]*([0-9]+\.[0-9]+)%/i) ||
-                html.match(/([4-9]\.[0-9]+)%/);
-        if (m && fundingOn === true) {
-          var apy = parseFloat(m[1]);
-          // Approximate the small rate shown on f(x) UI (empirical scaling)
-          var small = (apy / 365 * 0.32).toFixed(4);
-          setText('fd-rate', small + '%');
-        }
+  // Rate exacto: se lee del propio contrato (PoolConfiguration.getLongPoolFundingRatio),
+  // que ya incluye el escalar de gobernanza x tipo medio de Aave. Devuelve una tasa
+  // anual x 1e18; se divide entre 365 para mostrarla como tasa diaria (como la web de f(x)).
+  function fetchContractRate() {
+    if (fundingOn !== true) return; // OFF -> 0%, no hace falta consultar
+    var data = SEL + POOL.toLowerCase().replace('0x', '').padStart(64, '0');
+    fetch('https://api.etherscan.io/v2/api?chainid=1&module=proxy&action=eth_call'
+      + '&to=' + CFG + '&data=' + data + '&tag=latest&apikey=' + KEY)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var res = d && d.result;
+        if (typeof res !== 'string' || !/^0x[0-9a-fA-F]+$/.test(res)) { return; }
+        var annualPct = Number(BigInt(res) / BigInt(10) ** BigInt(12)) / 1e6 * 100; // % anual
+        if (fundingOn === true) setText('fd-rate', (annualPct / 365).toFixed(4) + '%');
       })
-      .catch(function() {
-        // sin datos: se deja el valor anterior en pantalla
-      });
+      .catch(function() { /* sin datos: se deja el valor anterior */ });
   }
 
   function refresh() {
@@ -1736,7 +1740,6 @@ FUNDING_JS = """
 
   refresh();
   setInterval(refresh, __INTERVAL__);
-  setInterval(fetchAaveRate, __INTERVAL__);
 })();
 """
 
@@ -1814,6 +1817,9 @@ def render_html(
         .replace("__KEY__", ETHERSCAN_API_KEY)
         .replace("__THR__", f"{FUNDING_USDC_THRESHOLD_PCT:g}")
         .replace("__INTERVAL__", str(FUNDING_REFRESH_MS))
+        .replace("__CFG__", POOL_CONFIGURATION_ADDRESS)
+        .replace("__POOL__", WSTETH_LONG_POOL_ADDRESS)
+        .replace("__SEL__", FUNDING_RATIO_SELECTOR)
     )
     peg_chart_html = render_peg_chart(fxusd_peg_history)
     mcap_chart_html = render_mcap_chart(fxusd_mcap_history)
