@@ -1715,7 +1715,8 @@ FUNDING_JS = """
 
   // Rate exacto: se lee del propio contrato (PoolConfiguration.getLongPoolFundingRatio),
   // que ya incluye el escalar de gobernanza x tipo medio de Aave. Devuelve una tasa
-  // anual x 1e18; se divide entre 365 para mostrarla como tasa diaria (como la web de f(x)).
+  // anual x 1e18; se divide entre 1095 (365 dias x 3) para mostrarla por periodo de 8 horas,
+  // que es la escala que usa la web de f(x).
   function fetchContractRate() {
     if (fundingOn !== true) return; // OFF -> 0%, no hace falta consultar
     var data = SEL + POOL.toLowerCase().replace('0x', '').padStart(64, '0');
@@ -1726,7 +1727,7 @@ FUNDING_JS = """
         var res = d && d.result;
         if (typeof res !== 'string' || !/^0x[0-9a-fA-F]+$/.test(res)) { return; }
         var annualPct = Number(BigInt(res) / BigInt(10) ** BigInt(12)) / 1e6 * 100; // % anual
-        if (fundingOn === true) setText('fd-rate', (annualPct / 365).toFixed(4) + '%');
+        if (fundingOn === true) setText('fd-rate', (annualPct / 1095).toFixed(4) + '%');
       })
       .catch(function() { /* sin datos: se deja el valor anterior */ });
   }
