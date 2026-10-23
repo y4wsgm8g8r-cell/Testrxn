@@ -2032,6 +2032,8 @@ def render_html(
 <body>
   <div class="wrap">
 
+    <img src="logo.png" alt="METAFXN" style="width: 140px; height: 140px; border-radius: 50%; display: block; margin: 0 auto 1.5rem;" />
+
     <div class="mcap-row">
       <div class="mcap-card">
         <p class="mcap-label">fxUSD Market Cap</p>
@@ -2058,7 +2060,6 @@ def render_html(
     {''.join(sections)}
 
     <footer>
-      <img src="logo.png" alt="METAFXN" style="width: 140px; height: 140px; border-radius: 50%; display: block; margin: 0 auto;" />
       <div id="visit-counter" style="text-align:center; margin-top: 16px; color:#000; font-size:14px;">
         Visits: <strong id="visit-count" style="color:#000;">...</strong>
       </div>
