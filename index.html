@@ -49,6 +49,9 @@ body {
   font-family: var(--font-ui); font-weight: 700; font-size: 1.3rem;
   letter-spacing: 0.08em; color: #fff;
 }
+.brand-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.brand-by { display: flex; align-items: center; gap: 6px; font-family: var(--font-ui); font-size: 0.72rem; color: var(--accent-text); letter-spacing: 0.04em; }
+.brand-by img { height: 22px; width: 22px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.35); }
 .brand-name span { font-weight: 400; letter-spacing: 0.04em; color: var(--accent-text); }
 .live-pill {
   display: inline-flex; align-items: center; gap: 8px;
@@ -222,6 +225,8 @@ footer a { color: #000; }
   font-family: var(--font-ui); font-size: 0.6rem; font-weight: 500; white-space: nowrap;
 }
 .nav-item svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.nav-item .nav-img { width: 24px; height: 24px; display: block; opacity: 0.6; }
+.nav-item.active .nav-img { opacity: 1; }
 .nav-item.active { color: #fff; }
 .nav-item.active svg { stroke: var(--lime); }
 .nav-item.active::before {
@@ -235,18 +240,23 @@ footer a { color: #000; }
 }
 
 html, body { overflow-x: hidden; }
-.xs-status { font-size: 0.75rem; color: var(--muted); margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+.xs-status { font-size: 0.8rem; font-weight: 600; color: var(--deep); margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
 .xs-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+.xs-info { background: rgba(6,78,6,0.12); border: 1px solid rgba(6,78,6,0.35); border-radius: 12px; padding: 10px 12px; margin: 0 0 14px; font-size: 0.8rem; line-height: 1.4; color: var(--deep); }
+#xs-tab .funding-note { color: var(--deep); font-size: 0.78rem; }
+#xs-tab .funding-note a { color: var(--deep); }
 .xs-card h3 { margin: 0 0 10px; font-size: 1rem; color: #fff; }
 .xs-win { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text); margin: 12px 0 6px; font-weight: 700; }
 .xs-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 0.86rem; color: #fff; }
 .xs-row .xs-v { margin-left: auto; font-family: var(--font-mono, 'JetBrains Mono', monospace); }
+.xs-big { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.84rem; color: #fff; font-family: var(--font-mono, 'JetBrains Mono', monospace); }
+.xs-big a { color: var(--accent-text); text-decoration: none; }
 .xs-sep { height: 1px; background: var(--card-border); margin: 4px 0; }
 .xs-total { display: flex; padding-top: 6px; font-weight: 700; font-size: 0.9rem; color: #fff; }
 .xs-total .xs-v { margin-left: auto; font-family: var(--font-mono, 'JetBrains Mono', monospace); color: var(--lime); }
 .xs-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 .xs-g { background: var(--lime); } .xs-r { background: #ff6b6b; }
-.xs-feed-title { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; margin: 18px 0 10px; font-weight: 700; }
+.xs-feed-title { font-size: 0.8rem; color: var(--deep); text-transform: uppercase; letter-spacing: 0.14em; margin: 18px 0 10px; font-weight: 700; }
 .xs-item { background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; }
 .xs-item.xs-new { border-color: var(--lime); }
 .xs-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -257,32 +267,84 @@ html, body { overflow-x: hidden; }
 .xs-sub { font-size: 0.8rem; color: var(--muted); margin: 6px 0 2px; }
 .xs-meta { font-size: 0.72rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; }
 .xs-meta a { color: var(--accent-text); text-decoration: none; }
-.xs-empty { color: var(--muted); font-size: 0.85rem; padding: 10px 0; }
+.xs-empty { color: var(--deep); font-size: 0.85rem; padding: 10px 0; }
+
+#mcap-head.hide-sub { display: none !important; }
+.sub-tabs { display: flex; gap: 8px; margin: 0 0 16px; flex-wrap: wrap; }
+.sub-tab { appearance: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--card-border); background: var(--card); color: #fff; border-radius: 999px; padding: 6px 14px 6px 8px; font: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+.sub-tab img { width: 24px; height: 24px; display: block; }
+.sub-tab .sub-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--lime); color: var(--deep); display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+.sub-tab.active { background: var(--lime); color: var(--deep); border-color: var(--lime); }
+.sub-soon { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 1.4rem 1.2rem; text-align: center; color: #fff; }
+.sub-soon img { width: 64px; height: 64px; margin-bottom: 8px; }
+.sub-soon p { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; }
+
+.rh-box { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; }
+.rh-tabs { display: flex; gap: 8px; margin: 10px 0 12px; }
+.rh-tab { appearance: none; border: 1px solid var(--card-border); background: transparent; color: var(--muted); border-radius: 999px; padding: 5px 14px; font: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+.rh-tab.active { background: var(--lime); color: var(--deep); border-color: var(--lime); }
+.rh-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.rh-table th { text-align: right; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 6px 4px; border-bottom: 1px solid var(--card-border); }
+.rh-table td { text-align: right; padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,0.08); color: #fff; font-family: var(--font-mono, 'JetBrains Mono', monospace); }
+.rh-table th:first-child, .rh-table td:first-child { text-align: left; font-family: inherit; white-space: nowrap; }
+.rh-table th { font-size: 0.6rem; letter-spacing: 0.06em; }
+.rh-table td { font-size: 0.8rem; }
+.rh-empty { color: var(--muted); font-size: 0.85rem; margin: 8px 0; }
+
+.fxn-box { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 1rem 1rem 0.8rem; margin-bottom: 14px; }
+.fxn-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.fxn-title { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; margin: 0; font-weight: 700; }
+.fxn-ranges { display: inline-flex; border: 1px solid var(--card-border); border-radius: 8px; overflow: hidden; }
+.fxn-range { appearance: none; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 0.75rem; font-weight: 700; padding: 5px 10px; cursor: pointer; }
+.fxn-range.active { background: var(--lime); color: var(--deep); }
+.fxn-chart svg { width: 100%; height: auto; display: block; }
+.fxn-chart text { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 11px; fill: rgba(255,255,255,0.7); }
+.fxn-msg { color: var(--muted); font-size: 0.85rem; padding: 18px 0; text-align: center; }
+.fxn-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.fxn-stat { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 12px 14px; }
+.fxn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; margin-top: 10px; }
+.fxn-cell-label { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; font-weight: 700; }
+.fxn-cell-value { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 1rem; font-weight: 700; color: #fff; margin: 0; word-break: break-all; }
+.fxn-stat-wide { grid-column: 1 / -1; }
+.fxn-stat-label { display: flex; align-items: center; gap: 6px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; font-weight: 700; }
+.fxn-stat-label img { width: 18px; height: 18px; }
+.fxn-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.fxn-stat-value { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0; word-break: break-all; }
+.fxn-stat-sub { font-size: 0.72rem; color: var(--muted); margin: 4px 0 0; }
 </style>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
       <img src="IMG_2015.png" alt="FXN" />
-      <span class="brand-name">FXUSD<span>.club</span></span>
+      <div class="brand-text">
+        <span class="brand-name">FXUSD<span>.club</span></span>
+        <span class="brand-by"><img src="metafxn.JPG" alt="MetaFXN" />by MetaFXN</span>
+      </div>
     </div>
     <span class="live-pill"><span class="live-dot"></span>LIVE</span>
   </header>
 
   <div class="wrap">
 
-    <div data-tab="mcap"><h1>Dashboard</h1><p class="subtitle">fxUSD &amp; fxSAVE: pools, yields, funding and peg, live.</p></div><div data-tab="funding"><h1>Funding</h1><p class="subtitle">Live Stability Pool funding status and current rate.</p></div><div data-tab="xs"><h1>X&amp;S Live</h1><p class="subtitle">Latest xPosition and sPosition orders above $10k, with 24h and 7-day volume.</p></div><div data-tab="pool"><h1>FX Pool</h1><p class="subtitle">f(x) Protocol pools and their current yields.</p></div><div data-tab="loop"><h1>Loop fxSAVE</h1><p class="subtitle">Leveraged fxSAVE strategies: max APY and borrow cost.</p></div><div data-tab="yield"><h1>Yield</h1><p class="subtitle">More ways to earn on fxUSD and fxSAVE.</p></div>
+    <div data-tab="mcap" id="mcap-head"><h1>Dashboard</h1><p class="subtitle">fxUSD &amp; fxSAVE: pools, yields, funding and peg, live.</p></div><div data-tab="funding"><h1>Funding</h1><p class="subtitle">Live Stability Pool funding status and current rate.</p></div><div data-tab="xs"><h1>X&amp;S Live</h1><p class="subtitle">Latest xPosition and sPosition orders above $10k, with 24h and 7-day volume.</p></div><div data-tab="pool"><h1>FX Pool</h1><p class="subtitle">f(x) Protocol pools and their current yields.</p></div><div data-tab="loop"><h1>Loop fxSAVE</h1><p class="subtitle">Leveraged fxSAVE strategies: max APY and borrow cost.</p></div><div data-tab="yield"><h1>Yield</h1><p class="subtitle">More ways to earn on fxUSD and fxSAVE.</p></div>
 
     <div data-tab="mcap">
+    <div class="sub-tabs">
+      <button class="sub-tab active" data-sub="fxusd"><img src="fxusd.PNG" alt="" />fxUSD</button>
+      <button class="sub-tab" data-sub="fxn"><img src="fxn.PNG" alt="" />FXN</button>
+      <button class="sub-tab" data-sub="fx100"><img src="fx100.PNG" alt="" />FX100</button>
+    </div>
+    <div class="sub-pane" data-sub="fxusd">
     <div class="mcap-row">
       <div class="mcap-card">
         <p class="mcap-label">fxUSD Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,228,087</span></p>
-        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9995</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxusd-mcap">78,198,605</span></p>
+        <p class="mcap-price">Precio: $<span id="fxusd-price">0.9996</span></p>
       </div>
       <div class="mcap-card">
         <p class="mcap-label">fxSAVE Market Cap</p>
-        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">71,100,983</span></p>
+        <p class="mcap-value"><span class="live-dot"></span>$<span id="fxsave-mcap">71,111,545</span></p>
         <p class="mcap-price">Precio: $<span id="fxsave-price">1.1200</span></p>
       </div>
     </div>
@@ -302,10 +364,10 @@ html, body { overflow-x: hidden; }
     
     <div class="peg-chart">
       <p class="peg-title">Peg Deviation (fxUSD)</p>
-      <p class="peg-value"><span class="live-heart">♥</span> $<span id="peg-current-price">0.9995</span> &middot; <span id="peg-deviation">-5.1</span> bps</p>
+      <p class="peg-value"><span class="live-heart">♥</span> $<span id="peg-current-price">0.9995</span> &middot; <span id="peg-deviation">-5.2</span> bps</p>
       <svg viewBox="0 0 700 190" preserveAspectRatio="none" style="width: 100%; height: 140px;">
         <line x1="10" y1="85.0" x2="690" y2="85.0" stroke="#3a4658" stroke-width="1" stroke-dasharray="4,3" />
-        <polyline points="10.0,87.7 21.5,88.5 33.1,88.8 44.6,88.7 56.1,89.4 67.6,90.3 79.2,90.5 90.7,89.6 102.2,86.3 113.7,89.4 125.3,82.2 136.8,87.8 148.3,86.0 159.8,87.7 171.4,89.5 182.9,88.8 194.4,91.3 205.9,86.0 217.5,87.7 229.0,92.0 240.5,92.6 252.0,85.5 263.6,88.7 275.1,89.2 286.6,88.7 298.1,88.2 309.7,92.7 321.2,91.0 332.7,90.2 344.2,86.7 355.8,87.2 367.3,89.4 378.8,85.5 390.3,83.5 401.9,83.6 413.4,85.3 424.9,86.3 436.4,86.7 448.0,90.6 459.5,84.4 471.0,88.7 482.5,88.9 494.1,89.2 505.6,88.3 517.1,88.1 528.6,86.2 540.2,86.8 551.7,91.6 563.2,87.5 574.7,85.9 586.3,85.5 597.8,81.3 609.3,78.9 620.8,83.1 632.4,83.5 643.9,77.4 655.4,84.1 666.9,85.9 678.5,83.2 690.0,91.3" fill="none" stroke="#b9e63a" stroke-width="2" />
+        <polyline points="10.0,88.1 21.5,88.3 33.1,86.8 44.6,87.8 56.1,88.2 67.6,88.2 79.2,89.8 90.7,89.3 102.2,90.2 113.7,87.2 125.3,83.6 136.8,84.6 148.3,86.6 159.8,89.9 171.4,90.8 182.9,88.1 194.4,88.3 205.9,86.8 217.5,85.4 229.0,91.7 240.5,116.6 252.0,86.4 263.6,88.8 275.1,90.7 286.6,90.9 298.1,85.3 309.7,92.5 321.2,77.5 332.7,86.4 344.2,83.6 355.8,86.0 367.3,89.2 378.8,90.4 390.3,88.0 401.9,83.5 413.4,82.0 424.9,87.6 436.4,89.5 448.0,89.9 459.5,90.8 471.0,60.0 482.5,84.8 494.1,89.0 505.6,91.6 517.1,86.3 528.6,86.3 540.2,86.4 551.7,93.9 563.2,82.9 574.7,80.9 586.3,83.1 597.8,82.8 609.3,76.9 620.8,78.0 632.4,81.6 643.9,76.1 655.4,88.4 666.9,92.3 678.5,82.9 690.0,91.5" fill="none" stroke="#b9e63a" stroke-width="2" />
         <text x="10.0" y="182" font-size="11" fill="#8a94a3" text-anchor="start">Aug '26</text><text x="240.5" y="182" font-size="11" fill="#8a94a3" text-anchor="middle">Sep '26</text><text x="459.5" y="182" font-size="11" fill="#8a94a3" text-anchor="middle">Oct '26</text><text x="690.0" y="182" font-size="11" fill="#8a94a3" text-anchor="end">Oct '26</text>
       </svg>
     </div>
@@ -314,7 +376,7 @@ html, body { overflow-x: hidden; }
     
     <div class="peg-chart">
       <p class="peg-title">Ethereum supply · fxUSD vs peers</p>
-      <div class="cmp-legend"><span class="cmp-item"><i style="background:#b9e63a"></i>fxUSD <b id="cmp-val-fxUSD">$78.13m</b></span><span class="cmp-item"><i style="background:#7aedcf"></i>GHO <b id="cmp-val-GHO">$692.98m</b></span><span class="cmp-item"><i style="background:#4da3ff"></i>crvUSD <b id="cmp-val-crvUSD">$236.49m</b></span><span class="cmp-item"><i style="background:#c77dff"></i>FRAX <b id="cmp-val-FRAX">$128.48m</b></span><span class="cmp-item"><i style="background:#ff8c42"></i>DOLA <b id="cmp-val-DOLA">$107.90m</b></span><span class="cmp-item"><i style="background:#ff4d8d"></i>frxUSD <b id="cmp-val-frxUSD">$76.05m</b></span><span class="cmp-item"><i style="background:#ffd166"></i>REUSD (Resupply) <b id="cmp-val-REUSD">$52.18m</b></span><span class="cmp-item"><i style="background:#e8e8e8"></i>Frankencoin <b id="cmp-val-ZCHF">$37.01m</b></span></div>
+      <div class="cmp-legend"><span class="cmp-item"><i style="background:#b9e63a"></i>fxUSD <b id="cmp-val-fxUSD">$78.14m</b></span><span class="cmp-item"><i style="background:#7aedcf"></i>GHO <b id="cmp-val-GHO">$693.11m</b></span><span class="cmp-item"><i style="background:#4da3ff"></i>crvUSD <b id="cmp-val-crvUSD">$236.53m</b></span><span class="cmp-item"><i style="background:#c77dff"></i>FRAX <b id="cmp-val-FRAX">$128.50m</b></span><span class="cmp-item"><i style="background:#ff8c42"></i>DOLA <b id="cmp-val-DOLA">$107.91m</b></span><span class="cmp-item"><i style="background:#ff4d8d"></i>frxUSD <b id="cmp-val-frxUSD">$76.05m</b></span><span class="cmp-item"><i style="background:#ffd166"></i>REUSD (Resupply) <b id="cmp-val-REUSD">$52.21m</b></span><span class="cmp-item"><i style="background:#e8e8e8"></i>Frankencoin <b id="cmp-val-ZCHF">$36.92m</b></span></div>
       <svg viewBox="0 0 700 280" preserveAspectRatio="none" style="width: 100%; height: 240px;">
         <line x1="48" y1="248.0" x2="690" y2="248.0" stroke="#243044" stroke-width="1" /><text x="42" y="251.0" font-size="10" fill="#8a94a3" text-anchor="end">0</text><line x1="48" y1="200.4" x2="690" y2="200.4" stroke="#243044" stroke-width="1" /><text x="42" y="203.4" font-size="10" fill="#8a94a3" text-anchor="end">138.89m</text><line x1="48" y1="152.8" x2="690" y2="152.8" stroke="#243044" stroke-width="1" /><text x="42" y="155.8" font-size="10" fill="#8a94a3" text-anchor="end">277.77m</text><line x1="48" y1="105.2" x2="690" y2="105.2" stroke="#243044" stroke-width="1" /><text x="42" y="108.2" font-size="10" fill="#8a94a3" text-anchor="end">416.66m</text><line x1="48" y1="57.6" x2="690" y2="57.6" stroke="#243044" stroke-width="1" /><text x="42" y="60.6" font-size="10" fill="#8a94a3" text-anchor="end">555.54m</text><line x1="48" y1="10.0" x2="690" y2="10.0" stroke="#243044" stroke-width="1" /><text x="42" y="13.0" font-size="10" fill="#8a94a3" text-anchor="end">694.43m</text>
         <polyline points="48.0,247.8 50.0,247.8 52.0,247.8 54.0,246.1 56.1,245.3 58.1,244.7 60.1,244.1 62.1,244.1 64.1,244.0 66.1,243.9 68.1,243.5 70.1,243.0 72.2,243.3 74.2,243.3 76.2,243.2 78.2,242.7 80.2,244.0 82.2,242.7 84.2,243.8 86.2,241.5 88.3,242.1 90.3,240.5 92.3,242.0 94.3,241.8 96.3,242.9 98.3,243.0 100.3,243.1 102.3,243.2 104.4,243.4 106.4,240.5 108.4,240.6 110.4,240.7 112.4,240.8 114.4,240.9 116.4,241.0 118.4,241.1 120.5,241.0 122.5,241.0 124.5,241.0 126.5,241.0 128.5,241.2 130.5,241.2 132.5,241.3 134.5,241.7 136.6,241.8 138.6,242.2 140.6,242.5 142.6,242.6 144.6,242.6 146.6,242.3 148.6,241.7 150.6,241.6 152.7,241.6 154.7,241.3 156.7,241.3 158.7,241.4 160.7,241.3 162.7,241.5 164.7,241.1 166.7,240.5 168.8,240.2 170.8,239.8 172.8,239.6 174.8,239.7 176.8,239.4 178.8,239.4 180.8,239.4 182.8,239.4 184.9,239.5 186.9,239.4 188.9,239.4 190.9,239.4 192.9,239.4 194.9,239.4 196.9,239.4 198.9,239.4 201.0,239.4 203.0,239.4 205.0,239.3 207.0,239.4 209.0,239.5 211.0,239.5 213.0,239.5 215.0,239.9 217.1,240.4 219.1,240.4 221.1,240.5 223.1,240.9 225.1,241.0 227.1,240.3 229.1,240.3 231.1,240.3 233.2,240.3 235.2,240.3 237.2,240.1 239.2,240.9 241.2,240.8 243.2,240.8 245.2,240.8 247.2,240.8 249.3,241.7 251.3,241.7 253.3,241.9 255.3,242.4 257.3,240.4 259.3,237.9 261.3,236.6 263.3,235.5 265.4,234.5 267.4,233.8 269.4,237.9 271.4,236.6 273.4,237.8 275.4,236.8 277.4,235.5 279.4,234.6 281.5,233.6 283.5,235.5 285.5,236.0 287.5,238.3 289.5,240.9 291.5,240.6 293.5,243.5 295.5,243.3 297.6,243.1 299.6,242.1 301.6,241.6 303.6,240.8 305.6,242.5 307.6,242.6 309.6,242.3 311.6,244.1 313.7,244.4 315.7,244.2 317.7,244.1 319.7,242.6 321.7,241.4 323.7,241.4 325.7,241.3 327.7,241.2 329.8,240.6 331.8,240.8 333.8,237.5 335.8,236.8 337.8,233.9 339.8,233.5 341.8,230.5 343.8,232.1 345.9,231.8 347.9,230.2 349.9,229.3 351.9,228.0 353.9,227.6 355.9,225.8 357.9,225.5 359.9,224.9 362.0,225.3 364.0,225.2 366.0,223.9 368.0,223.2 370.0,222.2 372.0,221.9 374.0,220.8 376.0,221.7 378.1,220.0 380.1,220.9 382.1,221.0 384.1,221.9 386.1,222.4 388.1,222.1 390.1,222.0 392.1,217.1 394.2,213.5 396.2,212.3 398.2,210.4 400.2,209.1 402.2,209.2 404.2,204.6 406.2,204.3 408.2,204.7 410.3,204.9 412.3,205.1 414.3,205.0 416.3,204.8 418.3,206.6 420.3,206.5 422.3,206.3 424.3,207.4 426.4,207.5 428.4,210.2 430.4,210.3 432.4,205.3 434.4,206.4 436.4,208.9 438.4,210.2 440.4,209.8 442.5,213.1 444.5,212.7 446.5,212.6 448.5,210.9 450.5,211.2 452.5,213.5 454.5,217.2 456.5,221.7 458.6,221.6 460.6,222.7 462.6,233.3 464.6,237.0 466.6,236.6 468.6,233.3 470.6,233.2 472.6,232.4 474.7,232.6 476.7,232.5 478.7,232.5 480.7,236.9 482.7,237.0 484.7,237.0 486.7,237.3 488.7,237.1 490.8,237.1 492.8,236.7 494.8,236.5 496.8,236.4 498.8,236.2 500.8,236.4 502.8,236.3 504.8,236.3 506.9,236.3 508.9,236.4 510.9,236.3 512.9,240.9 514.9,241.4 516.9,242.8 518.9,242.9 520.9,243.0 523.0,243.0 525.0,242.9 527.0,242.9 529.0,242.8 531.0,242.8 533.0,242.8 535.0,242.5 537.0,242.6 539.1,242.5 541.1,242.5 543.1,242.1 545.1,241.9 547.1,241.9 549.1,242.1 551.1,242.1 553.1,242.1 555.2,242.1 557.2,242.1 559.2,241.8 561.2,241.3 563.2,241.1 565.2,238.6 567.2,238.3 569.2,236.5 571.3,236.6 573.3,236.8 575.3,235.6 577.3,233.4 579.3,229.5 581.3,229.6 583.3,229.5 585.3,228.9 587.4,229.0 589.4,228.2 591.4,228.2 593.4,227.2 595.4,229.4 597.4,231.6 599.4,230.6 601.4,230.7 603.5,229.1 605.5,228.5 607.5,228.5 609.5,230.8 611.5,231.1 613.5,231.1 615.5,230.2 617.5,229.7 619.6,229.4 621.6,228.0 623.6,227.6 625.6,227.7 627.6,226.7 629.6,226.1 631.6,226.1 633.6,226.2 635.7,226.3 637.7,226.2 639.7,226.1 641.7,226.2 643.7,226.1 645.7,226.6 647.7,224.8 649.7,224.6 651.8,224.1 653.8,222.8 655.8,221.2 657.8,221.2 659.8,220.8 661.8,220.0 663.8,219.5 665.8,219.8 667.9,219.5 669.9,218.6 671.9,217.9 673.9,217.7 675.9,217.0 677.9,217.0 679.9,218.5 681.9,216.7 684.0,216.6 686.0,219.1 688.0,220.8 690.0,221.2" fill="none" stroke="#b9e63a" stroke-width="8" opacity="0.18" />
@@ -324,6 +386,26 @@ html, body { overflow-x: hidden; }
       <script type="application/json" id="cmp-spec">[{"key":"fxUSD","id":168,"symbol":"FXUSD"},{"key":"GHO","id":118,"symbol":"GHO"},{"key":"crvUSD","id":110,"symbol":"CRVUSD"},{"key":"FRAX","id":6,"symbol":"FRAX"},{"key":"DOLA","id":15,"symbol":"DOLA"},{"key":"frxUSD","id":235,"symbol":"FRXUSD"},{"key":"REUSD","id":256,"symbol":"REUSD"},{"key":"ZCHF","id":226,"symbol":"ZCHF"}]</script>
     </div>
     
+    </div>
+    <div class="sub-pane" data-sub="fxn" id="fxn-pane" style="display:none">
+      <div class="fxn-box"><div class="fxn-head"><p class="fxn-title">cvxFXN &amp; sdFXN peg</p><div class="fxn-ranges"><button class="fxn-range active" data-range="1W">1W</button><button class="fxn-range" data-range="1M">1M</button><button class="fxn-range" data-range="1Y">1Y</button><button class="fxn-range" data-range="ALL">ALL</button></div></div><div id="fxn-chart" class="fxn-chart"><p class="fxn-msg">Loading…</p></div><p class="funding-note">Peg = token price / FXN price (DefiLlama). 100% = 1 FXN.</p></div><div class="fxn-stats"><div class="fxn-stat fxn-stat-wide"><p class="fxn-stat-label"><img src="fxn.PNG" alt="" />FXN price</p><p class="fxn-stat-value" id="fxn-price-fxn">...</p></div><div class="fxn-stat"><p class="fxn-stat-label"><img src="fxn.PNG" alt="" />Total veFXN supply</p><p class="fxn-stat-value" id="fxn-vefxn">...</p></div><div class="fxn-stat"><p class="fxn-stat-label"><span class="fxn-dot" style="background:#6ec6f0"></span>cvxFXN</p><p class="fxn-stat-value" id="fxn-peg-cvx">...</p><p class="fxn-stat-sub" id="fxn-peg-cvx-sub"></p></div><div class="fxn-stat"><p class="fxn-stat-label"><span class="fxn-dot" style="background:#f0cf7a"></span>sdFXN</p><p class="fxn-stat-value" id="fxn-peg-sd">...</p><p class="fxn-stat-sub" id="fxn-peg-sd-sub"></p></div></div><div class="fxn-box"><p class="fxn-title">FXN market data</p><div class="fxn-grid"><div class="fxn-cell"><p class="fxn-cell-label">Market cap</p><p class="fxn-cell-value" id="fxn-m-mcap">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">Circulating supply</p><p class="fxn-cell-value" id="fxn-m-circ">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">FDV</p><p class="fxn-cell-value" id="fxn-m-fdv">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">Total supply</p><p class="fxn-cell-value" id="fxn-m-total">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">Max supply</p><p class="fxn-cell-value" id="fxn-m-max">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">Market cap / FDV</p><p class="fxn-cell-value" id="fxn-m-ratio">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">TVL</p><p class="fxn-cell-value" id="fxn-m-tvl">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">24h volume</p><p class="fxn-cell-value" id="fxn-m-vol">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">FDV / TVL</p><p class="fxn-cell-value" id="fxn-m-fdvtvl">...</p></div><div class="fxn-cell"><p class="fxn-cell-label">Holders</p><p class="fxn-cell-value" id="fxn-m-holders">...</p></div></div><p class="funding-note" id="fxn-m-note"></p></div>
+    </div>
+    <div class="sub-pane" data-sub="fx100" style="display:none">
+      <div class="sub-soon"><img src="fx100.PNG" alt="FX100" /><h3>FX100</h3><p>Coming soon.</p></div>
+    </div>
+    <script>
+    (function() {
+      var btns = document.querySelectorAll('.sub-tab'), panes = document.querySelectorAll('.sub-pane');
+      Array.prototype.forEach.call(btns, function(b) {
+        b.addEventListener('click', function() {
+          Array.prototype.forEach.call(btns, function(x) { x.classList.toggle('active', x === b); });
+          Array.prototype.forEach.call(panes, function(p) { p.style.display = (p.getAttribute('data-sub') === b.getAttribute('data-sub')) ? '' : 'none'; });
+          var head = document.getElementById('mcap-head');
+          if (head) head.classList.toggle('hide-sub', b.getAttribute('data-sub') !== 'fxusd');
+        });
+      });
+    })();
+    </script>
     </div>
 
     <div data-tab="funding">
@@ -356,11 +438,42 @@ html, body { overflow-x: hidden; }
         </div>
       </div>
     </div>
-    
+    <div class="rh-box"><p class="funding-title">Rate history (average)</p><div class="rh-tabs"><button class="rh-tab active" data-rh="day">Daily</button><button class="rh-tab" data-rh="month">Monthly</button><button class="rh-tab" data-rh="year">Yearly</button></div><div class="rh-pane" data-rh="day"><table class="rh-table"><thead><tr><th>Day</th><th>Avg rate</th><th>Annual</th><th>Time ON</th><th>Samples</th></tr></thead><tbody><tr><td>2026-10-24</td><td>0.0041%</td><td>4.52%</td><td>100%</td><td>1</td></tr></tbody></table></div><div class="rh-pane" data-rh="month" style="display:none"><table class="rh-table"><thead><tr><th>Month</th><th>Avg rate</th><th>Annual</th><th>Time ON</th><th>Samples</th></tr></thead><tbody><tr><td>2026-10</td><td>0.0041%</td><td>4.52%</td><td>100%</td><td>1</td></tr></tbody></table></div><div class="rh-pane" data-rh="year" style="display:none"><table class="rh-table"><thead><tr><th>Year</th><th>Avg rate</th><th>Annual</th><th>Time ON</th><th>Samples</th></tr></thead><tbody><tr><td>2026</td><td>0.0041%</td><td>4.52%</td><td>100%</td><td>1</td></tr></tbody></table></div><p class="funding-note">Data is collected every hour and the averages are calculated from those readings; funding OFF counts as 0%. 1 sample = 1 h; there can be more than 24 samples per day (extra samples are added when the site is redeployed). <span id="rh-since">Tracking since 2026-10-24 (UTC), 1 samples.</span> <b>Storage is temporary:</b> set DATA_DIR to a Railway Volume path to keep this history across deploys.</p><script>
+(function() {
+  var HEADS = { day: 'Day', month: 'Month', year: 'Year' };
+  function tableHtml(kind, rows) {
+    if (!rows || !rows.length) return '<p class="rh-empty">No data yet.</p>';
+    var body = rows.map(function(r) {
+      return '<tr><td>' + r.period + '</td><td>' + r.avg.toFixed(4) + '%</td><td>' + r.annual.toFixed(2) + '%</td><td>'
+        + Math.round(r.on_pct) + '%</td><td>' + r.n + '</td></tr>';
+    }).join('');
+    return '<table class="rh-table"><thead><tr><th>' + HEADS[kind] + '</th><th>Avg rate</th><th>Annual</th><th>Time ON</th><th>Samples</th></tr></thead><tbody>' + body + '</tbody></table>';
+  }
+  function refreshTable() {
+    fetch('rate_summary.json?t=' + Date.now(), { cache: 'no-store' }).then(function(r) { return r.json(); }).then(function(s) {
+      ['day', 'month', 'year'].forEach(function(k) {
+        var pane = document.querySelector('.rh-pane[data-rh="' + k + '"]');
+        if (pane) pane.innerHTML = tableHtml(k, s.rows && s.rows[k]);
+      });
+      var el = document.getElementById('rh-since');
+      if (el && s.since) el.textContent = 'Tracking since ' + s.since + ' (UTC), ' + s.n + ' samples.';
+    }).catch(function() {});
+  }
+  refreshTable();
+  setInterval(refreshTable, 300000);
+  var tabs = document.querySelectorAll('.rh-tab'), panes = document.querySelectorAll('.rh-pane');
+  Array.prototype.forEach.call(tabs, function(t) {
+    t.addEventListener('click', function() {
+      Array.prototype.forEach.call(tabs, function(x) { x.classList.toggle('active', x === t); });
+      Array.prototype.forEach.call(panes, function(p) { p.style.display = (p.getAttribute('data-rh') === t.getAttribute('data-rh')) ? '' : 'none'; });
+    });
+  });
+})();
+</script></div>
     </div>
 
     <div data-tab="xs" id="xs-tab">
-    <div class="xs-status"><span class="live-dot"></span><span id="xs-status-text">Loading live orders…</span></div><div id="xs-stats"></div><p class="xs-feed-title">Last 5 orders above $10,000</p><div id="xs-feed"><p class="xs-empty">Loading…</p></div><p class="funding-note">xPosition = long pools (wBTC, wstETH); sPosition = short pools. Open/Close is the sign of the collateral (x) or debt (s) change in each on-chain Operate event; USD value uses the current spot price. Volume in wBTC / wstETH.</p>
+    <div class="xs-status"><span class="live-dot"></span><span id="xs-status-text">Loading live orders…</span></div><p class="xs-info"><b>Note:</b> minting fxUSD counts as xPosition. Collateral Volume only counts collateral moved. Debt-only mints and repayments (no collateral change) are shown separately, converted to wBTC / wstETH at spot price, and added in Total incl. debt.</p><div id="xs-stats"></div><p class="xs-feed-title">Last 5 orders above $10,000</p><div id="xs-feed"><p class="xs-empty">Loading…</p></div><p class="funding-note">xPosition = long pools (wBTC, wstETH); sPosition = short pools. Open/Close is the sign of the change in each on-chain Operate event: collateral for xPosition (minting fxUSD counts as xPosition; debt-only mints/repayments are listed separately, converted at spot) and debt for sPosition; USD value uses the current spot price. Volume in wBTC / wstETH. <b>Why volumes may differ from other trackers:</b> every on-chain change counts as an order, including partial collateral adds/withdrawals and debt-only fxUSD mints/repayments, so Close xPosition and totals can be higher than reports that only count full opens and closes.</p>
     </div>
 
     
@@ -374,11 +487,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.33% <span class="apy-change apy-down">-0.01% (24h)</span></p>
+          <p class="stat-value apy">6.24% <span class="apy-change apy-down">-0.15% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$71,100,983</p>
+          <p class="stat-value">$71,111,545</p>
         </div>
       </div>
     </a>
@@ -389,11 +502,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">14.72% <span class="apy-change apy-down">-1.17% (24h)</span></p>
+          <p class="stat-value apy">14.72% <span class="apy-change apy-down">-0.56% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$151,727</p>
+          <p class="stat-value">$151,524</p>
         </div>
       </div>
       
@@ -405,11 +518,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">13.98% <span class="apy-change apy-down">-0.37% (24h)</span></p>
+          <p class="stat-value apy">13.65% <span class="apy-change apy-down">-0.5% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$1,998,670</p>
+          <p class="stat-value">$1,998,871</p>
         </div>
       </div>
       
@@ -421,11 +534,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">8.8% <span class="apy-change apy-down">-0.28% (24h)</span></p>
+          <p class="stat-value apy">8.81% <span class="apy-change apy-down">-0.1% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$536,359</p>
+          <p class="stat-value">$536,213</p>
         </div>
       </div>
       
@@ -437,11 +550,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.38% <span class="apy-change apy-down">-0.3% (24h)</span></p>
+          <p class="stat-value apy">6.3% <span class="apy-change apy-down">-0.14% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$22,530</p>
+          <p class="stat-value">$22,581</p>
         </div>
       </div>
       
@@ -453,11 +566,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.14% <span class="apy-change apy-down">-0.02% (24h)</span></p>
+          <p class="stat-value apy">6.06% <span class="apy-change apy-down">-0.07% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$72,940,635</p>
+          <p class="stat-value">$73,110,985</p>
         </div>
       </div>
       
@@ -469,11 +582,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">5.59% <span class="apy-change apy-up">+0.35% (24h)</span></p>
+          <p class="stat-value apy">5.55% <span class="apy-change apy-up">+0.44% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$115,147</p>
+          <p class="stat-value">$115,136</p>
         </div>
       </div>
       
@@ -485,11 +598,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">5.32% <span class="apy-change apy-down">-1.49% (24h)</span></p>
+          <p class="stat-value apy">5.22% <span class="apy-change apy-down">-1.36% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$9,181,190</p>
+          <p class="stat-value">$9,181,262</p>
         </div>
       </div>
       
@@ -501,11 +614,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.49% <span class="apy-change apy-up">+0.07% (24h)</span></p>
+          <p class="stat-value apy">0.38% <span class="apy-change apy-down">-0.13% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$197,811</p>
+          <p class="stat-value">$197,746</p>
         </div>
       </div>
       
@@ -537,7 +650,7 @@ html, body { overflow-x: hidden; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$133,384</p>
+          <p class="stat-value">$133,370</p>
         </div>
       </div>
       
@@ -553,7 +666,7 @@ html, body { overflow-x: hidden; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$98,793</p>
+          <p class="stat-value">$98,186</p>
         </div>
       </div>
       
@@ -588,21 +701,21 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Lend Rate</p>
-          <p class="stat-value apy"><span id="lend-rate">6.96</span>%</p>
+          <p class="stat-value apy"><span id="lend-rate">7.72</span>%</p>
         </div>
         <div class="stat">
           <p class="stat-label">Borrow Rate</p>
-          <p class="stat-value"><span id="lend-borrow">2.38</span>%</p>
+          <p class="stat-value"><span id="lend-borrow">2.43</span>%</p>
         </div>
       </div>
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Total Liquidity</p>
-          <p class="stat-value">$11,050,549</p>
+          <p class="stat-value">$9,883,324</p>
         </div>
         <div class="stat">
           <p class="stat-label">Prestado</p>
-          <p class="stat-value">$16,516,446</p>
+          <p class="stat-value">$16,664,509</p>
         </div>
       </div>
     </a>
@@ -613,14 +726,14 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Net APY</p>
-          <p class="stat-value apy"><span id="rockawayx-apy">6.47</span>%</p>
+          <p class="stat-value apy"><span id="rockawayx-apy">7.08</span>%</p>
         </div>
         <div class="stat">
           <p class="stat-label">Depositos totales</p>
-          <p class="stat-value">$<span id="rockawayx-tvl">13,403,424</span></p>
+          <p class="stat-value">$<span id="rockawayx-tvl">13,403,214</span></p>
         </div>
       </div>
-       <span class="pill">incl. <span id="rockawayx-fxn">5.1</span>% FXN</span>
+       <span class="pill">incl. <span id="rockawayx-fxn">5.64</span>% FXN</span>
     </a>
     
       </div>
@@ -630,27 +743,27 @@ html, body { overflow-x: hidden; }
       <p class="section-title">YIELDZ</p>
       <div class="grid">
         
-    <a class="card" href="https://yieldz.io/leverage?q=Fxsave" target="_blank" rel="noopener" data-yz-id="0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84" data-yz-lltv="91.5" data-yz-deposit="6.4584" data-yz-borrow="2.3752">
+    <a class="card" href="https://yieldz.io/leverage?q=Fxsave" target="_blank" rel="noopener" data-yz-id="0x17f7ae1b52670010976b3fe41324cbb2b1eb7dd8f492e51764b2828371b86b84" data-yz-lltv="91.5" data-yz-deposit="6.505" data-yz-borrow="2.4295">
       <p class="card-title">fxSAVE / USDC</p>
       <p class="card-sub">Yieldz &middot; Morpho &middot; Med. &middot; Ethereum</p>
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Max APY</p>
-          <p class="stat-value apy"><span id="yz-0x17f7ae1b-apy">50.41%</span></p>
+          <p class="stat-value apy"><span id="yz-0x17f7ae1b-apy">50.38%</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">Avail. Liq.</p>
-          <p class="stat-value">$<span id="yz-0x17f7ae1b-liq">11,050,801</span></p>
+          <p class="stat-value">$<span id="yz-0x17f7ae1b-liq">9,883,026</span></p>
         </div>
       </div>
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">To Util.</p>
-          <p class="stat-value"><span id="yz-0x17f7ae1b-toutil">$8,294,039</span></p>
+          <p class="stat-value"><span id="yz-0x17f7ae1b-toutil">$7,228,680</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">Utilization</p>
-          <p class="stat-value"><span id="yz-0x17f7ae1b-util">59.91</span>%</p>
+          <p class="stat-value"><span id="yz-0x17f7ae1b-util">62.77</span>%</p>
         </div>
       </div>
     </a>
@@ -682,7 +795,7 @@ html, body { overflow-x: hidden; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$<span id="tg-0x849cf82e-tvl">895,593</span></p>
+          <p class="stat-value">$<span id="tg-0x849cf82e-tvl">895,603</span></p>
         </div>
       </div>
     </a>
@@ -693,11 +806,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">vAPR</p>
-          <p class="stat-value apy"><span id="tg-0xa63ded87-vapr">3.14</span>%</p>
+          <p class="stat-value apy"><span id="tg-0xa63ded87-vapr">3.13</span>%</p>
         </div>
         <div class="stat">
           <p class="stat-label">Max lev. vAPR</p>
-          <p class="stat-value apy"><span id="tg-0xa63ded87-max">19.62</span>%</p>
+          <p class="stat-value apy"><span id="tg-0xa63ded87-max">19.56</span>%</p>
         </div>
       </div>
       <div class="stat-row">
@@ -707,7 +820,7 @@ html, body { overflow-x: hidden; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$<span id="tg-0xa63ded87-tvl">226,133</span></p>
+          <p class="stat-value">$<span id="tg-0xa63ded87-tvl">226,141</span></p>
         </div>
       </div>
     </a>
@@ -729,7 +842,7 @@ html, body { overflow-x: hidden; }
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$2,771,906</p>
+          <p class="stat-value">$2,772,131</p>
         </div>
       </div>
     </a>
@@ -739,11 +852,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">Underlying APY</p>
-          <p class="stat-value apy">6.45% <span class="apy-change apy-flat">0% (24h)</span></p>
+          <p class="stat-value apy">6.25% <span class="apy-change apy-up">+0.04% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$2,771,906</p>
+          <p class="stat-value">$2,772,131</p>
         </div>
       </div>
     </a>
@@ -753,11 +866,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">7.12% <span class="apy-change apy-down">-0.11% (24h)</span></p>
+          <p class="stat-value apy">6.97% <span class="apy-change apy-down">-0.08% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$2,771,906</p>
+          <p class="stat-value">$2,772,131</p>
         </div>
       </div>
     </a>
@@ -775,7 +888,7 @@ html, body { overflow-x: hidden; }
           <div class="stat-row">
             <div class="stat">
               <p class="stat-label">Leveraged APY</p>
-              <p class="stat-value apy">41.02%</p>
+              <p class="stat-value apy">40.83%</p>
             </div>
             <div class="stat">
               <p class="stat-label">Base APY</p>
@@ -785,11 +898,11 @@ html, body { overflow-x: hidden; }
           <div class="stat-row">
             <div class="stat">
               <p class="stat-label">TVL Morpho</p>
-              <p class="stat-value">$27,566,995</p>
+              <p class="stat-value">$26,547,877</p>
             </div>
             <div class="stat">
               <p class="stat-label">Available to Borrow</p>
-              <p class="stat-value">$11,050,549</p>
+              <p class="stat-value">$9,883,324</p>
             </div>
           </div>
         </a>
@@ -829,14 +942,14 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">12.58% <span class="apy-change apy-down">-0.41% (24h)</span></p>
+          <p class="stat-value apy">12.47% <span class="apy-change apy-down">-0.49% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
           <p class="stat-value">$29,584</p>
         </div>
       </div>
-       <span class="pill">incl. 12.51% rewards</span>
+       <span class="pill">incl. 12.41% rewards</span>
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -845,14 +958,14 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">10.72% <span class="apy-change apy-down">-0.51% (24h)</span></p>
+          <p class="stat-value apy">10.67% <span class="apy-change apy-down">-0.4% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$159,438</p>
+          <p class="stat-value">$159,431</p>
         </div>
       </div>
-       <span class="pill">incl. 10.65% rewards</span>
+       <span class="pill">incl. 10.56% rewards</span>
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -861,14 +974,14 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.36% <span class="apy-change apy-down">-0.07% (24h)</span></p>
+          <p class="stat-value apy">6.3% <span class="apy-change apy-down">-0.11% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$2,016,396</p>
+          <p class="stat-value">$2,016,669</p>
         </div>
       </div>
-       <span class="pill">incl. 6.19% rewards</span>
+       <span class="pill">incl. 6.13% rewards</span>
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -877,11 +990,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">5.72% <span class="apy-change apy-up">+5.02% (24h)</span></p>
+          <p class="stat-value apy">5.8% <span class="apy-change apy-up">+5.53% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$41,615</p>
+          <p class="stat-value">$41,628</p>
         </div>
       </div>
       
@@ -893,11 +1006,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">3.73% <span class="apy-change apy-down">-0.05% (24h)</span></p>
+          <p class="stat-value apy">3.79% <span class="apy-change apy-down">-0.01% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$536,494</p>
+          <p class="stat-value">$536,354</p>
         </div>
       </div>
       
@@ -909,14 +1022,30 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">1.6% <span class="apy-change apy-up">+0.04% (24h)</span></p>
+          <p class="stat-value apy">1.42% <span class="apy-change apy-down">-0.24% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$202,337</p>
+          <p class="stat-value">$202,147</p>
         </div>
       </div>
-       <span class="pill">incl. 1.43% rewards</span>
+       <span class="pill">incl. 1.42% rewards</span>
+    </a>
+    
+    <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
+      <p class="card-title">ALUSD-FXUSD</p>
+      <p class="card-sub">Ethereum</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">APY</p>
+          <p class="stat-value apy">0.21% <span class="apy-change apy-down">-0.23% (24h)</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">TVL</p>
+          <p class="stat-value">$151,554</p>
+        </div>
+      </div>
+      
     </a>
     
     <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
@@ -925,11 +1054,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.2% <span class="apy-change apy-down">-0.1% (24h)</span></p>
+          <p class="stat-value apy">0.2% <span class="apy-change apy-down">-0.01% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$152,172</p>
+          <p class="stat-value">$151,289</p>
         </div>
       </div>
       
@@ -941,11 +1070,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.1% <span class="apy-change apy-down">-0.16% (24h)</span></p>
+          <p class="stat-value apy">0.11% <span class="apy-change apy-down">-0.2% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$115,646</p>
+          <p class="stat-value">$115,649</p>
         </div>
       </div>
       
@@ -957,27 +1086,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.08% <span class="apy-change apy-down">-1.25% (24h)</span></p>
+          <p class="stat-value apy">0.04% <span class="apy-change apy-down">-1.26% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$9,181,717</p>
-        </div>
-      </div>
-      
-    </a>
-    
-    <a class="card" href="https://www.curve.finance/#/ethereum/pools" target="_blank" rel="noopener">
-      <p class="card-title">ALUSD-FXUSD</p>
-      <p class="card-sub">Ethereum</p>
-      <div class="stat-row">
-        <div class="stat">
-          <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.08% <span class="apy-change apy-down">-0.38% (24h)</span></p>
-        </div>
-        <div class="stat">
-          <p class="stat-label">TVL</p>
-          <p class="stat-value">$151,751</p>
+          <p class="stat-value">$9,182,234</p>
         </div>
       </div>
       
@@ -989,11 +1102,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0% <span class="apy-change apy-flat">0% (24h)</span></p>
+          <p class="stat-value apy">0.02% <span class="apy-change apy-up">+0.02% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$776,589</p>
+          <p class="stat-value">$776,617</p>
         </div>
       </div>
       
@@ -1012,14 +1125,14 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">9.74% <span class="apy-change apy-down">-0.16% (24h)</span></p>
+          <p class="stat-value apy">9.48% <span class="apy-change apy-down">-0.6% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$1,998,627</p>
+          <p class="stat-value">$1,998,898</p>
         </div>
       </div>
-       <span class="pill">incl. 9.57% rewards</span>
+       <span class="pill">incl. 9.31% rewards</span>
     </a>
     
     <a class="card" href="https://curve.convexfinance.com/stake" target="_blank" rel="noopener">
@@ -1028,43 +1141,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">3.73% <span class="apy-change apy-down">-0.05% (24h)</span></p>
+          <p class="stat-value apy">3.79% <span class="apy-change apy-down">-0.01% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$486,193</p>
-        </div>
-      </div>
-      
-    </a>
-    
-    <a class="card" href="https://curve.convexfinance.com/stake" target="_blank" rel="noopener">
-      <p class="card-title">GHO-FXUSD</p>
-      <p class="card-sub">Ethereum</p>
-      <div class="stat-row">
-        <div class="stat">
-          <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.1% <span class="apy-change apy-down">-0.16% (24h)</span></p>
-        </div>
-        <div class="stat">
-          <p class="stat-label">TVL</p>
-          <p class="stat-value">$90,832</p>
-        </div>
-      </div>
-      
-    </a>
-    
-    <a class="card" href="https://curve.convexfinance.com/stake" target="_blank" rel="noopener">
-      <p class="card-title">USDC-FXUSD</p>
-      <p class="card-sub">Ethereum</p>
-      <div class="stat-row">
-        <div class="stat">
-          <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.08% <span class="apy-change apy-down">-1.25% (24h)</span></p>
-        </div>
-        <div class="stat">
-          <p class="stat-label">TVL</p>
-          <p class="stat-value">$9,180,680</p>
+          <p class="stat-value">$486,066</p>
         </div>
       </div>
       
@@ -1076,11 +1157,43 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">0.08% <span class="apy-change apy-down">-0.38% (24h)</span></p>
+          <p class="stat-value apy">0.21% <span class="apy-change apy-down">-0.23% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$140,770</p>
+          <p class="stat-value">$140,588</p>
+        </div>
+      </div>
+      
+    </a>
+    
+    <a class="card" href="https://curve.convexfinance.com/stake" target="_blank" rel="noopener">
+      <p class="card-title">GHO-FXUSD</p>
+      <p class="card-sub">Ethereum</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">APY</p>
+          <p class="stat-value apy">0.11% <span class="apy-change apy-down">-0.2% (24h)</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">TVL</p>
+          <p class="stat-value">$90,835</p>
+        </div>
+      </div>
+      
+    </a>
+    
+    <a class="card" href="https://curve.convexfinance.com/stake" target="_blank" rel="noopener">
+      <p class="card-title">USDC-FXUSD</p>
+      <p class="card-sub">Ethereum</p>
+      <div class="stat-row">
+        <div class="stat">
+          <p class="stat-label">APY</p>
+          <p class="stat-value apy">0.04% <span class="apy-change apy-down">-1.26% (24h)</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">TVL</p>
+          <p class="stat-value">$9,181,124</p>
         </div>
       </div>
       
@@ -1099,11 +1212,11 @@ html, body { overflow-x: hidden; }
       <div class="stat-row">
         <div class="stat">
           <p class="stat-label">APY</p>
-          <p class="stat-value apy">6.33% <span class="apy-change apy-down">-0.01% (24h)</span></p>
+          <p class="stat-value apy">6.24% <span class="apy-change apy-down">-0.15% (24h)</span></p>
         </div>
         <div class="stat">
           <p class="stat-label">TVL</p>
-          <p class="stat-value">$71,152,091</p>
+          <p class="stat-value">$71,322,494</p>
         </div>
       </div>
       
@@ -1366,7 +1479,7 @@ html, body { overflow-x: hidden; }
       setInterval(refreshAll, 20000);
 
       // --- Whale watch: live transfers over $10k for fxUSD / fxSAVE ---
-      var whalePrices = { FXUSD: 0.9995, FXSAVE: 1.12 };
+      var whalePrices = { FXUSD: 0.9996, FXSAVE: 1.12 };
       var whaleSeen = {};
       var whaleLastShown = {}; // symbol -> amount/time pair, for fuzzy dedup
       var WHALE_MAX_ITEMS = 8;
@@ -1612,13 +1725,20 @@ html, body { overflow-x: hidden; }
     rows.forEach(function(r) {
       var d = r.data.replace('0x', '');
       var dColl = int256(d.slice(0, 64)), dDebt = int256(d.slice(64, 128));
-      var delta = p.side === 'x' ? dColl : dDebt;
-      if (delta === BigInt(0)) return;
+      var delta = p.side === 'x' ? dColl : dDebt, amt;
+      // xPosition solo con cambio de deuda (mint/repay de fxUSD sin tocar colateral): se pasa a unidades del activo con el precio.
+      var debtOnly = p.side === 'x' && dColl === BigInt(0) && dDebt !== BigInt(0);
+      if (delta === BigInt(0) && !debtOnly) return;
       var key = r.transactionHash + ':' + r.logIndex;
       if (events[key]) return;
-      var amt = Number(delta) / Math.pow(10, dec);
+      if (debtOnly) {
+        if (!prices[p.asset]) return;
+        amt = (Number(dDebt) / 1e18) / prices[p.asset];
+      } else {
+        amt = Number(delta) / Math.pow(10, dec);
+      }
       events[key] = { key: key, asset: p.asset, side: p.side, open: amt > 0, amt: Math.abs(amt),
-        ts: parseInt(r.timeStamp, 16), tx: r.transactionHash };
+        ts: parseInt(r.timeStamp, 16), tx: r.transactionHash, pos: BigInt(r.topics[2]).toString(), debt: debtOnly };
       if (markNew) newKeys[key] = true;
       added++;
     });
@@ -1636,15 +1756,28 @@ html, body { overflow-x: hidden; }
   function fmt(n, d) { return n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
   function kindOf(e) { return e.side === 'x' ? (e.open ? 'Open xPosition' : 'Close xPosition') : (e.open ? 'Open sPosition' : 'Close sPosition'); }
   function good(e) { return e.side === 'x' ? e.open : !e.open; } // x abierta / s cerrada = verde
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function bigClosesHtml(asset, now) {
+    var list = Object.keys(events).map(function(k) { return events[k]; }).filter(function(e) {
+      return e.asset === asset && e.side === 'x' && !e.open && !e.debt && now - e.ts <= WEEK;
+    }).sort(function(x, y) { return y.amt - x.amt; }).slice(0, 3);
+    if (!list.length) return '';
+    return '<div class="xs-win">Biggest closes (7d)</div>' + list.map(function(e) {
+      var d = new Date(e.ts * 1000);
+      return '<div class="xs-big"><span>' + fmt(e.amt, 2) + ' ' + asset + '</span><span>' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCDate()
+        + ' · <a href="https://etherscan.io/tx/' + e.tx + '" target="_blank" rel="noopener">Etherscan</a></span></div>';
+    }).join('');
+  }
   function statsHtml() {
     var now = Math.floor(Date.now() / 1000), html = '';
     Object.keys(ASSETS).forEach(function(a) {
       var out = '<div class="xs-card"><h3>' + a + ' Volume Report</h3>';
       [['24-Hour Volume', DAY], ['7-Day Volume', WEEK]].forEach(function(w) {
-        var s = { ox: 0, cx: 0, os: 0, cs: 0 };
+        var s = { ox: 0, cx: 0, os: 0, cs: 0 }, dm = 0, dr = 0;
         Object.keys(events).forEach(function(k) {
           var e = events[k];
           if (e.asset !== a || now - e.ts > w[1]) return;
+          if (e.debt) { if (e.open) dm += e.amt; else dr += e.amt; return; }
           s[(e.open ? 'o' : 'c') + e.side] += e.amt;
         });
         function row(c, label, v) { return '<div class="xs-row"><span class="xs-dot ' + c + '"></span>' + label + '<span class="xs-v">' + fmt(v, 2) + ' ' + a + '</span></div>'; }
@@ -1652,7 +1785,11 @@ html, body { overflow-x: hidden; }
           + row('xs-g', 'Open xPosition', s.ox) + row('xs-r', 'Close xPosition', s.cx)
           + '<div class="xs-sep"></div>'
           + row('xs-r', 'Open sPosition', s.os) + row('xs-g', 'Close sPosition', s.cs)
-          + '<div class="xs-total">Total Volume<span class="xs-v">' + fmt(s.ox + s.cx + s.os + s.cs, 2) + ' ' + a + '</span></div>';
+          + '<div class="xs-total">Collateral Volume<span class="xs-v">' + fmt(s.ox + s.cx + s.os + s.cs, 2) + ' ' + a + '</span></div>'
+          + '<div class="xs-sep"></div>'
+          + row('xs-g', 'fxMINT (debt, converted)', dm) + row('xs-r', 'fxUSD repay (debt, converted)', dr)
+          + '<div class="xs-total">Total incl. debt<span class="xs-v">' + fmt(s.ox + s.cx + s.os + s.cs + dm + dr, 2) + ' ' + a + '</span></div>'
+          + (w[1] === WEEK ? bigClosesHtml(a, now) : '');
       });
       html += out + '</div>';
     });
@@ -1672,7 +1809,7 @@ html, body { overflow-x: hidden; }
         + '<span class="xs-pill ' + (good(e) ? 'xs-g' : 'xs-r') + '">' + kindOf(e) + '</span>'
         + '<span class="xs-usd">$' + fmt(usd, 2) + '</span></div>'
         + '<div class="xs-sub">' + fmt(e.amt, 2) + ' ' + e.asset + ' · Price $' + fmt(prices[e.asset], 2) + '</div>'
-        + '<div class="xs-meta"><span>' + addr + '</span><span>' + d.slice(5, 10) + ' ' + d.slice(11, 19) + ' UTC</span>'
+        + '<div class="xs-meta"><span>' + addr + '</span><span>Position #' + e.pos + '</span><span>' + d.slice(5, 10) + ' ' + d.slice(11, 19) + ' UTC</span>'
         + '<a href="https://etherscan.io/tx/' + e.tx + '" target="_blank" rel="noopener">Etherscan</a></div></div>';
     }).join('');
   }
@@ -1719,11 +1856,227 @@ html, body { overflow-x: hidden; }
   setInterval(function() { if (started && active() && !document.hidden) cycle(); }, REFRESH);
 })();
 </script>
+  <script>
+(function() {
+  var KEY = 'FQF5W8F6ZYMPQUJRV1ZBF1ASZC7IF9EBRM', T = {"fxn": "0x365AccFCa291e7D3914637ABf1F7635dB165Bb09", "cvx": "0x183395DbD0B5e93323a7286D1973150697FFFCB3", "sd": "0xe19d1c837b8a1c83a56cd9165b2c0256d39653ad"}, VE = '0xEC6B8A3F3605B083F7044C0F31f2cac0caf1d469', CG = 'fxn-token', CGKEY = '', REFRESH = 60000;
+  var COLORS = { cvx: '#6ec6f0', sd: '#f0cf7a' };
+  var RANGES = { '1W': [168, 3600], '1M': [120, 21600], '1Y': [183, 172800], 'ALL': [200, 604800] };
+  var range = '1W', started = false, busy = false, data = null;
+  function $(id) { return document.getElementById(id); }
+  function fmt(n, d) { return n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function ids() { return ['fxn', 'cvx', 'sd'].map(function(k) { return 'ethereum:' + T[k]; }); }
+  function getJson(url) { return fetch(url).then(function(r) { if (!r.ok) throw new Error('http'); return r.json(); }); }
+
+  // Series de precios (DefiLlama) -> peg = precio del token / precio de FXN
+  // Precios historicos por fechas (batchHistorical): mas fiable que /chart.
+  var STEPS = { '1W': [84, 7200], '1M': [90, 28800], '1Y': [90, 345600], 'ALL': [90, 1296000] };
+  function loadChart() {
+    var st = STEPS[range], now = Math.floor(Date.now() / 1000), tsList = [];
+    for (var n = st[0] - 1; n >= 0; n--) tsList.push(now - n * st[1]);
+    var req = {};
+    ids().forEach(function(id) { req[id] = tsList; });
+    var urls = ['https://coins.llama.fi/batchHistorical?coins=' + encodeURIComponent(JSON.stringify(req))];
+    var r = RANGES[range], pp = r[1] >= 86400 ? (r[1] / 86400) + 'd' : (r[1] / 3600) + 'h';
+    urls.push('https://coins.llama.fi/chart/' + ids().join(',') + '?span=' + r[0] + '&period=' + pp + '&start=' + (now - r[0] * r[1]));
+    var k = 0, lastErr = 'no data';
+    function next() {
+      if (k >= urls.length) return Promise.reject(new Error(lastErr));
+      var u = urls[k++];
+      return fetch(u).then(function(res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); }).then(function(j) {
+        var raw = (j && j.coins) || {}, c = {};
+        Object.keys(raw).forEach(function(key) {
+          var row = raw[key], arr = (row && row.prices) || [];
+          arr = arr.filter(function(p) { return p && typeof p.price === 'number' && typeof p.timestamp === 'number'; })
+                   .sort(function(a, b) { return a.timestamp - b.timestamp; });
+          c[key.toLowerCase()] = { prices: arr };
+        });
+        if (!Object.keys(c).length) throw new Error('empty response');
+        return c;
+      }).catch(function(e) { lastErr = (e && e.message) || 'error'; return next(); });
+    }
+    return next();
+  }
+  function nearest(arr, ts) {
+    var lo = 0, hi = arr.length - 1;
+    while (lo < hi) { var mid = (lo + hi) >> 1; if (arr[mid].timestamp < ts) lo = mid + 1; else hi = mid; }
+    if (lo > 0 && Math.abs(arr[lo - 1].timestamp - ts) < Math.abs(arr[lo].timestamp - ts)) lo--;
+    return arr[lo];
+  }
+  function pegSeries(coins, key) {
+    var f = coins[('ethereum:' + T.fxn).toLowerCase()], c = coins[('ethereum:' + T[key]).toLowerCase()];
+    if (!f || !c || !f.prices || !c.prices || !f.prices.length || !c.prices.length) return [];
+    var out = [];
+    c.prices.forEach(function(p) {
+      var q = nearest(f.prices, p.timestamp);
+      if (q && Math.abs(q.timestamp - p.timestamp) <= 86400 * 3 && q.price > 0 && p.price > 0) out.push({ t: p.timestamp, v: p.price / q.price * 100 });
+    });
+    return out;
+  }
+  function draw(series) {
+    var box = $('fxn-chart');
+    var all = []; ['cvx', 'sd'].forEach(function(k) { all = all.concat(series[k]); });
+    if (!all.length) { box.innerHTML = '<p class="fxn-msg">No chart data available right now.</p>'; return; }
+    var W = 640, H = 300, L = 8, R = 84, Tp = 14, B = 28;
+    var tmin = Math.min.apply(null, all.map(function(p) { return p.t; })), tmax = Math.max.apply(null, all.map(function(p) { return p.t; }));
+    var vmin = Math.min.apply(null, all.map(function(p) { return p.v; })), vmax = Math.max.apply(null, all.map(function(p) { return p.v; }));
+    var pad = Math.max((vmax - vmin) * 0.15, 0.2); vmin -= pad; vmax += pad;
+    function X(t) { return L + (tmax === tmin ? 0 : (t - tmin) / (tmax - tmin)) * (W - L - R); }
+    function Y(v) { return Tp + (vmax - v) / (vmax - vmin) * (H - Tp - B); }
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="cvxFXN and sdFXN peg">';
+    var step = (vmax - vmin) / 4, lastYs = [];
+    ['cvx', 'sd'].forEach(function(k) { var pp = series[k]; if (pp.length) lastYs.push(Y(pp[pp.length - 1].v)); });
+    for (var i = 0; i <= 4; i++) {
+      var v = vmin + step * i, y = Y(v);
+      var near = lastYs.some(function(ly) { return Math.abs(ly - y) < 16; });
+      s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y + '" y2="' + y + '" stroke="rgba(255,255,255,0.10)" />'
+        + (near ? '' : '<text x="' + (W - R + 8) + '" y="' + (y + 4) + '">' + v.toFixed(2) + '%</text>');
+    }
+    var long = range === '1Y' || range === 'ALL';
+    for (var k = 0; k < 4; k++) {
+      var t = tmin + (tmax - tmin) * k / 3, d = new Date(t * 1000);
+      var label = d.toLocaleDateString('en-US', long ? { month: 'short', year: '2-digit' } : { month: 'short', day: 'numeric' });
+      s += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="' + (k === 0 ? 'start' : k === 3 ? 'end' : 'middle') + '">' + label + '</text>';
+    }
+    var tags = [];
+    ['cvx', 'sd'].forEach(function(key) {
+      var pts = series[key]; if (!pts.length) return;
+      var d = pts.map(function(p, i) { return (i ? 'L' : 'M') + X(p.t).toFixed(1) + ' ' + Y(p.v).toFixed(1); }).join(' ');
+      s += '<path d="' + d + '" fill="none" stroke="' + COLORS[key] + '" stroke-width="2.4" stroke-linejoin="round" />';
+      var last = pts[pts.length - 1];
+      tags.push({ key: key, y: Y(last.v), v: last.v });
+    });
+    tags.sort(function(a, b) { return a.y - b.y; });
+    if (tags.length === 2 && tags[1].y - tags[0].y < 20) tags[1].y = tags[0].y + 20;
+    tags.forEach(function(g) {
+      var name = g.key === 'cvx' ? 'cvxFXN' : 'sdFXN';
+      s += '<rect x="' + (W - R - 2) + '" y="' + (g.y - 10) + '" width="' + (R + 2) + '" height="20" rx="4" fill="' + COLORS[g.key] + '" />'
+        + '<text x="' + (W - R + 2) + '" y="' + (g.y + 4) + '" style="fill:#0b2a0b;font-weight:700">' + g.v.toFixed(2) + '%</text>';
+    });
+    box.innerHTML = s + '</svg>';
+  }
+  function setPegStat(key, series) {
+    var el = $('fxn-peg-' + key), sub = $('fxn-peg-' + key + '-sub');
+    var pts = series[key];
+    if (!pts.length) { if (el) el.textContent = '—'; return; }
+    if (el) el.textContent = pts[pts.length - 1].v.toFixed(2) + '%';
+  }
+  function loadSupplies() {
+    getJson('https://api.etherscan.io/v2/api?chainid=1&module=proxy&action=eth_call&to=' + VE + '&data=0x18160ddd&tag=latest&apikey=' + KEY)
+      .then(function(j) {
+        var res = j && j.result;
+        if (typeof res !== 'string' || !/^0x[0-9a-fA-F]+$/.test(res)) throw new Error('bad');
+        var v = Number(BigInt(res) / BigInt(10) ** BigInt(14)) / 1e4;
+        $('fxn-vefxn').textContent = fmt(v, 2);
+      }).catch(function() { if ($('fxn-vefxn').textContent === '...') $('fxn-vefxn').textContent = '—'; });
+  }
+  // Datos de mercado de CoinGecko: primero en vivo desde el navegador; si falla, la copia que guarda el servidor.
+  function setM(id, text) { var el = $(id); if (el) el.textContent = text; }
+  function usd(n) { return (typeof n === 'number' && isFinite(n)) ? '$' + fmt(n, 0) : '—'; }
+  function num(n, d) { return (typeof n === 'number' && isFinite(n)) ? fmt(n, d) : '—'; }
+  function showMarket(m, note) {
+    var mc = m.market_cap, fdv = m.fdv, tvl = m.tvl;
+    setM('fxn-m-mcap', usd(mc)); setM('fxn-m-circ', num(m.circulating, 2)); setM('fxn-m-fdv', usd(fdv));
+    setM('fxn-m-total', num(m.total_supply, 0)); setM('fxn-m-max', num(m.max_supply, 0));
+    setM('fxn-m-ratio', (mc > 0 && fdv > 0) ? (mc / fdv).toFixed(2) : '—');
+    setM('fxn-m-tvl', usd(tvl)); setM('fxn-m-vol', usd(m.volume));
+    setM('fxn-m-fdvtvl', (fdv > 0 && tvl > 0) ? (fdv / tvl).toFixed(2) : '—');
+    setM('fxn-m-note', note || '');
+  }
+  function parseCg(j) {
+    var d = j && j.market_data; if (!d) throw new Error('no market_data');
+    return {
+      market_cap: d.market_cap && d.market_cap.usd, circulating: d.circulating_supply,
+      fdv: d.fully_diluted_valuation && d.fully_diluted_valuation.usd, total_supply: d.total_supply,
+      max_supply: d.max_supply, tvl: d.total_value_locked && (d.total_value_locked.usd || d.total_value_locked),
+      volume: d.total_volume && d.total_volume.usd
+    };
+  }
+  function loadMarket() {
+    var auth = CGKEY ? '&x_cg_demo_api_key=' + encodeURIComponent(CGKEY) : '';
+    var ids = [CG, 'f-x-protocol', 'fxn'].filter(function(v, i, a) { return a.indexOf(v) === i; });
+    function one(i) {
+      var url = 'https://api.coingecko.com/api/v3/coins/' + ids[i] + '?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false' + auth;
+      return fetch(url).then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .catch(function(e) { if (i + 1 < ids.length) return one(i + 1); throw e; });
+    }
+    return one(0)
+      .then(function(j) { showMarket(parseCg(j), ''); })
+      .catch(function(e) {
+        var why = (e && e.message) || 'error';
+        return getJson('fxn_market.json?t=' + Date.now()).then(function(snap) {
+          if (!snap || !snap.data) throw new Error('no snapshot');
+          var t = snap.ts ? new Date(snap.ts * 1000).toISOString().slice(5, 16).replace('T', ' ') + ' UTC' : '';
+          showMarket(snap.data, 'Snapshot ' + t + ' (live: ' + why + ')');
+        }).catch(function() { setM('fxn-m-note', 'Market data unavailable (' + why + ')'); });
+      });
+  }
+  function loadHolders() {
+    var addr = T.fxn;
+    function fromSnap() {
+      return getJson('fxn_market.json?t=' + Date.now()).then(function(snap) {
+        var h = snap && snap.holders;
+        setM('fxn-m-holders', typeof h === 'number' ? fmt(h, 0) : '—');
+      }).catch(function() { setM('fxn-m-holders', '—'); });
+    }
+    return getJson('https://eth.blockscout.com/api/v2/tokens/' + addr).then(function(j) {
+      var h = j && parseInt(j.holders_count || j.holders, 10);
+      if (!(h > 0)) throw new Error('no holders');
+      setM('fxn-m-holders', fmt(h, 0));
+    }).catch(function() {
+      return getJson('https://api.ethplorer.io/getTokenInfo/' + addr + '?apiKey=freekey').then(function(j) {
+        var h = j && j.holdersCount;
+        if (typeof h !== 'number') throw new Error('no holders');
+        setM('fxn-m-holders', fmt(h, 0));
+      }).catch(fromSnap);
+    });
+  }
+  function loadPrices() {
+    getJson('https://coins.llama.fi/prices/current/' + ids().join(',')).then(function(j) {
+      var c = (j && j.coins) || {};
+      [['fxn', 'fxn'], ['cvx', 'cvx'], ['sd', 'sd']].forEach(function(k) {
+        var row = c['ethereum:' + T[k[0]]], price = row && row.price;
+        var txt = (typeof price === 'number') ? '$' + (price >= 1 ? fmt(price, 2) : fmt(price, 4)) : null;
+        if (!txt) return;
+        if (k[0] === 'fxn') { $('fxn-price-fxn').textContent = txt; }
+        else { var sub = $('fxn-peg-' + k[0] + '-sub'); if (sub) sub.textContent = 'Price ' + txt; }
+      });
+      var pf = c['ethereum:' + T.fxn] && c['ethereum:' + T.fxn].price;
+      ['cvx', 'sd'].forEach(function(k) {
+        var row = c['ethereum:' + T[k]], el = $('fxn-peg-' + k);
+        if (pf && row && row.price && el && el.textContent === '...') el.textContent = (row.price / pf * 100).toFixed(2) + '%';
+      });
+    }).catch(function() { if ($('fxn-price-fxn').textContent === '...') $('fxn-price-fxn').textContent = '—'; });
+  }
+  function cycle() {
+    if (busy) return; busy = true;
+    loadSupplies(); loadPrices(); loadMarket(); loadHolders();
+    loadChart().then(function(coins) {
+      var series = { cvx: pegSeries(coins, 'cvx'), sd: pegSeries(coins, 'sd') };
+      draw(series); setPegStat('cvx', series); setPegStat('sd', series);
+    }).catch(function(e) { $('fxn-chart').innerHTML = '<p class="fxn-msg">Could not load chart data (' + ((e && e.message) || 'error') + '). Retrying…</p>'; })
+      .then(function() { busy = false; });
+  }
+  function visible() { var p = $('fxn-pane'); return p && p.offsetParent !== null; }
+  Array.prototype.forEach.call(document.querySelectorAll('.fxn-range'), function(b) {
+    b.addEventListener('click', function() {
+      range = b.getAttribute('data-range');
+      Array.prototype.forEach.call(document.querySelectorAll('.fxn-range'), function(x) { x.classList.toggle('active', x === b); });
+      $('fxn-chart').innerHTML = '<p class="fxn-msg">Loading…</p>';
+      busy = false; cycle();
+    });
+  });
+  document.addEventListener('click', function(ev) {
+    var t = ev.target && ev.target.closest ? ev.target.closest('.sub-tab[data-sub="fxn"]') : null;
+    if (t) { if (!started) started = true; cycle(); }
+  });
+  setInterval(function() { if (started && visible() && !document.hidden) cycle(); }, REFRESH);
+})();
+</script>
 
 
 
 
-  <nav class="bottom-nav"><button class="nav-item" data-go="mcap"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><span>MCAP</span></button><button class="nav-item" data-go="funding"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>Funding</span></button><button class="nav-item" data-go="xs"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>X&amp;S Live</span></button><button class="nav-item" data-go="pool"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg><span>FX Pool</span></button><button class="nav-item" data-go="loop"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg><span>Loop fxSAVE</span></button><button class="nav-item" data-go="yield"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6"/><circle cx="9.5" cy="9.5" r="1"/><circle cx="14.5" cy="14.5" r="1"/></svg><span>Yield</span></button></nav>
+  <nav class="bottom-nav"><button class="nav-item" data-go="mcap"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><span>MCAP</span></button><button class="nav-item" data-go="funding"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>Funding</span></button><button class="nav-item" data-go="xs"><img class="nav-img" src="xslive.PNG" alt="" /><span>X&amp;S Live</span></button><button class="nav-item" data-go="pool"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg><span>FX Pool</span></button><button class="nav-item" data-go="loop"><img class="nav-img" src="fxsave.PNG" alt="" /><span>Loop fxSAVE</span></button><button class="nav-item" data-go="yield"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6"/><circle cx="9.5" cy="9.5" r="1"/><circle cx="14.5" cy="14.5" r="1"/></svg><span>Yield</span></button></nav>
   <script>
 (function() {
   var TABS = ['mcap', 'funding', 'xs', 'pool', 'loop', 'yield'];
